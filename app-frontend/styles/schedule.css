@@ -1,0 +1,114 @@
+/* Contenedor */
+.schedule-container {
+  max-width: 900px;
+  margin: auto;
+  padding: 2rem 1rem;
+  background: var(--color-bg-primary);
+}
+
+
+/* Header */
+.schedule-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.schedule-header p {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+}
+
+/* Estado vacío */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--color-text-secondary);
+}
+.empty-state i {
+  font-size: 3rem;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+}
+
+/* --- MOBILE: Cards por defecto --- */
+.course-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: var(--color-bg-primary);
+}
+.course-card {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s;
+  border-left: 6px solid #6366f1;
+}
+.course-card:hover {
+  box-shadow: 0 4px 16px rgba(99,102,241,0.15);
+}
+.course-card h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.course-day {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-right: 0.5rem;
+}
+.course-time {
+  display: inline-block;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+/* --- DESKTOP: Tabla (se muestra con clases Bootstrap) --- */
+.schedule-grid { margin-top: 1.5rem; }
+.table-responsive {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: black;
+}
+.schedule-table {
+  background: var(--color-bg-secondary);
+}
+.schedule-table th,
+.schedule-table td {
+  vertical-align: middle;
+  text-align: center;
+  padding: 1rem;
+}
+.schedule-table th { font-weight: 700; }
+
+.schedule-table .course-block {
+  font-weight: bold;
+  color: #6366f1;
+  background: #eef2ff;
+  border-radius: 8px;
+  padding: 0.5em 0.75em;
+  display: inline-block;
+}
+
+.course-block {
+  display: inline-block;
+  background-color: rgba(99,102,241,0.1);
+  color: var(--color-primary);
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+/* Mejora de accesibilidad visual al pasar por encima */
+.schedule-table tbody tr:hover td {
+  background: rgba(99,102,241,0.04);
+}
+
+/* Otros estilos personalizados */
+.bg-primary.bg-opacity-10 {
+  background-color: #eef2ff !important;
+}

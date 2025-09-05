@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Utp+schedule- Gestión Inteligente de Horarios</title>
+    <meta
+      name="description"
+      content="Aplicación de gestión de horarios universitarios con IA para recomendaciones personalizadas"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="styles/common.css" />
+    <link rel="stylesheet" href="styles/index.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+
+    <meta name="theme-color" content="#6366f1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📅</text></svg>"
+    />
+  </head>
+  <body>
+    <div id="navbar"></div>
+
+    <main>
+      <section class="hero-section">
+        <div class="hero-container">
+          <h1 class="hero-title">UTP+Schedule</h1>
+          <div class="hero-content">
+            <p class="hero-subtitle">
+              Gestiona tu horario universitario de forma inteligente y
+              organizada. Crea horarios, organiza tareas y mantén todos tus
+              recursos académicos en un solo lugar.
+            </p>
+            <a href="add-course.html" class="btn">
+              <i class="bi bi-plus-lg me-2"></i>
+              Comenzar Ahora
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-5">
+        <div class="container">
+          <div class="features-grid">
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="bi bi-plus-lg"></i>
+              </div>
+              <h3 class="feature-title">Crear Horarioo</h3>
+              <p class="feature-description">
+                Agrega tus cursos manualmente y construye tu horario
+                personalizado con una interfaz intuitiva.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="bi bi-calendar"></i>
+              </div>
+              <h3 class="feature-title">Horario Interactivo</h3>
+              <p class="feature-description">
+                Visualiza y gestiona tu horario de forma clara y organizada con
+                vista semanal completa.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="bi bi-check-square"></i>
+              </div>
+              <h3 class="feature-title">Gestión de Tareas</h3>
+              <p class="feature-description">
+                Organiza tareas, proyectos y exámenes con fechas límite y
+                seguimiento de progreso.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="bi bi-collection"></i>
+              </div>
+              <h3 class="feature-title">Recursos de Estudio</h3>
+              <p class="feature-description">
+                Centraliza enlaces, documentos y materiales organizados por
+                curso y categoría.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-5">
+        <div class="container">
+          <div class="card text-center">
+            <div class="card-header">
+              <h3>Estado Actual</h3>
+            </div>
+            <div class="card-body">
+              <p id="home-status" class="mb-4">
+                No hay cursos registrados. Comienza agregando tus materias para
+                crear tu horario.
+              </p>
+              <a href="add-course.html" class="btn btn-primary">
+                <i class="bi bi-plus-lg me-2"></i>
+                Comenzar
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <script src="script.js"></script>
+  </body>
+</html>
