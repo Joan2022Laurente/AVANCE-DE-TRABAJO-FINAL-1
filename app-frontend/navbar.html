@@ -1,123 +1,139 @@
-<nav class="navbar navbar-expand-lg">
-  <div class="container">
-    <!-- Logo -->
-    <a class="navbar-brand" href="index.html">
-
-      UTP+Schedule
+<!-- Navbar para móviles -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark d-lg-none" id="mobileNavbar">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center" href="index.html">
+      <span>UTP+Schedule</span>
     </a>
-
-    <!-- Botón hamburguesa -->
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-    >
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+      data-bs-target="#mobileNavbarMenu" aria-controls="mobileNavbarMenu"
+      aria-expanded="false" aria-label="Toggle navigation">
       <i class="bi bi-list"></i>
     </button>
 
-    <!-- Links -->
-    <div class="collapse navbar-collapse" id="navbarNav">
+    <div class="collapse navbar-collapse" id="mobileNavbarMenu">
       <ul class="navbar-nav ms-auto">
-        <!-- Inicio / Presentación -->
         <li class="nav-item">
-          <a class="nav-link" href="index.html"
-            ><i class="bi bi-house"></i> Inicio</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="about.html"
-            ><i class="bi bi-info-circle"></i> Sobre Nosotros</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="dashboard.html"
-            ><i class="bi bi-speedometer2"></i> Dashboard</a
-          >
-        </li>
-
-        <!-- Gestión Académica -->
-        <li class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            href="#"
-            id="academicDropdown"
-            role="button"
-            data-bs-toggle="dropdown"
-          >
-            <i class="bi bi-journal-bookmark"></i> Gestión Académica
+          <a class="nav-link active" href="index.html">
+            <i class="bi bi-house me-2"></i>Inicio
           </a>
-          <ul class="dropdown-menu">
-            <li>
-              <a class="dropdown-item" href="schedule.html"
-                ><i class="bi bi-calendar"></i> Horario</a
-              >
-            </li>
-            <li>
-              <a class="dropdown-item" href="tasks.html"
-                ><i class="bi bi-check2-square"></i> Tareas</a
-              >
-            </li>
-            <li>
-              <a class="dropdown-item" href="resources.html"
-                ><i class="bi bi-book"></i> Recursos</a
-              >
-            </li>
-            <li>
-              <a class="dropdown-item" href="stats.html"
-                ><i class="bi bi-bar-chart-line"></i> Estadísticas</a
-              >
-            </li>
-          </ul>
         </li>
-
-        <!-- Soporte / Extras -->
-        <li class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            href="#"
-            id="supportDropdown"
-            role="button"
-            data-bs-toggle="dropdown"
-          >
-            <i class="bi bi-grid"></i> Soporte
+        <li class="nav-item">
+          <a class="nav-link" href="about.html">
+            <i class="bi bi-info-circle me-2"></i>Sobre Nosotros
           </a>
-          <ul class="dropdown-menu">
-            <li>
-              <a class="dropdown-item" href="profile.html"
-                ><i class="bi bi-person-circle"></i> Perfil</a
-              >
-            </li>
-            <li>
-              <a class="dropdown-item" href="settings.html"
-                ><i class="bi bi-gear"></i> Configuración</a
-              >
-            </li>
-            <li>
-              <a class="dropdown-item" href="help.html"
-                ><i class="bi bi-question-circle"></i> Ayuda</a
-              >
-            </li>
-            <li>
-              <a class="dropdown-item" href="about-system.html"
-                ><i class="bi bi-tools"></i> Sobre el Sistema</a
-              >
-            </li>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="dashboard.html">
+            <i class="bi bi-speedometer2 me-2"></i>Dashboard
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="mobileAcademicDropdown"
+            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-journal-bookmark me-2"></i>Gestión Académica
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark"
+            aria-labelledby="mobileAcademicDropdown">
+            <li><a class="dropdown-item" href="schedule.html"><i class="bi bi-calendar me-2"></i>Horario</a></li>
+            <li><a class="dropdown-item" href="tasks.html"><i class="bi bi-check2-square me-2"></i>Tareas</a></li>
+            <li><a class="dropdown-item" href="resources.html"><i class="bi bi-book me-2"></i>Recursos</a></li>
+            <li><a class="dropdown-item" href="stats.html"><i class="bi bi-bar-chart-line me-2"></i>Estadísticas</a></li>
           </ul>
-        </li>
-
-        <!-- Autenticación -->
-        <li class="nav-item">
-          <a class="nav-link" href="login.html"
-            ><i class="bi bi-box-arrow-in-right"></i> Login</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="register.html"
-            ><i class="bi bi-person-plus"></i> Registro</a
-          >
         </li>
       </ul>
+      <!-- Login -->
+      <div class="d-flex ms-lg-3">
+        <a class="nav-link text-white" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+          <i class="bi bi-box-arrow-in-right me-2"></i>Login
+        </a>
+      </div>
     </div>
   </div>
 </nav>
+
+<!-- Sidebar -->
+<nav class="sidebar" id="sidebar">
+  <ul class="nav nav-pills flex-column mb-auto">
+    <li class="nav-item collapse-btn-box">
+      <button class="collapse-btn" id="collapseBtn" aria-label="Toggle sidebar">
+        <i class="bi bi-chevron-left" id="collapseIcon"></i>
+      </button>
+    </li>
+    <li class="nav-item"><a class="nav-link active" href="index.html"><i class="bi bi-house"></i><span class="link-text">Inicio</span></a></li>
+    <li class="nav-item"><a class="nav-link" href="about.html"><i class="bi bi-info-circle"></i><span class="link-text">Sobre Nosotros</span></a></li>
+    <li class="nav-item"><a class="nav-link" href="dashboard.html"><i class="bi bi-speedometer2"></i><span class="link-text">Dashboard</span></a></li>
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="academicDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-journal-bookmark"></i><span class="link-text">Gestión Académica</span>
+      </a>
+      <ul class="dropdown-menu" aria-labelledby="academicDropdown">
+        <li><a class="dropdown-item" href="schedule.html"><i class="bi bi-calendar"></i><span class="link-text">Horario</span></a></li>
+        <li><a class="dropdown-item" href="tasks.html"><i class="bi bi-check2-square"></i><span class="link-text">Tareas</span></a></li>
+        <li><a class="dropdown-item" href="resources.html"><i class="bi bi-book"></i><span class="link-text">Recursos</span></a></li>
+        <li><a class="dropdown-item" href="stats.html"><i class="bi bi-bar-chart-line"></i><span class="link-text">Estadísticas</span></a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="mt-auto pt-3 border-top border-secondary">
+    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+      <i class="bi bi-box-arrow-in-right"></i><span class="link-text">Login</span>
+    </a>
+  </div>
+</nav>
+<!-- Modal de Login -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background-color: var(--color-bg-primary); border: 1px solid var(--color-border); border-radius: 12px;">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title text-white">
+          <i class="bi bi-box-arrow-in-right me-2"></i> Iniciar Sesión
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="loginForm">
+          <div class="mb-4">
+            <label for="email" class="form-label text-white">Correo</label>
+            <input
+              type="email"
+              id="email"
+              class="form-control bg-dark text-white border-secondary"
+              style="border-radius: 8px; padding: 10px 15px;"
+              placeholder="tu@correo.com"
+              required
+            >
+          </div>
+          <div class="mb-4">
+            <label for="password" class="form-label text-white">Contraseña</label>
+            <input
+              type="password"
+              id="password"
+              class="form-control bg-dark text-white border-secondary"
+              style="border-radius: 8px; padding: 10px 15px;"
+              placeholder="•••••••"
+              required
+            >
+          </div>
+          <div class="form-check mb-4">
+            <input class="form-check-input" type="checkbox" id="rememberMe">
+            <label class="form-check-label text-secondary" for="rememberMe">Recordarme</label>
+          </div>
+          <button
+            type="submit"
+            class="btn w-100"
+            style="background-color: var(--color-primary); border: none; padding: 10px; border-radius: 8px; font-weight: 600;"
+          >
+            Ingresar
+          </button>
+        </form>
+      </div>
+      <div class="modal-footer border-0 justify-content-center pt-0">
+        <small class="text-muted">
+          ¿No tienes cuenta? <a href="#" class="text-decoration-none" style="color: var(--color-primary);">Regístrate</a>
+        </small>
+      </div>
+    </div>
+  </div>
+</div>
+
