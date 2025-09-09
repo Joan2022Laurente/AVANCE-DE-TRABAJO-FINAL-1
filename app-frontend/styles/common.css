@@ -1,5 +1,5 @@
 /* Common styles for all pages - Dark Monochromatic Theme */
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dela+Gothic+One&family=Quicksand:wght@300..700&family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap");
 :root {
   /* Monochromatic color palette - max 5 colors */
   --color-primary: #e11168; /* Single accent color */
@@ -11,8 +11,8 @@
   --color-border: #333333; /* Border gray */
 
   /* Typography - limited to 2 font families */
-  --font-primary: "Sansation", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+  --font-primary: "Inter Tight", sans-serif;
+  --font-mono: "Mona Sans", sans-serif;
 
   /* Spacing system for whitespace */
   --space-xs: 0.5rem;
@@ -44,7 +44,7 @@
 }
 
 body {
-  font-family: var(--font-primary);
+  font-family: var(--font-mono);
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
   line-height: 1.6;
@@ -63,7 +63,7 @@ h5,
 h6 {
   font-weight: 500;
   line-height: 1.2;
-  font-family: "Dela Gothic One", sans-serif;
+  font-family: var(--font-primary);
   margin-bottom: var(--space-sm);
   color: var(--color-text-primary);
 }
@@ -88,41 +88,6 @@ p {
   color: var(--color-text-secondary);
   line-height: 1.6;
 }
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dela+Gothic+One&family=Quicksand:wght@300..700&family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap");
-
-:root {
-  --color-primary: #e11168;
-  --color-bg-primary: #070707;
-  --color-bg-secondary: #0e1114;
-  --color-bg-tertiary: #2a2a2a;
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #cccccc;
-  --color-border: #333333;
-
-  --font-primary: "Sansation", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: "JetBrains Mono", "Fira Code", monospace;
-
-  --space-xs: 0.5rem;
-  --space-sm: 1rem;
-  --space-md: 1.5rem;
-  --space-lg: 2rem;
-  --space-xl: 3rem;
-  --space-2xl: 4rem;
-
-  --radius-sm: 0.375rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-
-  --sidebar-width: 240px;
-  --sidebar-collapsed-width: 70px;
-  --sidebar-bg: #000f37;
-  --sidebar-text: #fff;
-  --sidebar-hover-bg: rgba(99, 102, 241, 0.1);
-  --sidebar-hover-text: #6366f1;
-  --sidebar-border-radius: 8px;
-  --sidebar-transition: 0.3s ease;
-}
-
 * {
   margin: 0;
   padding: 0;
@@ -453,6 +418,27 @@ main.collapsed {
   }
 }
 
+/* Contenedor para centrar loader dentro del modal */
+#loginLoader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+}
+
+/* Opcional: cambiar fondo de modal si quieres efecto más dramático */
+.modal-content {
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+/* Mantener inputs y botones visibles */
+.modal-body input,
+.modal-body button {
+  z-index: 2; /* asegura que estén por encima del loader si lo haces overlay */
+}
+
 /* Buttons */
 .btn {
   font-weight: 500;
@@ -516,31 +502,232 @@ main.collapsed {
   margin-bottom: var(--space-sm);
 }
 
-/* Forms */
+/* Forms */ /* Estilo para inputs y labels */
+
 .form-control {
   background-color: var(--color-bg-tertiary);
   border: 1px solid var(--color-border);
   color: var(--color-text-primary);
   border-radius: var(--radius-md);
-  padding: var(--space-xs) var(--space-sm);
-  transition: all 0.2s ease;
+  padding: var(--space-sm);
+  transition: var(--transition);
+  font-size: 14px;
+}
+/* Overlay para el loader */
+.modal-loader-overlay {
+  background-color: rgb(0, 0, 0);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--radius-md);
+  z-index: 10;
 }
 
+/* Ocultar inputs durante la carga */
+.modal-header,
+.modal-loading .form-control,
+.modal-loading .form-label,
+.modal-loading #loginBtn {
+  display: none;
+}
+
+/* Contenedor de texto de carga */
+.loading-text-container {
+  margin-top: 20px;
+  text-align: center;
+  color: white;
+  font-weight: 500;
+}
+
+/* Texto de carga */
+.loading-text {
+  opacity: 0;
+  animation: fadeIn 0.5s ease forwards;
+}
+
+/* Efecto de máquina de escribir */
+.typing-effect {
+  border-right: 2px solid white;
+  animation: typing 1.5s steps(20, end), blink-caret 0.75s step-end infinite;
+  white-space: nowrap;
+  overflow: hidden;
+  opacity: 1;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink-caret {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: white;
+  }
+}
 .form-control:focus {
   background-color: var(--color-bg-tertiary);
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-  color: var(--color-text-primary);
+  box-shadow: 0 0 0 3px rgba(225, 17, 104, 0.2);
+  outline: none;
 }
 
 .form-control::placeholder {
   color: var(--color-text-secondary);
+  font-size: 14px;
 }
 
 .form-label {
   color: var(--color-text-primary);
   font-weight: 500;
   margin-bottom: var(--space-xs);
+  display: block;
+}
+
+/* Estilo para el botón */
+.btn {
+  font-weight: 600;
+  transition: var(--transition);
+  padding: 10px;
+  border-radius: var(--radius-md);
+}
+
+.btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* Estilo para el modal */
+.modal-content {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+}
+
+.modal-header {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.modal-title {
+  color: var(--color-text-primary);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal-body {
+  padding-top: var(--space-xs);
+}
+
+/* Estilo para el input de contraseña */
+.input-password-container {
+  position: relative;
+}
+
+.input-password-container .toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: var(--color-text-secondary);
+}
+
+/* Loader base */
+.loader {
+  --loader-size: 60px; /* tamaño fijo dentro del modal */
+  --loader-size-half: calc(var(--loader-size) / 2);
+  --loader-size-half-neg: calc(var(--loader-size-half) * -1);
+  --light-color: rgba(255, 255, 255, 0.3);
+  --dot-size: 10px;
+  --dot-size-half: calc(var(--dot-size) / 2);
+  --dot-size-half-neg: calc(var(--dot-size-half) * -1);
+
+  display: block;
+  position: relative;
+  width: var(--loader-size);
+  display: grid;
+  place-items: center;
+  color: white;
+}
+
+.loader::before,
+.loader::after {
+  content: "";
+  position: absolute;
+}
+
+/* loader estilo 8 */
+.loader--8 {
+  --loader-size: 60px;
+  --anim-duration: 0.8s;
+  aspect-ratio: 1 / 1;
+  border: 1px dashed var(--light-color);
+  border-radius: 50%;
+  perspective: 50vmin;
+  transform-style: preserve-3d;
+  transform: rotateX(45deg) rotateY(15deg);
+}
+
+.loader--8::before,
+.loader--8::after {
+  animation: loader-8 var(--anim-duration) cubic-bezier(0.39, 0.24, 0, 0.99)
+    infinite;
+}
+
+.loader--8::before {
+  --z-dist: 8vmin;
+  width: var(--dot-size);
+  aspect-ratio: 1 / 1;
+  background: currentColor;
+  border-radius: 50%;
+  top: calc(50% - var(--dot-size-half));
+  left: calc(50% - var(--dot-size-half));
+  animation-delay: calc(var(--anim-duration) / 4 * -1);
+}
+
+.loader--8::after {
+  --z-dist: 4vmin;
+  width: 65%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+}
+
+@keyframes loader-8 {
+  0%,
+  100% {
+    transform: translateZ(calc(var(--z-dist) * -1)) scale(0.6);
+  }
+  55% {
+    transform: translateZ(var(--z-dist));
+  }
 }
 
 /* Tables */

@@ -28,9 +28,11 @@
 }
 
 .hero-subtitle {
-  font-size: 1rem;
+  font-size: 4rem;
   color: var(--color-text-secondary);
   margin-bottom: 20px;
+  font-weight: 600;
+  line-height: 1;
 }
 
 .hero-section .btn {
