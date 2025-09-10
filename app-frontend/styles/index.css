@@ -28,7 +28,7 @@
 }
 
 .hero-subtitle {
-  font-size: 4rem;
+  font-size: 2rem;
   color: var(--color-text-secondary);
   margin-bottom: 20px;
   font-weight: 600;
@@ -39,9 +39,9 @@
   padding: 15px 25px;
   border-radius: 30px;
   text-decoration: none;
-  color: black;
   background-color: var(--color-primary);
   min-width: 200px;
+  color: var(--color-text-primary);
 }
 
 /* Responsive solo aquí */
