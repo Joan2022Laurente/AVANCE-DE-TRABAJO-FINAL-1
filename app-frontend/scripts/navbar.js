@@ -29,6 +29,8 @@ export function loadNavbarAndHeader() {
             });
         }
       });
+
+      initLogin();
     })
     .catch((error) => console.error("Error al cargar el sidebar:", error));
 
@@ -38,6 +40,5 @@ export function loadNavbarAndHeader() {
     .then((html) => {
       document.getElementById("header").innerHTML = html;
       // 👇 Aquí ya existe el loginForm en el DOM
-      initLogin();
     });
 }
