@@ -16,7 +16,9 @@ export function initLogin() {
       "#mobileNavbarMenu .nav-link.loginLinkMobile"
     );
     // Sidebar
-    const sidebarLoginLink = document.querySelector("#sidebar .loginLinkDesktop");
+    const sidebarLoginLink = document.querySelector(
+      "#sidebar .loginLinkDesktop"
+    );
 
     if (isLoggedIn) {
       if (mobileLoginLink) {
@@ -135,6 +137,11 @@ export function initLogin() {
       evtSource.addEventListener("eventos", (event) => {
         const data = JSON.parse(event.data);
         userData.eventos = data.eventos;
+      });
+
+      evtSource.addEventListener("semana", (event) => {
+        const data = JSON.parse(event.data);
+        userData.semanaInfo = data.semanaInfo;
       });
 
       evtSource.addEventListener("fin", () => {
