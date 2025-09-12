@@ -8,18 +8,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Mapear días abreviados a días completos
   const dayMap = {
-    "Lun": "Lunes",
-    "Mar": "Martes",
-    "Mié": "Miércoles",
-    "Jue": "Jueves",
-    "Vie": "Viernes",
-    "Sáb": "Sabado",
-    "Dom": "Domingo"
+    Lun: "Lunes",
+    Mar: "Martes",
+    Mié: "Miércoles",
+    Jue: "Jueves",
+    Vie: "Viernes",
+    Sáb: "Sabado",
+    Dom: "Domingo",
   };
 
   // Actualizar información del encabezado
   document.getElementById("cycleInfo").textContent = userData.semanaInfo.ciclo;
-  document.getElementById("weekInfo").textContent = `${userData.semanaInfo.semanaActual} ${userData.semanaInfo.fechas}`;
+  document.getElementById(
+    "weekInfo"
+  ).textContent = `${userData.semanaInfo.semanaActual} ${userData.semanaInfo.fechas}`;
 
   // Obtener elementos del DOM
   const scheduleTableBody = document.getElementById("scheduleTableBody");
@@ -47,9 +49,17 @@ document.addEventListener("DOMContentLoaded", () => {
     "05:00 p.m.",
     "06:00 p.m.",
     "06:30 p.m. - 08:00 p.m.",
-    "11:59 p.m."
+    "11:59 p.m.",
   ];
-  const days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sabado", "Domingo"];
+  const days = [
+    "Lunes",
+    "Martes",
+    "Miércoles",
+    "Jueves",
+    "Viernes",
+    "Sabado",
+    "Domingo",
+  ];
 
   // Función para extraer la hora de inicio de un slot
   const getStartTime = (timeSlot) => {
@@ -62,13 +72,16 @@ document.addEventListener("DOMContentLoaded", () => {
     row.innerHTML = `<td style="font-weight: 600;">${timeSlot}</td>`;
 
     days.forEach((day) => {
-      const cell = document.createElement("td");
-      const timeSlotStart = getStartTime(timeSlot);
+const cell = document.createElement("td");
+  const timeSlotStart = getStartTime(timeSlot);
 
-      const dayClasses = clases.filter((clase) => {
-        const claseDay = clase.dia.split(" ")[0]; // Ej: "Sáb 13" -> "Sáb"
-        const claseStartTime = getStartTime(clase.hora);
-        return dayMap[claseDay] === day && claseStartTime === timeSlotStart;
+  const dayClasses = clases.filter((clase) => {
+    // Extrae solo el nombre del día, ignorando números o saltos de línea
+    const match = clase.dia.match(/^[^\d\n]+/);
+    const claseDay = match ? match[0].trim() : clase.dia;
+
+    const claseStartTime = getStartTime(clase.hora);
+    return dayMap[claseDay] === day && claseStartTime === timeSlotStart;
       });
 
       if (dayClasses.length > 0) {
@@ -91,7 +104,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Generar horario para mobile
   const dayEvents = {};
   clases.forEach((clase) => {
-    const claseDay = clase.dia.split(" ")[0]; // Ej: "Sáb 13" -> "Sáb"
+    const match = clase.dia.match(/^[^\d\n]+/);
+    const claseDay = match ? match[0].trim() : clase.dia;
     const dayName = dayMap[claseDay];
     if (!dayEvents[dayName]) dayEvents[dayName] = [];
     dayEvents[dayName].push(clase);
@@ -133,7 +147,9 @@ document.addEventListener("DOMContentLoaded", () => {
       statusText = "Por entregar";
     }
 
-    const activityName = actividad.nombreActividad.replace(/🔴|📝|📌/g, "").trim();
+    const activityName = actividad.nombreActividad
+      .replace(/🔴|📝|📌/g, "")
+      .trim();
     activityDiv.innerHTML = `
       <div class="activity-name">
         <strong>${activityName}</strong>
