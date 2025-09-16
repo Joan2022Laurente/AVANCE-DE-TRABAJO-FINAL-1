@@ -39,6 +39,44 @@ export function loadNavbarAndHeader() {
     .then((res) => res.text())
     .then((html) => {
       document.getElementById("header").innerHTML = html;
-      // 👇 Aquí ya existe el loginForm en el DOM
+
+      renderHeaderUserInfo();
     });
+}
+
+function renderHeaderUserInfo() {
+  const storedUser = localStorage.getItem("userData");
+  if (!storedUser) return; // ❌ Nada → no renderizamos
+
+  // Caso especial: se guardó mal como "[object Object]"
+  if (storedUser === "[object Object]") {
+    console.warn("userData inválido en localStorage:", storedUser);
+    return;
+  }
+
+  try {
+    const userData = JSON.parse(storedUser); // un solo parse
+    const nombre = userData?.nombreEstudiante || "Usuario";
+    const rol = "Estudiante";
+
+    const userContainer = document.querySelector("#header .user-container");
+    if (userContainer) {
+      const userInfoDiv = document.createElement("div");
+      userInfoDiv.className = "me-2 text-end d-none d-sm-block";
+      userInfoDiv.innerHTML = `
+        <div class="fw-bold">${nombre}</div>
+        <small class="text-muted">${rol}</small>
+              <img
+        src="assets/user.svg"
+        alt="Avatar"
+        class="rounded-circle"
+        width="40"
+        height="40"
+      />
+      `;
+      userContainer.prepend(userInfoDiv);
+    }
+  } catch (error) {
+    console.error("Error al parsear userData:", error, storedUser);
+  }
 }
