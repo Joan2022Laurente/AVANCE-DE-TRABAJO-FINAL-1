@@ -38,58 +38,47 @@ export function initLogin() {
     }
   }
 
-  // 🔹 IMPROVED: Mejor verificación de servidor libre
+  // Intenta muchos /status en paralelo (rápido) y devuelve el primero libre.
   async function getFreeServer() {
-    console.log("Checking server availability...");
-    
-    // Intentar todos en paralelo primero
-    const checks = servers.map(async (server) => {
-      try {
-        const response = await fetchWithTimeout(`${server}/status`, {}, 3000);
-        const data = await response.json();
-        console.log(`Server ${server}: busy=${data.busy}, browser=${data.browserActive}`);
-        return { server, data, available: !data.busy };
-      } catch (err) {
-        console.warn(`Server ${server} failed:`, err.name);
-        return { server, data: null, available: false };
-      }
-    });
+    // Chequeos paralelos rápidos (timeout corto)
+    const checks = servers.map((server) =>
+      fetchWithTimeout(`${server}/status`, {}, 2500)
+        .then((r) => r.json().then((data) => ({ server, data })))
+        .catch((err) => {
+          console.warn("status failed:", server, err && err.name);
+          return null;
+        })
+    );
 
     const results = await Promise.all(checks);
-    const availableServers = results.filter(r => r.available);
-    
-    if (availableServers.length > 0) {
-      // Retornar un servidor disponible aleatorio para balancear carga
-      const randomServer = availableServers[Math.floor(Math.random() * availableServers.length)];
-      console.log(`Selected server: ${randomServer.server}`);
-      return randomServer.server;
-    }
+    const free = results.find((r) => r && !r.data?.busy);
+    if (free) return free.server;
 
-    // Si ninguno está disponible, intentar secuencial con timeout más largo
-    console.log("No servers available in parallel check, trying sequential...");
+    // Fallback: chequeo secuencial con timeout más alto (intentar despertar servidores)
     for (const server of servers) {
       try {
-        const res = await fetchWithTimeout(`${server}/status`, {}, 8000);
+        const res = await fetchWithTimeout(`${server}/status`, {}, 7000);
         const data = await res.json();
-        if (!data.busy) {
-          console.log(`Found available server: ${server}`);
-          return server;
-        }
+        if (!data.busy) return server;
       } catch (err) {
-        console.warn(`Sequential check failed for ${server}:`, err.name);
+        // ignorar
       }
     }
-    
-    console.log("No servers available");
     return null;
   }
 
   // Fade helper
   async function setLoadingMessage(el, msg, duration = 600) {
     if (!el) return;
+
+    // Fade out
     el.classList.add("fade-out");
     await new Promise((r) => setTimeout(r, duration));
+
+    // Cambiar texto
     el.textContent = msg;
+
+    // Fade in
     el.classList.remove("fade-out");
   }
 
@@ -145,76 +134,6 @@ export function initLogin() {
 
   updateLoginLinks();
 
-  // ---------- SSE manual con POST ----------
-  async function connectSSEWithBody(server, username, password, onMessage) {
-    console.log(`Attempting to connect to: ${server}`);
-    
-    const response = await fetch(`${server}/api/eventos-stream`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-
-    // 🔹 IMPROVED: Manejo específico de servidor ocupado
-    if (response.status === 503) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(`SERVER_BUSY: ${errorData.error || "Servidor ocupado"}`);
-    }
-
-    if (response.status === 400) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(`BAD_REQUEST: ${errorData.error || "Credenciales inválidas"}`);
-    }
-
-    if (!response.ok) {
-      throw new Error(`HTTP_ERROR: ${response.status} - ${response.statusText}`);
-    }
-
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder("utf-8");
-    let buffer = "";
-
-    try {
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-        let parts = buffer.split("\n\n");
-        buffer = parts.pop();
-
-        for (const part of parts) {
-          if (part.trim() === "") continue;
-          const lines = part.split("\n");
-          let eventName = "message";
-          let eventData = "";
-
-          for (const line of lines) {
-            if (typeof line === "string" && line.startsWith("event:")) {
-              eventName = line.slice(6).trim();
-            } else if (typeof line === "string" && line.startsWith("data:")) {
-              eventData += line.slice(5).trim();
-            }
-          }
-
-          if (eventData) {
-            try {
-              onMessage(eventName, JSON.parse(eventData));
-            } catch (e) {
-              console.error("Error parseando SSE:", e, eventData);
-            }
-          }
-        }
-      }
-    } finally {
-      try {
-        reader.releaseLock();
-      } catch (e) {
-        // Ignore cleanup errors
-      }
-    }
-  }
-
   // ---------- Submit/login ----------
   loginBtn.addEventListener("click", () => loginForm.requestSubmit());
 
@@ -236,6 +155,7 @@ export function initLogin() {
     loaderOverlay.style.display = "flex";
     modalBody.classList.add("modal-loading");
 
+    // Si ya hay datos guardados: reproducir mensajes locales y luego ir a schedule
     const savedData = localStorage.getItem("userData");
     if (savedData) {
       const mensajesLocales = [
@@ -244,199 +164,169 @@ export function initLogin() {
         "Cargando actividades",
         "Listo 🚀",
       ];
+
       try {
         for (let i = 0; i < mensajesLocales.length; i++) {
           await setLoadingMessage(loadingTextElement, mensajesLocales[i], 350);
-          await sleep(800);
+          // dejar visible un poco
+          await sleep(10000);
         }
+      } catch (err) {
+        console.error("Error al mostrar mensajes locales:", err);
       } finally {
         loaderOverlay.style.display = "none";
         modalBody.classList.remove("modal-loading");
         loginBtn.disabled = false;
         updateLoginLinks();
+        // Cerrar modal si está abierto
         try {
           const loginModal = bootstrap.Modal.getInstance(
             document.getElementById("loginModal")
           );
           if (loginModal) loginModal.hide();
-        } catch {}
+        } catch (err) {}
+        // Mostrar welcome (sin redirigir)
         showWelcome(localStorage.getItem("userData"));
       }
+
       return;
     }
 
-    // 🔹 IMPROVED: Reintentos inteligentes y mejor manejo de errores
-    let lastError = null;
-    let attemptCount = 0;
-    const maxAttempts = 3;
+    // --------- Si no hay savedData: buscar servidor libre y conectar SSE ----------
+    try {
+      await setLoadingMessage(
+        loadingTextElement,
+        "Buscando servidor disponible...",
+        250
+      );
 
-    while (attemptCount < maxAttempts) {
-      attemptCount++;
-      
-      try {
-        await setLoadingMessage(
-          loadingTextElement, 
-          `Buscando servidor disponible... (${attemptCount}/${maxAttempts})`, 
-          250
-        );
-        
-        const server = await getFreeServer();
-        
-        if (!server) {
-          if (attemptCount < maxAttempts) {
-            await setLoadingMessage(
-              loadingTextElement,
-              `Servidores ocupados, reintentando en 3 segundos...`,
-              250
-            );
-            await sleep(3000);
-            continue;
-          } else {
-            await setLoadingMessage(
-              loadingTextElement,
-              "Todos los servidores están ocupados. Intenta más tarde.",
-              250
-            );
-            await sleep(3000);
-            break;
-          }
-        }
-
+      const server = await getFreeServer();
+      if (!server) {
         await setLoadingMessage(
           loadingTextElement,
-          `Conectando a servidor...`,
+          "Todos los servidores están ocupados. Intenta más tarde.",
           250
         );
+        loaderOverlay.style.display = "none";
+        modalBody.classList.remove("modal-loading");
+        loginBtn.disabled = false;
+        return;
+      }
 
-        let userData = {};
-        let loginCompleted = false;
+      await setLoadingMessage(
+        loadingTextElement,
+        `Conectando a ${server}...`,
+        250
+      );
 
-        await connectSSEWithBody(
-          server,
-          username,
-          password,
-          async (event, data) => {
-            if (event === "estado") {
-              await setLoadingMessage(
-                loadingTextElement,
-                data.mensaje || "Procesando...",
-                250
-              );
-            }
-            if (event === "nombre") {
-              userData.nombreEstudiante = data.nombreEstudiante;
-            }
-            if (event === "semana") {
-              userData.semanaInfo = data.semanaInfo;
-            }
-            if (event === "eventos") {
-              userData.eventos = data.eventos;
-            }
-            if (event === "fin") {
-              userData.success = true;
-              localStorage.setItem("userData", JSON.stringify(userData));
-              loginCompleted = true;
-              
-              loaderOverlay.style.display = "none";
-              modalBody.classList.remove("modal-loading");
-              updateLoginLinks();
-              
-              try {
-                const loginModal = bootstrap.Modal.getInstance(
-                  document.getElementById("loginModal")
-                );
-                if (loginModal) loginModal.hide();
-              } catch {}
-              
-              showWelcome(localStorage.getItem("userData"));
-            }
-            if (event === "error") {
-              throw new Error("LOGIN_ERROR: " + (data.mensaje || "Error desconocido"));
-            }
-          }
+      const url = `${server}/api/eventos-stream?username=${encodeURIComponent(
+        username
+      )}&password=${encodeURIComponent(password)}`;
+      console.log("Conectando a:", url);
+
+      const evtSource = new EventSource(url);
+
+      let userData = {};
+
+      evtSource.addEventListener("estado", async (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          await setLoadingMessage(
+            loadingTextElement,
+            data.mensaje || "Procesando...",
+            250
+          );
+        } catch (err) {
+          console.warn("estado parse error", err);
+        }
+      });
+
+      evtSource.addEventListener("nombre", (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          userData.nombreEstudiante = data.nombreEstudiante;
+        } catch (err) {
+          console.warn("nombre parse error", err);
+        }
+      });
+
+      evtSource.addEventListener("eventos", (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          userData.eventos = data.eventos;
+        } catch (err) {
+          console.warn("eventos parse error", err);
+        }
+      });
+
+      evtSource.addEventListener("semana", (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          userData.semanaInfo = data.semanaInfo;
+        } catch (err) {
+          console.warn("semana parse error", err);
+        }
+      });
+
+      evtSource.addEventListener("fin", async () => {
+        try {
+          userData.success = true;
+          localStorage.setItem("userData", JSON.stringify(userData));
+          loaderOverlay.style.display = "none";
+          evtSource.close();
+
+          updateLoginLinks();
+
+          // Cerrar el modal de login
+          try {
+            const loginModal = bootstrap.Modal.getInstance(
+              document.getElementById("loginModal")
+            );
+            if (loginModal) loginModal.hide();
+          } catch (err) {}
+
+          // Mostrar splash/welcome en la misma página
+          showWelcome(localStorage.getItem("userData"));
+        } catch (err) {
+          console.error("fin handler error", err);
+        }
+      });
+
+      evtSource.addEventListener("error", (err) => {
+        console.error("SSE error:", err);
+        loaderOverlay.style.display = "none";
+        try {
+          evtSource.close();
+        } catch (e) {}
+        alert(
+          "Error al iniciar sesión, revisa tus credenciales o intenta más tarde."
         );
-
-        if (loginCompleted) {
-          return; // Éxito, salir del bucle
-        }
-
-      } catch (error) {
-        console.error(`Login attempt ${attemptCount} failed:`, error);
-        lastError = error;
-
-        if (error.message.includes('SERVER_BUSY')) {
-          if (attemptCount < maxAttempts) {
-            await setLoadingMessage(
-              loadingTextElement,
-              `Servidor ocupado, probando otro... (${attemptCount}/${maxAttempts})`,
-              250
-            );
-            await sleep(2000);
-            continue;
-          }
-        } else if (error.message.includes('BAD_REQUEST')) {
-          await setLoadingMessage(
-            loadingTextElement,
-            "Credenciales incorrectas",
-            250
-          );
-          await sleep(2000);
-          break;
-        } else if (error.message.includes('LOGIN_ERROR')) {
-          await setLoadingMessage(
-            loadingTextElement,
-            error.message.replace('LOGIN_ERROR: ', ''),
-            250
-          );
-          await sleep(2000);
-          break;
-        } else {
-          if (attemptCount < maxAttempts) {
-            await setLoadingMessage(
-              loadingTextElement,
-              `Error de conexión, reintentando... (${attemptCount}/${maxAttempts})`,
-              250
-            );
-            await sleep(2000);
-            continue;
-          }
-        }
-      }
-    }
-
-    // Si llegamos aquí, todos los intentos fallaron
-    loaderOverlay.style.display = "none";
-    modalBody.classList.remove("modal-loading");
-    loginBtn.disabled = false;
-
-    if (lastError) {
-      let errorMsg = "Error al iniciar sesión. ";
-      if (lastError.message.includes('SERVER_BUSY')) {
-        errorMsg += "Todos los servidores están ocupados, intenta más tarde.";
-      } else if (lastError.message.includes('BAD_REQUEST')) {
-        errorMsg += "Revisa tus credenciales.";
-      } else if (lastError.message.includes('LOGIN_ERROR')) {
-        errorMsg += lastError.message.replace('LOGIN_ERROR: ', '');
-      } else {
-        errorMsg += "Revisa tu conexión a internet.";
-      }
-      alert(errorMsg);
+      });
+    } catch (error) {
+      console.error("Login flow error:", error);
+      loaderOverlay.style.display = "none";
+      alert("Error al iniciar sesión, revisa tus credenciales.");
+    } finally {
+      modalBody.classList.remove("modal-loading");
+      loginBtn.disabled = false;
     }
   });
 
   loginForm.dataset.listenerAdded = "true";
 }
 
-// ---------- showWelcome ----------
+// ---------- showWelcome (mejorado) ----------
 export function showWelcome(userData) {
   try {
     const data = typeof userData === "string" ? JSON.parse(userData) : userData;
-    if (!data) return;
+    if (!data) return console.warn("showWelcome: no hay userData");
 
     const nombre = data.nombreEstudiante || "Estudiante";
     const eventos = data.eventos || [];
 
+    // Fecha ISO yyyy-mm-dd
     const hoy = new Date().toISOString().split("T")[0];
+
     const clasesHoy = eventos.filter(
       (e) => e.tipo === "Clase" && e.fecha === hoy
     );
@@ -457,8 +347,11 @@ export function showWelcome(userData) {
     if (elSub) elSub.textContent = submsg;
 
     const welcome = document.getElementById("welcome-screen");
-    if (!welcome) return;
+    if (!welcome) return console.warn("welcome-screen no encontrado");
+
+    // Asegúrate de que el elemento empiece oculto: class="welcome hidden"
     welcome.classList.remove("hidden");
+    // fuerza reflow para que transition funcione
     void welcome.offsetWidth;
     welcome.classList.add("show");
 
@@ -467,6 +360,8 @@ export function showWelcome(userData) {
       goBtn.onclick = () => {
         welcome.classList.remove("show");
         setTimeout(() => welcome.classList.add("hidden"), 500);
+        // si quieres redirigir:
+        // window.location.href = "dashboard.html";
       };
     }
   } catch (err) {
