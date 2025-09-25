@@ -8,14 +8,12 @@ export function loadNavbarAndHeader() {
       const collapseBtn = document.getElementById("collapseBtn");
       const sidebar = document.getElementById("sidebar");
       const main = document.querySelector("main");
-
       if (collapseBtn) {
         collapseBtn.addEventListener("click", () => {
           sidebar.classList.toggle("collapsed");
           main.classList.toggle("collapsed");
         });
       }
-
       // Cerrar dropdowns al hacer clic fuera
       document.addEventListener("click", (e) => {
         if (
@@ -29,7 +27,8 @@ export function loadNavbarAndHeader() {
             });
         }
       });
-
+      // Ocultar Dashboard y Gestión Académica si no está logeado
+      checkAuthAndHideElements();
       initLogin();
     })
     .catch((error) => console.error("Error al cargar el sidebar:", error));
@@ -39,9 +38,42 @@ export function loadNavbarAndHeader() {
     .then((res) => res.text())
     .then((html) => {
       document.getElementById("header").innerHTML = html;
-
       renderHeaderUserInfo();
+      checkAuthAndHideElements(); // <-- Asegúrate de que esto esté aquí
     });
+}
+
+function checkAuthAndHideElements() {
+  const storedUser = localStorage.getItem("userData");
+  if (!storedUser || storedUser === "[object Object]") {
+    // Ocultar Dashboard en sidebar
+    const dashboardLink = document.querySelector('a[href="dashboard.html"]');
+    if (dashboardLink) {
+      dashboardLink.closest("li.nav-item").style.display = "none";
+    }
+    // Ocultar dropdown de Gestión Académica en sidebar
+    const academicDropdown = document.querySelector(
+      'a[href="#"][id="academicDropdown"]'
+    );
+    if (academicDropdown) {
+      academicDropdown.closest("li.nav-item").style.display = "none";
+    }
+
+    // Ocultar Dashboard en menú móvil
+    const dashboardLinkMobile = document.querySelector(
+      '#navbarMenu a[href="dashboard.html"]'
+    );
+    if (dashboardLinkMobile) {
+      dashboardLinkMobile.closest("li.nav-item").style.display = "none";
+    }
+    // Ocultar dropdown de Gestión Académica en menú móvil
+    const academicDropdownMobile = document.querySelector(
+      '#navbarMenu a[id="academicDropdownMobile"]'
+    );
+    if (academicDropdownMobile) {
+      academicDropdownMobile.closest("li.nav-item").style.display = "none";
+    }
+  }
 }
 
 function renderHeaderUserInfo() {

@@ -434,9 +434,9 @@ input:-webkit-autofill {
 .modal-loader-overlay {
   background: linear-gradient(
     -45deg,
-    rgb(0, 30, 54),
-    #000000,
-    var(--color-primary),
+    #000b72,
+    #960000,
+    #3f00eb,
     #000005
   );
   background-size: 400% 400%;

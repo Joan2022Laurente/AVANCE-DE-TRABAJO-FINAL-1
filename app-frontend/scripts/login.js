@@ -40,7 +40,6 @@ export function initLogin() {
 
   // Intenta muchos /status en paralelo (rápido) y devuelve el primero libre.
   async function getFreeServer() {
-    // Chequeos paralelos rápidos (timeout corto)
     const checks = servers.map((server) =>
       fetchWithTimeout(`${server}/status`, {}, 2500)
         .then((r) => r.json().then((data) => ({ server, data })))
@@ -54,15 +53,13 @@ export function initLogin() {
     const free = results.find((r) => r && !r.data?.busy);
     if (free) return free.server;
 
-    // Fallback: chequeo secuencial con timeout más alto (intentar despertar servidores)
+    // fallback: secuencial
     for (const server of servers) {
       try {
         const res = await fetchWithTimeout(`${server}/status`, {}, 7000);
         const data = await res.json();
         if (!data.busy) return server;
-      } catch (err) {
-        // ignorar
-      }
+      } catch {}
     }
     return null;
   }
@@ -70,15 +67,9 @@ export function initLogin() {
   // Fade helper
   async function setLoadingMessage(el, msg, duration = 600) {
     if (!el) return;
-
-    // Fade out
     el.classList.add("fade-out");
     await new Promise((r) => setTimeout(r, duration));
-
-    // Cambiar texto
     el.textContent = msg;
-
-    // Fade in
     el.classList.remove("fade-out");
   }
 
@@ -134,6 +125,56 @@ export function initLogin() {
 
   updateLoginLinks();
 
+  // ---------- SSE manual con POST ----------
+  async function connectSSEWithBody(server, username, password, onMessage) {
+    const response = await fetch(`${server}/api/eventos-stream`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+    let buffer = "";
+
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      let parts = buffer.split("\n\n");
+      buffer = parts.pop();
+
+      for (const part of parts) {
+        if (part.trim() === "") continue;
+        const lines = part.split("\n");
+        let eventName = "message";
+        let eventData = "";
+
+        for (const line of lines) {
+          // 🔹 FIX: Verificar que line sea una cadena antes de usar startsWith
+          if (typeof line === 'string' && line.startsWith("event:")) {
+            eventName = line.slice(6).trim();
+          } else if (typeof line === 'string' && line.startsWith("data:")) {
+            eventData += line.slice(5).trim();
+          }
+        }
+
+        if (eventData) {
+          try {
+            onMessage(eventName, JSON.parse(eventData));
+          } catch (e) {
+            console.error("Error parseando SSE:", e, eventData);
+          }
+        }
+      }
+    }
+  }
+
   // ---------- Submit/login ----------
   loginBtn.addEventListener("click", () => loginForm.requestSubmit());
 
@@ -155,7 +196,6 @@ export function initLogin() {
     loaderOverlay.style.display = "flex";
     modalBody.classList.add("modal-loading");
 
-    // Si ya hay datos guardados: reproducir mensajes locales y luego ir a schedule
     const savedData = localStorage.getItem("userData");
     if (savedData) {
       const mensajesLocales = [
@@ -164,42 +204,29 @@ export function initLogin() {
         "Cargando actividades",
         "Listo 🚀",
       ];
-
       try {
         for (let i = 0; i < mensajesLocales.length; i++) {
           await setLoadingMessage(loadingTextElement, mensajesLocales[i], 350);
-          // dejar visible un poco
-          await sleep(10000);
+          await sleep(1000); // 🔹 FIX: Cambié de 10000 a 1000ms para que no tarde tanto
         }
-      } catch (err) {
-        console.error("Error al mostrar mensajes locales:", err);
       } finally {
         loaderOverlay.style.display = "none";
         modalBody.classList.remove("modal-loading");
         loginBtn.disabled = false;
         updateLoginLinks();
-        // Cerrar modal si está abierto
         try {
           const loginModal = bootstrap.Modal.getInstance(
             document.getElementById("loginModal")
           );
           if (loginModal) loginModal.hide();
-        } catch (err) {}
-        // Mostrar welcome (sin redirigir)
+        } catch {}
         showWelcome(localStorage.getItem("userData"));
       }
-
       return;
     }
 
-    // --------- Si no hay savedData: buscar servidor libre y conectar SSE ----------
     try {
-      await setLoadingMessage(
-        loadingTextElement,
-        "Buscando servidor disponible...",
-        250
-      );
-
+      await setLoadingMessage(loadingTextElement, "Buscando servidor...", 250);
       const server = await getFreeServer();
       if (!server) {
         await setLoadingMessage(
@@ -219,88 +246,41 @@ export function initLogin() {
         250
       );
 
-      const url = `${server}/api/eventos-stream?username=${encodeURIComponent(
-        username
-      )}&password=${encodeURIComponent(password)}`;
-      console.log("Conectando a:", url);
-
-      const evtSource = new EventSource(url);
-
       let userData = {};
 
-      evtSource.addEventListener("estado", async (event) => {
-        try {
-          const data = JSON.parse(event.data);
+      await connectSSEWithBody(server, username, password, async (event, data) => {
+        if (event === "estado") {
           await setLoadingMessage(
             loadingTextElement,
             data.mensaje || "Procesando...",
             250
           );
-        } catch (err) {
-          console.warn("estado parse error", err);
         }
-      });
-
-      evtSource.addEventListener("nombre", (event) => {
-        try {
-          const data = JSON.parse(event.data);
+        if (event === "nombre") {
           userData.nombreEstudiante = data.nombreEstudiante;
-        } catch (err) {
-          console.warn("nombre parse error", err);
         }
-      });
-
-      evtSource.addEventListener("eventos", (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          userData.eventos = data.eventos;
-        } catch (err) {
-          console.warn("eventos parse error", err);
-        }
-      });
-
-      evtSource.addEventListener("semana", (event) => {
-        try {
-          const data = JSON.parse(event.data);
+        if (event === "semana") {
           userData.semanaInfo = data.semanaInfo;
-        } catch (err) {
-          console.warn("semana parse error", err);
         }
-      });
-
-      evtSource.addEventListener("fin", async () => {
-        try {
+        if (event === "eventos") {
+          userData.eventos = data.eventos;
+        }
+        if (event === "fin") {
           userData.success = true;
           localStorage.setItem("userData", JSON.stringify(userData));
           loaderOverlay.style.display = "none";
-          evtSource.close();
-
           updateLoginLinks();
-
-          // Cerrar el modal de login
           try {
             const loginModal = bootstrap.Modal.getInstance(
               document.getElementById("loginModal")
             );
             if (loginModal) loginModal.hide();
-          } catch (err) {}
-
-          // Mostrar splash/welcome en la misma página
+          } catch {}
           showWelcome(localStorage.getItem("userData"));
-        } catch (err) {
-          console.error("fin handler error", err);
         }
-      });
-
-      evtSource.addEventListener("error", (err) => {
-        console.error("SSE error:", err);
-        loaderOverlay.style.display = "none";
-        try {
-          evtSource.close();
-        } catch (e) {}
-        alert(
-          "Error al iniciar sesión, revisa tus credenciales o intenta más tarde."
-        );
+        if (event === "error") {
+          alert("Error en el login: " + (data.mensaje || "desconocido"));
+        }
       });
     } catch (error) {
       console.error("Login flow error:", error);
@@ -315,21 +295,17 @@ export function initLogin() {
   loginForm.dataset.listenerAdded = "true";
 }
 
-// ---------- showWelcome (mejorado) ----------
+// ---------- showWelcome ----------
 export function showWelcome(userData) {
   try {
     const data = typeof userData === "string" ? JSON.parse(userData) : userData;
-    if (!data) return console.warn("showWelcome: no hay userData");
+    if (!data) return;
 
     const nombre = data.nombreEstudiante || "Estudiante";
     const eventos = data.eventos || [];
 
-    // Fecha ISO yyyy-mm-dd
     const hoy = new Date().toISOString().split("T")[0];
-
-    const clasesHoy = eventos.filter(
-      (e) => e.tipo === "Clase" && e.fecha === hoy
-    );
+    const clasesHoy = eventos.filter((e) => e.tipo === "Clase" && e.fecha === hoy);
     const tieneClase = clasesHoy.length > 0;
 
     const actividadesPend = eventos.filter(
@@ -347,11 +323,8 @@ export function showWelcome(userData) {
     if (elSub) elSub.textContent = submsg;
 
     const welcome = document.getElementById("welcome-screen");
-    if (!welcome) return console.warn("welcome-screen no encontrado");
-
-    // Asegúrate de que el elemento empiece oculto: class="welcome hidden"
+    if (!welcome) return;
     welcome.classList.remove("hidden");
-    // fuerza reflow para que transition funcione
     void welcome.offsetWidth;
     welcome.classList.add("show");
 
@@ -360,8 +333,6 @@ export function showWelcome(userData) {
       goBtn.onclick = () => {
         welcome.classList.remove("show");
         setTimeout(() => welcome.classList.add("hidden"), 500);
-        // si quieres redirigir:
-        // window.location.href = "dashboard.html";
       };
     }
   } catch (err) {
