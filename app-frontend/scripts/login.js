@@ -1,4 +1,4 @@
-// login.js (reemplaza la impl. existente)
+
 export function initLogin() {
   const servers = [
     "https://apiutp-1.onrender.com",
@@ -196,7 +196,7 @@ export function initLogin() {
     try {
       await setLoadingMessage(
         loadingTextElement,
-        "Buscando servidor disponible...",
+        "Buscando servidor disponible",
         250
       );
 
@@ -215,14 +215,14 @@ export function initLogin() {
 
       await setLoadingMessage(
         loadingTextElement,
-        `Conectando a ${server}...`,
+        `Conectando a servidor`,
         250
       );
 
       const url = `${server}/api/eventos-stream?username=${encodeURIComponent(
         username
       )}&password=${encodeURIComponent(password)}`;
-      console.log("Conectando a:", url);
+      // console.log("Conectando a:", url);
 
       const evtSource = new EventSource(url);
 
@@ -233,7 +233,7 @@ export function initLogin() {
           const data = JSON.parse(event.data);
           await setLoadingMessage(
             loadingTextElement,
-            data.mensaje || "Procesando...",
+            data.mensaje || "Procesando",
             250
           );
         } catch (err) {
