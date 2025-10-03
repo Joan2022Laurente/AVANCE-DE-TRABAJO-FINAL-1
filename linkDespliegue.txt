@@ -1,1 +1,1 @@
-https://app-horario-utp.vercel.app/
+https://utpschedule.vercel.app/
