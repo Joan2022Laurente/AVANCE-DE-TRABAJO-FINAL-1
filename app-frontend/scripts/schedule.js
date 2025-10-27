@@ -40,7 +40,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const actividades = userData.eventos.filter((e) => e.tipo === "Actividad");
 
   // Función para generar colores consistentes por curso
+  const colorCache = {};
   const getColorForCourse = (courseName) => {
+    if (colorCache[courseName]) return colorCache[courseName];
+
     const colors = [
       '#6366f1', // Indigo
       '#8b5cf6', // Purple
@@ -51,34 +54,31 @@ document.addEventListener("DOMContentLoaded", () => {
       '#f97316', // Orange
       '#14b8a6', // Teal
     ];
-    
-    // Generar un índice basado en el nombre del curso
+
     let hash = 0;
     for (let i = 0; i < courseName.length; i++) {
       hash = courseName.charCodeAt(i) + ((hash << 5) - hash);
     }
-    return colors[Math.abs(hash) % colors.length];
+    const color = colors[Math.abs(hash) % colors.length];
+    colorCache[courseName] = color;
+    return color;
   };
 
-  // Función para normalizar horas (convierte a formato comparable)
+  // Función para normalizar horas
   const normalizeTime = (timeStr) => {
-    // Eliminar espacios extras y convertir a minúsculas
     timeStr = timeStr.toLowerCase().trim();
-    
-    // Extraer hora y minutos
     const match = timeStr.match(/(\d{1,2}):(\d{2})\s*(a\.m\.|p\.m\.|am|pm)/);
     if (!match) return timeStr;
-    
+
     let [_, hours, minutes, period] = match;
     hours = parseInt(hours);
-    
-    // Convertir a formato 24 horas para comparación
+
     if (period.includes('p') && hours !== 12) {
       hours += 12;
     } else if (period.includes('a') && hours === 12) {
       hours = 0;
     }
-    
+
     return `${hours.toString().padStart(2, '0')}:${minutes}`;
   };
 
@@ -124,23 +124,17 @@ document.addEventListener("DOMContentLoaded", () => {
   timeSlots.forEach((timeSlot) => {
     const row = document.createElement("tr");
     row.innerHTML = `<td style="font-weight: 600;">${timeSlot}</td>`;
-
     days.forEach((day) => {
       const cell = document.createElement("td");
-
       const dayClasses = clases.filter((clase) => {
-        // Validar que tenga hora válida
         if (!clase.hora || !clase.hora.includes('-')) return false;
-        
-        // Extrae solo el nombre del día, ignorando números o saltos de línea
+
         const match = clase.dia.match(/^[^\d\n]+/);
         const claseDay = match ? match[0].trim() : clase.dia;
         const claseDayFull = dayMap[claseDay];
-        
-        // Extraer hora de inicio de la clase
+
         const claseStartTime = clase.hora.split(" - ")[0];
-        
-        // Comparar usando normalización
+
         return claseDayFull === day && normalizeTime(claseStartTime) === normalizeTime(timeSlot);
       });
 
@@ -150,14 +144,31 @@ document.addEventListener("DOMContentLoaded", () => {
           courseBlock.className = "course-block";
           const courseName = clase.curso.split("(")[0].trim();
           courseBlock.style.backgroundColor = getColorForCourse(courseName);
-          
-          // Mostrar modalidad solo si existe
+
           const modalityText = clase.modalidad ? `<small>${clase.modalidad}</small>` : '';
-          
+
           courseBlock.innerHTML = `
             ${courseName}
             ${modalityText}
+            <div class="course-actions d-none">
+              <i class="bi bi-journal-plus action-icon" title="Agregar nota" data-course="${courseName}"></i>
+              <i class="bi bi-link-45deg action-icon" title="Agregar recurso" data-course="${courseName}"></i>
+            </div>
           `;
+
+          // Eventos para hover en desktop
+          courseBlock.addEventListener("mouseenter", () => {
+            const actions = courseBlock.querySelector(".course-actions");
+            actions.classList.remove("d-none");
+            actions.classList.add("d-flex");
+          });
+
+          courseBlock.addEventListener("mouseleave", () => {
+            const actions = courseBlock.querySelector(".course-actions");
+            actions.classList.add("d-none");
+            actions.classList.remove("d-flex");
+          });
+
           cell.appendChild(courseBlock);
         });
       }
@@ -169,9 +180,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Generar horario para mobile
   const dayEvents = {};
   clases.forEach((clase) => {
-    // Solo incluir clases con hora válida
     if (!clase.hora || !clase.hora.includes('-')) return;
-    
+
     const match = clase.dia.match(/^[^\d\n]+/);
     const claseDay = match ? match[0].trim() : clase.dia;
     const dayName = dayMap[claseDay];
@@ -179,9 +189,8 @@ document.addEventListener("DOMContentLoaded", () => {
     dayEvents[dayName].push(clase);
   });
 
-  // Ordenar días según el orden de la semana
   const orderedDays = days.filter(day => dayEvents[day]);
-  
+
   if (orderedDays.length === 0) {
     mobileSchedule.innerHTML = `
       <div class="empty-state">
@@ -195,31 +204,47 @@ document.addEventListener("DOMContentLoaded", () => {
       const dayCard = document.createElement("div");
       dayCard.className = "day-card";
       dayCard.innerHTML = `<h4>${day}</h4>`;
-      
-      // Ordenar eventos por hora
+
       events.sort((a, b) => {
         const timeA = a.hora.split(' - ')[0];
         const timeB = b.hora.split(' - ')[0];
         return normalizeTime(timeA).localeCompare(normalizeTime(timeB));
       });
-      
+
       events.forEach((event) => {
         const eventDiv = document.createElement("div");
         eventDiv.className = "mobile-event";
         const courseName = event.curso.split("(")[0].trim();
         const color = getColorForCourse(courseName);
         eventDiv.style.borderLeftColor = color;
-        
-        // Mostrar modalidad solo si existe
-        const modalityHTML = event.modalidad 
-          ? `<span class="modality" style="background-color: ${color}">${event.modalidad}</span>` 
+
+        const modalityHTML = event.modalidad
+          ? `<span class="modality" style="background-color: ${color}">${event.modalidad}</span>`
           : '';
-        
+
         eventDiv.innerHTML = `
           <h5>${courseName}</h5>
           <div class="time">${event.hora}</div>
           ${modalityHTML}
+          <div class="course-actions-mobile d-none">
+            <i class="bi bi-journal-plus action-icon" title="Agregar nota" data-course="${courseName}"></i>
+            <i class="bi bi-link-45deg action-icon" title="Agregar recurso" data-course="${courseName}"></i>
+          </div>
         `;
+
+        // Evento para click en móvil
+        eventDiv.addEventListener("click", (e) => {
+          const actions = eventDiv.querySelector(".course-actions-mobile");
+          if (actions.classList.contains("d-none")) {
+            actions.classList.remove("d-none");
+            actions.classList.add("d-flex");
+          } else {
+            actions.classList.add("d-none");
+            actions.classList.remove("d-flex");
+          }
+          e.stopPropagation();
+        });
+
         dayCard.appendChild(eventDiv);
       });
       mobileSchedule.appendChild(dayCard);
@@ -233,7 +258,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let badgeClass = "badge-pending";
     let statusText = "Pendiente";
 
-    // Manejar diferentes estados
     if (actividad.estado === "Entregada") {
       badgeClass = "badge-delivered";
       statusText = "Entregada";
@@ -244,7 +268,6 @@ document.addEventListener("DOMContentLoaded", () => {
       badgeClass = "badge-pending";
       statusText = "Por entregar";
     } else if (!actividad.estado) {
-      // Si no tiene estado, asumimos pendiente
       badgeClass = "badge-pending";
       statusText = "Pendiente";
     }
@@ -252,12 +275,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const activityName = actividad.nombreActividad
       .replace(/🔴|📝|📌/g, "")
       .trim();
-    
-    // Manejar campo hora que puede contener el nombre del curso
-    const horaDisplay = actividad.hora && !actividad.hora.includes(actividad.curso) 
-      ? actividad.hora 
+
+    const horaDisplay = actividad.hora && !actividad.hora.includes(actividad.curso)
+      ? actividad.hora
       : 'Sin hora específica';
-    
+
     activityDiv.innerHTML = `
       <div class="activity-name">
         <strong>${activityName}</strong>
@@ -284,6 +306,7 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `;
   }
+
   if (pendingActivities.children.length === 0) {
     pendingActivities.innerHTML = `
       <div class="empty-state">
@@ -292,4 +315,38 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `;
   }
+
+  // Eventos para los iconos de nota y recurso
+  document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("bi-journal-plus")) {
+      const courseName = e.target.getAttribute("data-course");
+      document.getElementById("noteCourseName").value = courseName;
+      const modal = new bootstrap.Modal(document.getElementById("addNoteModal"));
+      modal.show();
+    } else if (e.target.classList.contains("bi-link-45deg")) {
+      const courseName = e.target.getAttribute("data-course");
+      document.getElementById("resourceCourseName").value = courseName;
+      const modal = new bootstrap.Modal(document.getElementById("addResourceModal"));
+      modal.show();
+    }
+  });
+
+  // Guardar nota
+  document.getElementById("saveNote").addEventListener("click", () => {
+    const courseName = document.getElementById("noteCourseName").value;
+    const noteContent = document.getElementById("noteContent").value;
+    alert(`Nota guardada para ${courseName}: ${noteContent}`);
+    const modal = bootstrap.Modal.getInstance(document.getElementById("addNoteModal"));
+    modal.hide();
+  });
+
+  // Guardar recurso
+  document.getElementById("saveResource").addEventListener("click", () => {
+    const courseName = document.getElementById("resourceCourseName").value;
+    const resourceName = document.getElementById("resourceName").value;
+    const resourceLink = document.getElementById("resourceLink").value;
+    alert(`Recurso guardado para ${courseName}: ${resourceName} (${resourceLink})`);
+    const modal = bootstrap.Modal.getInstance(document.getElementById("addResourceModal"));
+    modal.hide();
+  });
 });

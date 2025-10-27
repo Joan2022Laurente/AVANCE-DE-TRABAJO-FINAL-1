@@ -1,15 +1,29 @@
 package com.utp.schedule_backend.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "schedules")
 public class Schedule {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "curso_id")
     private Long cursoId;
+
     private String dia;
+
+    @Column(name = "hora_inicio")
     private String horaInicio;
+
+    @Column(name = "hora_fin")
     private String horaFin;
+
     private String modalidad;
 
-    public Schedule() {
-    }
+    public Schedule() {}
 
     public Schedule(Long id, Long cursoId, String dia, String horaInicio, String horaFin, String modalidad) {
         this.id = id;
@@ -20,53 +34,21 @@ public class Schedule {
         this.modalidad = modalidad;
     }
 
-    //getters y setters...
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getId() {
-        return id;
-    }
+    public Long getCursoId() { return cursoId; }
+    public void setCursoId(Long cursoId) { this.cursoId = cursoId; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getDia() { return dia; }
+    public void setDia(String dia) { this.dia = dia; }
 
-    public Long getCursoId() {
-        return cursoId;
-    }
+    public String getHoraInicio() { return horaInicio; }
+    public void setHoraInicio(String horaInicio) { this.horaInicio = horaInicio; }
 
-    public void setCursoId(Long cursoId) {
-        this.cursoId = cursoId;
-    }
+    public String getHoraFin() { return horaFin; }
+    public void setHoraFin(String horaFin) { this.horaFin = horaFin; }
 
-    public String getDia() {
-        return dia;
-    }
-
-    public void setDia(String dia) {
-        this.dia = dia;
-    }
-
-    public String getHoraInicio() {
-        return horaInicio;
-    }
-
-    public void setHoraInicio(String horaInicio) {
-        this.horaInicio = horaInicio;
-    }
-
-    public String getHoraFin() {
-        return horaFin;
-    }
-
-    public void setHoraFin(String horaFin) {
-        this.horaFin = horaFin;
-    }
-
-    public String getModalidad() {
-        return modalidad;
-    }
-
-    public void setModalidad(String modalidad) {
-        this.modalidad = modalidad;
-    }
+    public String getModalidad() { return modalidad; }
+    public void setModalidad(String modalidad) { this.modalidad = modalidad; }
 }

@@ -1,4 +1,3 @@
-
 export function initLogin() {
   const servers = [
     "https://apiutp-1.onrender.com",
@@ -213,11 +212,7 @@ export function initLogin() {
         return;
       }
 
-      await setLoadingMessage(
-        loadingTextElement,
-        `Conectando a servidor`,
-        250
-      );
+      await setLoadingMessage(loadingTextElement, `Conectando a servidor`, 250);
 
       const url = `${server}/api/eventos-stream?username=${encodeURIComponent(
         username
@@ -250,12 +245,25 @@ export function initLogin() {
         }
       });
 
+      evtSource.addEventListener("cursos", (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          userData.cursos = data.cursos;
+        } catch (err) {
+          console.warn("cursos parse error", err);
+        }
+      });
+
       evtSource.addEventListener("eventos", (event) => {
         try {
           const data = JSON.parse(event.data);
-          userData.eventos = data.eventos;
+          // Separar clases y actividades
+          userData.clases = data.eventos.filter((e) => e.tipo === "Clase");
+          userData.actividades = data.eventos.filter(
+            (e) => e.tipo === "Actividad"
+          );
         } catch (err) {
-          console.warn("eventos parse error", err);
+          console.warn("Error al separar eventos:", err);
         }
       });
 
@@ -274,9 +282,7 @@ export function initLogin() {
           localStorage.setItem("userData", JSON.stringify(userData));
           loaderOverlay.style.display = "none";
           evtSource.close();
-
           updateLoginLinks();
-
           // Cerrar el modal de login
           try {
             const loginModal = bootstrap.Modal.getInstance(
@@ -284,7 +290,6 @@ export function initLogin() {
             );
             if (loginModal) loginModal.hide();
           } catch (err) {}
-
           // Mostrar splash/welcome en la misma página
           showWelcome(localStorage.getItem("userData"));
         } catch (err) {
@@ -322,23 +327,17 @@ export function showWelcome(userData) {
     if (!data) return console.warn("showWelcome: no hay userData");
 
     const nombre = data.nombreEstudiante || "Estudiante";
-    const eventos = data.eventos || [];
-
-    // Fecha ISO yyyy-mm-dd
-    const hoy = new Date().toISOString().split("T")[0];
-
-    const clasesHoy = eventos.filter(
-      (e) => e.tipo === "Clase" && e.fecha === hoy
-    );
+    const clasesHoy =
+      data.clases?.filter(
+        (e) => e.fecha === new Date().toISOString().split("T")[0]
+      ) || [];
     const tieneClase = clasesHoy.length > 0;
-
-    const actividadesPend = eventos.filter(
-      (e) => e.tipo === "Actividad" && e.estado !== "Entregada"
-    );
+    const actividadesPend =
+      data.actividades?.filter((e) => e.estado !== "Entregada") || [];
 
     const msg = `Hola ${nombre}.`;
     const submsg = tieneClase
-      ? `Hoy tienes clase. Te quedan por hacer ${actividadesPend.length} actividades.`
+      ? `Hoy tienes ${clasesHoy.length} clase(s). Te quedan por hacer ${actividadesPend.length} actividades.`
       : `No tienes clase hoy. Te quedan por hacer ${actividadesPend.length} actividades.`;
 
     const elMsg = document.getElementById("welcome-msg");
@@ -349,9 +348,7 @@ export function showWelcome(userData) {
     const welcome = document.getElementById("welcome-screen");
     if (!welcome) return console.warn("welcome-screen no encontrado");
 
-    // Asegúrate de que el elemento empiece oculto: class="welcome hidden"
     welcome.classList.remove("hidden");
-    // fuerza reflow para que transition funcione
     void welcome.offsetWidth;
     welcome.classList.add("show");
 
@@ -360,8 +357,6 @@ export function showWelcome(userData) {
       goBtn.onclick = () => {
         welcome.classList.remove("show");
         setTimeout(() => welcome.classList.add("hidden"), 500);
-        // si quieres redirigir:
-        // window.location.href = "dashboard.html";
       };
     }
   } catch (err) {

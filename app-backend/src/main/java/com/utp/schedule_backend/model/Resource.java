@@ -1,8 +1,18 @@
 package com.utp.schedule_backend.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "resources")
 public class Resource {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "curso_id")
     private Long cursoId;
+
     private String tipo;       // Ej: "pdf", "link", "video"
     private String contenido;  // URL o texto
     private String descripcion;

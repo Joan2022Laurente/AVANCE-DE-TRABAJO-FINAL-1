@@ -1,7 +1,14 @@
 package com.utp.schedule_backend.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "users") // puedes poner otro nombre si quieres
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nombre;
     private String email;
     private String password;
@@ -14,7 +21,7 @@ public class User {
         this.email = email;
         this.password = password;
     }
-
+    // Getters y Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

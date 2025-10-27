@@ -1,10 +1,19 @@
 package com.utp.schedule_backend.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "courses")
 public class Course {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nombre;
     private String codigo;
     private String docente;
+
+    @Column(name = "user_id")
     private Long userId; // relación simple con User
 
     public Course() {}

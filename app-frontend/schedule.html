@@ -17,11 +17,8 @@
   </head>
   <body>
     <div id="navbar"></div>
-
     <main>
       <div id="header"></div>
-
-
       <div class="main-container p-4">
         <!-- Header Section -->
         <div class="header-section">
@@ -31,7 +28,6 @@
             <p id="weekInfo"></p>
           </div>
         </div>
-
         <!-- Navigation Tabs -->
         <ul class="nav nav-tabs" id="scheduleTabs" role="tablist">
           <li class="nav-item" role="presentation">
@@ -59,7 +55,6 @@
             </button>
           </li>
         </ul>
-
         <!-- Tab Content -->
         <div class="tab-content" id="scheduleTabContent">
           <!-- Schedule Tab -->
@@ -86,13 +81,11 @@
                 </table>
               </div>
             </div>
-
             <!-- Mobile Schedule -->
             <div class="mobile-schedule" id="mobileSchedule">
               <!-- Generated dynamically -->
             </div>
           </div>
-
           <!-- Activities Tab -->
           <div class="tab-pane fade" id="activities" role="tabpanel">
             <div class="activities-section">
@@ -119,13 +112,66 @@
             </div>
           </div>
         </div>
-
         <a href="add-course.html" class="add-course-btn">
           <i class="bi bi-plus-lg me-2"></i>
           Agregar curso
         </a>
       </div>
     </main>
+
+    <!-- Modal para agregar nota -->
+    <div class="modal fade" id="addNoteModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Agregar Nota</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="noteForm">
+              <input type="hidden" id="noteCourseName">
+              <div class="mb-3">
+                <label for="noteContent" class="form-label">Contenido de la nota</label>
+                <textarea class="form-control" id="noteContent" rows="3"></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary" id="saveNote">Guardar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal para agregar recurso -->
+    <div class="modal fade" id="addResourceModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Agregar Recurso</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="resourceForm">
+              <input type="hidden" id="resourceCourseName">
+              <div class="mb-3">
+                <label for="resourceName" class="form-label">Nombre del recurso</label>
+                <input type="text" class="form-control" id="resourceName">
+              </div>
+              <div class="mb-3">
+                <label for="resourceLink" class="form-label">Enlace del recurso</label>
+                <input type="url" class="form-control" id="resourceLink">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary" id="saveResource">Guardar</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="./scripts/schedule.js"></script>
