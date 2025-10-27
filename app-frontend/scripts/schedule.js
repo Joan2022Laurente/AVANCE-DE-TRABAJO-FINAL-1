@@ -35,15 +35,10 @@ document.addEventListener("DOMContentLoaded", () => {
   deliveredActivities.innerHTML = "";
   pendingActivities.innerHTML = "";
 
-  // Filtrar eventos
-  const clases = userData.eventos.filter((e) => e.tipo === "Clase");
-  const actividades = userData.eventos.filter((e) => e.tipo === "Actividad");
-
   // Función para generar colores consistentes por curso
   const colorCache = {};
   const getColorForCourse = (courseName) => {
     if (colorCache[courseName]) return colorCache[courseName];
-
     const colors = [
       '#6366f1', // Indigo
       '#8b5cf6', // Purple
@@ -54,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
       '#f97316', // Orange
       '#14b8a6', // Teal
     ];
-
     let hash = 0;
     for (let i = 0; i < courseName.length; i++) {
       hash = courseName.charCodeAt(i) + ((hash << 5) - hash);
@@ -69,22 +63,19 @@ document.addEventListener("DOMContentLoaded", () => {
     timeStr = timeStr.toLowerCase().trim();
     const match = timeStr.match(/(\d{1,2}):(\d{2})\s*(a\.m\.|p\.m\.|am|pm)/);
     if (!match) return timeStr;
-
     let [_, hours, minutes, period] = match;
     hours = parseInt(hours);
-
     if (period.includes('p') && hours !== 12) {
       hours += 12;
     } else if (period.includes('a') && hours === 12) {
       hours = 0;
     }
-
     return `${hours.toString().padStart(2, '0')}:${minutes}`;
   };
 
   // Extraer todos los horarios únicos de las clases
   const uniqueTimeSlots = new Set();
-  clases.forEach(clase => {
+  userData.clases.forEach(clase => {
     if (clase.hora && clase.hora.includes('-')) {
       const startTime = clase.hora.split(' - ')[0];
       uniqueTimeSlots.add(startTime);
@@ -126,27 +117,21 @@ document.addEventListener("DOMContentLoaded", () => {
     row.innerHTML = `<td style="font-weight: 600;">${timeSlot}</td>`;
     days.forEach((day) => {
       const cell = document.createElement("td");
-      const dayClasses = clases.filter((clase) => {
+      const dayClasses = userData.clases.filter((clase) => {
         if (!clase.hora || !clase.hora.includes('-')) return false;
-
         const match = clase.dia.match(/^[^\d\n]+/);
         const claseDay = match ? match[0].trim() : clase.dia;
         const claseDayFull = dayMap[claseDay];
-
         const claseStartTime = clase.hora.split(" - ")[0];
-
         return claseDayFull === day && normalizeTime(claseStartTime) === normalizeTime(timeSlot);
       });
-
       if (dayClasses.length > 0) {
         dayClasses.forEach((clase) => {
           const courseBlock = document.createElement("div");
           courseBlock.className = "course-block";
           const courseName = clase.curso.split("(")[0].trim();
           courseBlock.style.backgroundColor = getColorForCourse(courseName);
-
           const modalityText = clase.modalidad ? `<small>${clase.modalidad}</small>` : '';
-
           courseBlock.innerHTML = `
             ${courseName}
             ${modalityText}
@@ -155,20 +140,17 @@ document.addEventListener("DOMContentLoaded", () => {
               <i class="bi bi-link-45deg action-icon" title="Agregar recurso" data-course="${courseName}"></i>
             </div>
           `;
-
           // Eventos para hover en desktop
           courseBlock.addEventListener("mouseenter", () => {
             const actions = courseBlock.querySelector(".course-actions");
             actions.classList.remove("d-none");
             actions.classList.add("d-flex");
           });
-
           courseBlock.addEventListener("mouseleave", () => {
             const actions = courseBlock.querySelector(".course-actions");
             actions.classList.add("d-none");
             actions.classList.remove("d-flex");
           });
-
           cell.appendChild(courseBlock);
         });
       }
@@ -179,9 +161,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Generar horario para mobile
   const dayEvents = {};
-  clases.forEach((clase) => {
+  userData.clases.forEach((clase) => {
     if (!clase.hora || !clase.hora.includes('-')) return;
-
     const match = clase.dia.match(/^[^\d\n]+/);
     const claseDay = match ? match[0].trim() : clase.dia;
     const dayName = dayMap[claseDay];
@@ -190,7 +171,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const orderedDays = days.filter(day => dayEvents[day]);
-
   if (orderedDays.length === 0) {
     mobileSchedule.innerHTML = `
       <div class="empty-state">
@@ -204,24 +184,20 @@ document.addEventListener("DOMContentLoaded", () => {
       const dayCard = document.createElement("div");
       dayCard.className = "day-card";
       dayCard.innerHTML = `<h4>${day}</h4>`;
-
       events.sort((a, b) => {
         const timeA = a.hora.split(' - ')[0];
         const timeB = b.hora.split(' - ')[0];
         return normalizeTime(timeA).localeCompare(normalizeTime(timeB));
       });
-
       events.forEach((event) => {
         const eventDiv = document.createElement("div");
         eventDiv.className = "mobile-event";
         const courseName = event.curso.split("(")[0].trim();
         const color = getColorForCourse(courseName);
         eventDiv.style.borderLeftColor = color;
-
         const modalityHTML = event.modalidad
           ? `<span class="modality" style="background-color: ${color}">${event.modalidad}</span>`
           : '';
-
         eventDiv.innerHTML = `
           <h5>${courseName}</h5>
           <div class="time">${event.hora}</div>
@@ -231,7 +207,6 @@ document.addEventListener("DOMContentLoaded", () => {
             <i class="bi bi-link-45deg action-icon" title="Agregar recurso" data-course="${courseName}"></i>
           </div>
         `;
-
         // Evento para click en móvil
         eventDiv.addEventListener("click", (e) => {
           const actions = eventDiv.querySelector(".course-actions-mobile");
@@ -244,7 +219,6 @@ document.addEventListener("DOMContentLoaded", () => {
           }
           e.stopPropagation();
         });
-
         dayCard.appendChild(eventDiv);
       });
       mobileSchedule.appendChild(dayCard);
@@ -252,12 +226,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Generar lista de actividades
-  actividades.forEach((actividad) => {
+  userData.actividades.forEach((actividad) => {
     const activityDiv = document.createElement("div");
     activityDiv.className = "activity-item";
     let badgeClass = "badge-pending";
     let statusText = "Pendiente";
-
     if (actividad.estado === "Entregada") {
       badgeClass = "badge-delivered";
       statusText = "Entregada";
@@ -271,15 +244,12 @@ document.addEventListener("DOMContentLoaded", () => {
       badgeClass = "badge-pending";
       statusText = "Pendiente";
     }
-
     const activityName = actividad.nombreActividad
       .replace(/🔴|📝|📌/g, "")
       .trim();
-
     const horaDisplay = actividad.hora && !actividad.hora.includes(actividad.curso)
       ? actividad.hora
       : 'Sin hora específica';
-
     activityDiv.innerHTML = `
       <div class="activity-name">
         <strong>${activityName}</strong>
@@ -289,7 +259,6 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
       <span class="activity-badge ${badgeClass}">${statusText}</span>
     `;
-
     if (actividad.estado === "Entregada") {
       deliveredActivities.appendChild(activityDiv);
     } else {
@@ -306,7 +275,6 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `;
   }
-
   if (pendingActivities.children.length === 0) {
     pendingActivities.innerHTML = `
       <div class="empty-state">

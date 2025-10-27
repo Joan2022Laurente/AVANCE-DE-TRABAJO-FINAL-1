@@ -3,34 +3,37 @@ package com.utp.schedule_backend.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users") // puedes poner otro nombre si quieres
+@Table(name = "users") // puedes cambiar el nombre si lo deseas
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nombre;
-    private String email;
-    private String password;
 
+    // Constructor vacío obligatorio para JPA
     public User() {}
 
-    public User(Long id, String nombre, String email, String password) {
+    // Constructor con parámetros
+    public User(Long id, String nombre) {
         this.id = id;
         this.nombre = nombre;
-        this.email = email;
-        this.password = password;
     }
+
     // Getters y Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public String getNombre() {
+        return nombre;
+    }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 }
