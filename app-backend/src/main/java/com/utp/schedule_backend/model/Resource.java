@@ -1,6 +1,7 @@
 package com.utp.schedule_backend.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "resources")
@@ -10,35 +11,39 @@ public class Resource {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "curso_id")
-    private Long cursoId;
-
-    private String tipo;       // Ej: "pdf", "link", "video"
-    private String contenido;  // URL o texto
+    private String titulo;
+    private String enlace;
+    private String categoria;
     private String descripcion;
+
+    private LocalDateTime fechaCreacion = LocalDateTime.now();
+
+    // 🔗 Relación con usuario
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Resource() {}
 
-    public Resource(Long id, Long cursoId, String tipo, String contenido, String descripcion) {
-        this.id = id;
-        this.cursoId = cursoId;
-        this.tipo = tipo;
-        this.contenido = contenido;
-        this.descripcion = descripcion;
-    }
-
+    // --- Getters y Setters ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public Long getCursoId() { return cursoId; }
-    public void setCursoId(Long cursoId) { this.cursoId = cursoId; }
+    public String getTitulo() { return titulo; }
+    public void setTitulo(String titulo) { this.titulo = titulo; }
 
-    public String getTipo() { return tipo; }
-    public void setTipo(String tipo) { this.tipo = tipo; }
+    public String getEnlace() { return enlace; }
+    public void setEnlace(String enlace) { this.enlace = enlace; }
 
-    public String getContenido() { return contenido; }
-    public void setContenido(String contenido) { this.contenido = contenido; }
+    public String getCategoria() { return categoria; }
+    public void setCategoria(String categoria) { this.categoria = categoria; }
 
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+
+    public LocalDateTime getFechaCreacion() { return fechaCreacion; }
+    public void setFechaCreacion(LocalDateTime fechaCreacion) { this.fechaCreacion = fechaCreacion; }
+
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 }

@@ -279,10 +279,44 @@ export function initLogin() {
       evtSource.addEventListener("fin", async () => {
         try {
           userData.success = true;
+          userData.codigo = username;
           localStorage.setItem("userData", JSON.stringify(userData));
           loaderOverlay.style.display = "none";
           evtSource.close();
           updateLoginLinks();
+
+          // Enviar el nombre del estudiante al backend
+          // Enviar el usuario y sus cursos al backend
+          if (userData.nombreEstudiante) {
+            try {
+              const payload = {
+                codigo: username,
+                nombre: userData.nombreEstudiante,
+                courses: (userData.cursos || []).map((c) => ({
+                  nombre: c.nombre,
+                  docente: c.docente,
+                })),
+              };
+
+              const response = await fetch("http://localhost:8081/api/users", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+              });
+
+              if (!response.ok) {
+                console.warn(
+                  "No se pudo registrar el usuario:",
+                  response.status
+                );
+              } else {
+                console.log("Usuario + cursos registrados correctamente ✅");
+              }
+            } catch (error) {
+              console.error("Error al registrar usuario:", error);
+            }
+          }
+
           // Cerrar el modal de login
           try {
             const loginModal = bootstrap.Modal.getInstance(
@@ -290,6 +324,7 @@ export function initLogin() {
             );
             if (loginModal) loginModal.hide();
           } catch (err) {}
+
           // Mostrar splash/welcome en la misma página
           showWelcome(localStorage.getItem("userData"));
         } catch (err) {
@@ -320,44 +355,67 @@ export function initLogin() {
   loginForm.dataset.listenerAdded = "true";
 }
 
-// ---------- showWelcome (mejorado) ----------
 export function showWelcome(userData) {
   try {
     const data = typeof userData === "string" ? JSON.parse(userData) : userData;
-    if (!data) return console.warn("showWelcome: no hay userData");
+    if (!data) {
+      console.warn("showWelcome: userData vacío o inválido");
+      return;
+    }
 
     const nombre = data.nombreEstudiante || "Estudiante";
-    const clasesHoy =
-      data.clases?.filter(
-        (e) => e.fecha === new Date().toISOString().split("T")[0]
-      ) || [];
-    const tieneClase = clasesHoy.length > 0;
+    const hoy = new Date().toISOString().split("T")[0];
+    const clasesHoy = data.clases?.filter((e) => e.fecha === hoy) || [];
     const actividadesPend =
       data.actividades?.filter((e) => e.estado !== "Entregada") || [];
 
-    const msg = `Hola ${nombre}.`;
-    const submsg = tieneClase
-      ? `Hoy tienes ${clasesHoy.length} clase(s). Te quedan por hacer ${actividadesPend.length} actividades.`
-      : `No tienes clase hoy. Te quedan por hacer ${actividadesPend.length} actividades.`;
+    // Lógica para mensajes dinámicos
+    const tieneClase = clasesHoy.length > 0;
+    const tieneActividades = actividadesPend.length > 0;
+    let submsg = "";
+    if (tieneClase && tieneActividades) {
+      submsg = `Hoy tienes ${clasesHoy.length} clase(s). Te quedan ${actividadesPend.length} actividad(es) pendiente(s).`;
+    } else if (tieneClase) {
+      submsg = `Hoy tienes ${clasesHoy.length} clase(s). ¡No tienes actividades pendientes!`;
+    } else if (tieneActividades) {
+      submsg = `No tienes clase hoy. Te quedan ${actividadesPend.length} actividad(es) pendiente(s).`;
+    } else {
+      submsg =
+        "No tienes clases ni actividades pendientes hoy. ¡Disfruta tu día!";
+    }
 
+    // Actualizar DOM
     const elMsg = document.getElementById("welcome-msg");
     const elSub = document.getElementById("welcome-submsg");
-    if (elMsg) elMsg.textContent = msg;
+    const welcome = document.getElementById("welcome-screen");
+
+    if (!welcome) {
+      console.error("Elemento #welcome-screen no encontrado");
+      return;
+    }
+    if (elMsg) elMsg.textContent = `Hola ${nombre}.`;
     if (elSub) elSub.textContent = submsg;
 
-    const welcome = document.getElementById("welcome-screen");
-    if (!welcome) return console.warn("welcome-screen no encontrado");
-
+    // Mostrar pantalla de bienvenida
     welcome.classList.remove("hidden");
     void welcome.offsetWidth;
     welcome.classList.add("show");
 
+    // Función para recargar la página
+    const reloadPage = () => {
+      window.location.reload();
+    };
+
+    // Botón "Dashboard"
     const goBtn = document.getElementById("goDashboardBtn");
     if (goBtn) {
-      goBtn.onclick = () => {
-        welcome.classList.remove("show");
-        setTimeout(() => welcome.classList.add("hidden"), 500);
-      };
+      goBtn.onclick = reloadPage;
+    }
+
+    // Botón de cierre (X)
+    const closeBtn = document.getElementById("closeWelcomeBtn");
+    if (closeBtn) {
+      closeBtn.onclick = reloadPage;
     }
   } catch (err) {
     console.error("Error en showWelcome:", err);

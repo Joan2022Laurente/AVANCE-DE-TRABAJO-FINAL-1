@@ -29,190 +29,337 @@
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   </head>
   <body>
+
+    <!-- Loader animado -->
+    <div class="page-loader">
+      <div class="loader-content">
+        <div class="loader-logo">UTP+Schedule</div>
+        <div class="loader-bar"></div>
+      </div>
+    </div>
+
     <div id="navbar"></div>
     <main>
       <div id="header"></div>
+      <div class="container pt-5">
+        <!-- Hero Section -->
+        <section class="hero-section">
+          <div class="hero-background">
+            <div class="gradient-orb orb-1"></div>
+            <div class="gradient-orb orb-2"></div>
+            <div class="gradient-orb orb-3"></div>
+          </div>
 
-      <!-- Hero Section -->
-      <section class="hero-section">
-        <div class="hero-container">
-          <div class="hero-content">
-            <h1 class="hero-title">
-              Domina tu <span class="highlight">horario universitario</span>
-            </h1>
-            <p class="hero-subtitle">
-              Con UTP+Schedule, organiza tus cursos, tareas y recursos en un
-              solo lugar.
-              <strong>Menos estrés, más productividad.</strong>
-            </p>
-            <div class="hero-buttons">
-              <a href="add-course.html" class="btn btn-primary btn-lg">
-                <i class="bi bi-plus-lg me-2"></i>
-                Comenzar Ahora
-              </a>
-              <a href="#features" class="btn btn-outline-primary btn-lg">
-                <i class="bi bi-info-circle me-2"></i>
-                Ver Funciones
-              </a>
-            </div>
-          </div>
-          <div class="hero-image">
-            <img
-              src="assets/hero-illustration.svg"
-              alt="Ilustración de horario universitario organizado"
-            />
-          </div>
-        </div>
-      </section>
-
-      <!-- Features Section -->
-      <section id="features" class="py-5">
-        <div class="container">
-          <div class="section-header text-center mb-5">
-            <h2>
-              Todo lo que necesitas para
-              <span class="highlight">triunfar</span> en la universidad
-            </h2>
-            <p class="section-subtitle">
-              Herramientas diseñadas para estudiantes, por estudiantes.
-            </p>
-          </div>
-          <div class="features-grid">
-            <div class="feature-card">
-              <div class="feature-icon">
-                <i class="bi bi-plus-lg"></i>
+          <div class="hero-container">
+            <div class="hero-content">
+              <div class="hero-badge">
+                <i class="bi bi-stars"></i>
+                <span>Potenciado por IA</span>
               </div>
-              <h3 class="feature-title">Crear Horario en Segundos</h3>
-              <p class="feature-description">
-                Agrega tus cursos con solo unos clics. Nuestra interfaz
-                intuitiva te guía paso a paso para construir tu horario ideal.
+              <h1 class="hero-title">
+                <span class="title-line">Domina tu</span>
+                <span class="title-line highlight-line">
+                  <span class="highlight">horario universitario</span>
+                </span>
+              </h1>
+              <p class="hero-subtitle">
+                Con UTP+Schedule, organiza tus cursos, tareas y recursos en un
+                solo lugar.
+                <strong>Menos estrés, más productividad.</strong>
               </p>
-            </div>
-            <div class="feature-card">
-              <div class="feature-icon">
-                <i class="bi bi-calendar-check"></i>
-              </div>
-              <h3 class="feature-title">Horario Interactivo</h3>
-              <p class="feature-description">
-                Visualiza tu semana completa con colores personalizables,
-                recordatorios y sincronización con tu calendario.
-              </p>
-            </div>
-            <div class="feature-card">
-              <div class="feature-icon">
-                <i class="bi bi-check-square-fill"></i>
-              </div>
-              <h3 class="feature-title">Gestión Inteligente de Tareas</h3>
-              <p class="feature-description">
-                Prioriza tareas automáticamente, recibe alertas de fechas límite
-                y lleva un seguimiento de tu progreso académico.
-              </p>
-            </div>
-            <div class="feature-card">
-              <div class="feature-icon">
-                <i class="bi bi-folder-symlink"></i>
-              </div>
-              <h3 class="feature-title">Recursos Centralizados</h3>
-              <p class="feature-description">
-                Guarda enlaces, documentos y notas por curso. Accede a todo
-                desde cualquier dispositivo, en cualquier momento.
-              </p>
-            </div>
-            <div class="feature-card">
-              <div class="feature-icon">
-                <i class="bi bi-lightbulb"></i>
-              </div>
-              <h3 class="feature-title">Recomendaciones con IA</h3>
-              <p class="feature-description">
-                Recibe sugerencias personalizadas para optimizar tu tiempo de
-                estudio y mejorar tu rendimiento académico.
-              </p>
-            </div>
-            <div class="feature-card">
-              <div class="feature-icon">
-                <i class="bi bi-phone"></i>
-              </div>
-              <h3 class="feature-title">Acceso Móvil</h3>
-              <p class="feature-description">
-                Lleva tu horario en el bolsillo. Disponible en cualquier
-                navegador, sin necesidad de descargar apps.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Testimonial Section -->
-      <section class="testimonial-section py-5">
-        <div class="container">
-          <div class="testimonial-card">
-            <div class="testimonial-content">
-              <p class="testimonial-text">
-                "UTP+Schedule cambió mi forma de estudiar. Ahora tengo todo
-                organizado y nunca más se me pasa una tarea. ¡Mi promedio subió
-                un 20%!"
-              </p>
-              <div class="testimonial-author">
-                <div class="author-avatar">
-                  <i class="bi bi-person-circle"></i>
-                </div>
-                <div class="author-info">
-                  <span class="author-name">Maricielo Esmeralda</span>
-                  <span class="author-role"
-                    >Estudiante de Ingeniería de Software, UTP</span
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Status Section -->
-      <section class="py-5">
-        <div class="container">
-          <div class="card text-center status-card">
-            <div class="card-header">
-              <h3>Tu Progreso Académico</h3>
-            </div>
-            <div class="card-body">
-              <div id="home-status" class="status-content">
-                <i class="bi bi-emoji-frown status-icon"></i>
-                <p class="status-message mb-4">
-                  Aún no has registrado cursos.
-                  <strong
-                    >¡Empieza ahora y toma el control de tu horario!</strong
-                  >
-                </p>
-                <a href="add-course.html" class="btn btn-primary btn-lg">
-                  <i class="bi bi-plus-lg me-2"></i>
-                  Agregar Mi Primer Curso
+              <div class="hero-buttons">
+                <a
+                  href="add-course.html"
+                  class="btn btn-primary btn-lg btn-magnetic"
+                >
+                  <span class="btn-content">
+                    <i class="bi bi-plus-lg me-2"></i>
+                    Comenzar Ahora
+                  </span>
+                </a>
+                <a
+                  href="#features"
+                  class="btn btn-outline-primary btn-lg btn-magnetic"
+                >
+                  <span class="btn-content">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Ver Funciones
+                  </span>
                 </a>
               </div>
+
+              <!-- Stats animados -->
+              <div class="hero-stats">
+                <div class="stat-item">
+                  <div class="stat-number" data-target="500">0</div>
+                  <div class="stat-label">Estudiantes Activos</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-number" data-target="2500">0</div>
+                  <div class="stat-label">Cursos Creados</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-number" data-target="98">0</div>
+                  <div class="stat-label">% Satisfacción</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-image">
+              <div class="floating-card card-1">
+                <i class="bi bi-calendar-check"></i>
+                <span>Horario Sincronizado</span>
+              </div>
+              <div class="floating-card card-2">
+                <i class="bi bi-check-circle-fill"></i>
+                <span>Tarea Completada</span>
+              </div>
+              <div class="floating-card card-3">
+                <i class="bi bi-lightning-charge"></i>
+                <span>IA Activada</span>
+              </div>
+              <img
+                src="assets/hero-illustration.png"
+                alt="Ilustración de horario universitario organizado"
+                class="hero-main-image"
+              />
             </div>
           </div>
-        </div>
-      </section>
 
-      <!-- Final CTA -->
-      <section class="final-cta py-5">
-        <div class="container text-center">
-          <h2>
-            ¿Listo para <span class="highlight">simplificar</span> tu vida
-            universitaria?
-          </h2>
-          <p class="cta-subtitle mb-4">
-            Únete a cientos de estudiantes que ya están optimizando su tiempo
-            con UTP+Schedule.
-          </p>
-          <a href="add-course.html" class="btn btn-primary btn-lg">
-            <i class="bi bi-rocket me-2"></i>
-            Comenzar Ahora - ¡Es Gratis!
-          </a>
-        </div>
-      </section>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="py-5 features-section">
+          <div class="container">
+            <div class="section-header text-center mb-5">
+              <div class="section-tag">Características</div>
+              <h2 class="reveal-text">
+                <span class="reveal-line">Todo lo que necesitas para</span>
+                <span class="reveal-line">
+                  <span class="highlight">triunfar</span> en la universidad
+                </span>
+              </h2>
+              <p class="section-subtitle">
+                Herramientas diseñadas para estudiantes, por estudiantes.
+              </p>
+            </div>
+
+            <div class="features-grid">
+              <div class="feature-card" data-feature="1">
+                <div class="feature-number">01</div>
+                <div class="feature-icon">
+                  <i class="bi bi-plus-lg"></i>
+                  <div class="icon-bg"></div>
+                </div>
+                <h3 class="feature-title">Crear Horario en Segundos</h3>
+                <p class="feature-description">
+                  Agrega tus cursos con solo unos clics. Nuestra interfaz
+                  intuitiva te guía paso a paso para construir tu horario ideal.
+                </p>
+
+              </div>
+
+              <div class="feature-card" data-feature="2">
+                <div class="feature-number">02</div>
+                <div class="feature-icon">
+                  <i class="bi bi-calendar-check"></i>
+                  <div class="icon-bg"></div>
+                </div>
+                <h3 class="feature-title">Horario Interactivo</h3>
+                <p class="feature-description">
+                  Visualiza tu semana completa con colores personalizables,
+                  recordatorios y sincronización con tu calendario.
+                </p>
+
+              </div>
+
+              <div class="feature-card" data-feature="3">
+                <div class="feature-number">03</div>
+                <div class="feature-icon">
+                  <i class="bi bi-check-square-fill"></i>
+                  <div class="icon-bg"></div>
+                </div>
+                <h3 class="feature-title">Gestión Inteligente de Tareas</h3>
+                <p class="feature-description">
+                  Prioriza tareas automáticamente, recibe alertas de fechas
+                  límite y lleva un seguimiento de tu progreso académico.
+                </p>
+
+              </div>
+
+              <div class="feature-card" data-feature="4">
+                <div class="feature-number">04</div>
+                <div class="feature-icon">
+                  <i class="bi bi-folder-symlink"></i>
+                  <div class="icon-bg"></div>
+                </div>
+                <h3 class="feature-title">Recursos Centralizados</h3>
+                <p class="feature-description">
+                  Guarda enlaces, documentos y notas por curso. Accede a todo
+                  desde cualquier dispositivo, en cualquier momento.
+                </p>
+
+              </div>
+
+              <div class="feature-card" data-feature="5">
+                <div class="feature-number">05</div>
+                <div class="feature-icon">
+                  <i class="bi bi-lightbulb"></i>
+                  <div class="icon-bg"></div>
+                </div>
+                <h3 class="feature-title">Recomendaciones con IA</h3>
+                <p class="feature-description">
+                  Recibe sugerencias personalizadas para optimizar tu tiempo de
+                  estudio y mejorar tu rendimiento académico.
+                </p>
+
+              </div>
+
+              <div class="feature-card" data-feature="6">
+                <div class="feature-number">06</div>
+                <div class="feature-icon">
+                  <i class="bi bi-phone"></i>
+                  <div class="icon-bg"></div>
+                </div>
+                <h3 class="feature-title">Acceso Móvil</h3>
+                <p class="feature-description">
+                  Lleva tu horario en el bolsillo. Disponible en cualquier
+                  navegador, sin necesidad de descargar apps.
+                </p>
+
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Testimonial Section -->
+        <section class="testimonial-section py-5">
+          <div class="container">
+            <div class="section-tag text-center mb-4">Testimonios</div>
+            <div class="testimonials-wrapper">
+              <div class="testimonials-slider">
+                <div class="testimonial-card active" data-index="0">
+                  <div class="testimonial-content">
+                    <div class="quote-mark">"</div>
+                    <p class="testimonial-text">
+                      UTP+Schedule cambió mi forma de estudiar. Ahora tengo todo
+                      organizado y nunca más se me pasa una tarea. ¡Mi promedio
+                      subió un 20%!
+                    </p>
+                    <div class="testimonial-author">
+                      <div class="author-avatar">
+                        <i class="bi bi-person-circle"></i>
+                      </div>
+                      <div class="author-info">
+                        <span class="author-name">Maricielo Esmeralda</span>
+                        <span class="author-role"
+                          >Estudiante de Ingeniería de Software, UTP</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="testimonial-card" data-index="1">
+                  <div class="testimonial-content">
+                    <div class="quote-mark">"</div>
+                    <p class="testimonial-text">
+                      La mejor herramienta para organizarme. Las recomendaciones
+                      de IA me ayudan a priorizar mejor y el diseño es
+                      increíble.
+                    </p>
+                    <div class="testimonial-author">
+                      <div class="author-avatar">
+                        <i class="bi bi-person-circle"></i>
+                      </div>
+                      <div class="author-info">
+                        <span class="author-name">Carlos Mendoza</span>
+                        <span class="author-role"
+                          >Estudiante de Sistemas, UTP</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="testimonial-card" data-index="2">
+                  <div class="testimonial-content">
+                    <div class="quote-mark">"</div>
+                    <p class="testimonial-text">
+                      Desde que uso UTP+Schedule, mi productividad aumentó
+                      significativamente. Es intuitivo y muy fácil de usar.
+                    </p>
+                    <div class="testimonial-author">
+                      <div class="author-avatar">
+                        <i class="bi bi-person-circle"></i>
+                      </div>
+                      <div class="author-info">
+                        <span class="author-name">Ana Torres</span>
+                        <span class="author-role"
+                          >Estudiante de Administración, UTP</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="testimonial-controls">
+              <button class="testimonial-prev" aria-label="Anterior testimonio">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+              <div class="testimonial-dots">
+                <span class="dot active" data-index="0"></span>
+                <span class="dot" data-index="1"></span>
+                <span class="dot" data-index="2"></span>
+              </div>
+              <button
+                class="testimonial-next"
+                aria-label="Siguiente testimonio"
+              >
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- Final CTA -->
+        <section class="final-cta py-5">
+          <div class="cta-background">
+            <div class="cta-orb cta-orb-1"></div>
+            <div class="cta-orb cta-orb-2"></div>
+          </div>
+          <div class="container text-center">
+            <h2 class="cta-title">
+              ¿Listo para <span class="highlight">simplificar</span> tu vida
+              universitaria?
+            </h2>
+            <p class="cta-subtitle mb-4">
+              Únete a cientos de estudiantes que ya están optimizando su tiempo
+              con UTP+Schedule.
+            </p>
+            <a
+              href="add-course.html"
+              class="btn btn-primary btn-lg btn-magnetic"
+            >
+              <span class="btn-content">
+                <i class="bi bi-rocket me-2"></i>
+                Comenzar Ahora - ¡Es Gratis!
+              </span>
+            </a>
+          </div>
+        </section>
+      </div>
     </main>
+
+    <!-- GSAP para animaciones profesionales -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
     <script type="module" src="scripts/main.js"></script>
+    <script src="scripts/index.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"

@@ -1,34 +1,49 @@
 package com.utp.schedule_backend.service;
 
 import com.utp.schedule_backend.model.Resource;
+import com.utp.schedule_backend.model.User;
+import com.utp.schedule_backend.repository.ResourceRepository;
+import com.utp.schedule_backend.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ResourceService {
 
-    private List<Resource> resources = new ArrayList<>();
-    private Long nextId = 1L;
+    @Autowired
+    private ResourceRepository resourceRepository;
 
-    // Crear recurso
-    public Resource crearRecurso(Resource resource) {
-        resource.setId(nextId++);
-        resources.add(resource);
-        return resource;
+    @Autowired
+    private UserRepository userRepository;
+
+    // Listar todos los recursos de un usuario
+    public List<Resource> listarPorUsuario(Long userId) {
+        return userRepository.findById(userId)
+                .map(resourceRepository::findByUser)
+                .orElse(List.of());
     }
 
-    // Listar recursos
-    public List<Resource> listarRecursos() {
-        return resources;
+    // Guardar recurso asociado a un usuario
+    public Resource guardar(Long userId, Resource resource) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        resource.setUser(user);
+        if (resource.getFechaCreacion() == null) {
+            resource.setFechaCreacion(LocalDateTime.now());
+        }
+
+        return resourceRepository.save(resource);
     }
 
-    // Obtener recurso por ID
-    public Optional<Resource> obtenerRecurso(Long id) {
-        return resources.stream()
-                .filter(r -> r.getId().equals(id))
-                .findFirst();
+    // Eliminar recurso por ID
+    public void eliminar(Long id) {
+        if (!resourceRepository.existsById(id)) {
+            throw new RuntimeException("Recurso no encontrado");
+        }
+        resourceRepository.deleteById(id);
     }
 }

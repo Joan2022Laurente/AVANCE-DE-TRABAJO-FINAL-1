@@ -74,9 +74,11 @@
 
 /* Modal */
 .modal-content {
+  padding: var(--space-md);
   background: var(--color-bg-secondary);
-  border-radius: var(--radius-xl);
-  border: 1px solid var(--color-border);
+  backdrop-filter: blur(80px);
+  border-radius: var(--radius-sm);
+
 }
 
 .modal-header {
@@ -96,4 +98,97 @@
 
 .modal-footer {
   border-top: 1px solid var(--color-border);
+}
+
+
+/* 📌 Tarjetas de recursos */
+.card {
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+.card-title {
+  color: var(--color-text-primary);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.card-text {
+  color: var(--color-text-secondary);
+}
+.badge {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+}
+
+/* 📌 Sección de curso */
+.course-section h3 {
+  color: var(--color-primary);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+/* 📌 Botón de eliminar */
+.delete-resource {
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+.delete-resource:hover {
+  opacity: 1;
+  background: rgba(225, 17, 104, 0.1);
+  border-color: rgba(225, 17, 104, 0.3);
+}
+
+/* 📌 Inputs y selects en el modal */
+.form-control,
+.form-select {
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  border-radius: var(--radius-sm);
+}
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 0.25rem rgba(225, 17, 104, 0.25);
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
+}
+.form-select option {
+  background: var(--color-bg-tertiary);
+}
+
+/* 📌 Placeholder */
+::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  opacity: 1;
+}
+
+/* 📌 Feedback para enlaces */
+.card a {
+  color: var(--color-primary);
+  font-weight: 500;
+}
+.card a:hover {
+  text-decoration: underline;
+}
+
+
+/* Transición para el estado vacío */
+.empty-state {
+  transition: all 0.3s ease;
+}
+
+/* Efecto de carga para botones */
+.btn-modern:active {
+  transform: translateY(0);
 }

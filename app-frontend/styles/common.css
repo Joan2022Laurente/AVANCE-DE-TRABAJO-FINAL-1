@@ -8,7 +8,7 @@
   --color-primary: #e11168;
   --color-bg-primary: #0f0f0f;
   --color-bg-secondary: #3b3b3b2d;
-  --color-bg-tertiary: #2a2a2a;
+  --color-bg-tertiary: #1d1d1d;
   --color-text-primary: #ffffff;
   --color-text-secondary: #cccccc;
   --color-border: #333333;
@@ -26,7 +26,7 @@
   --space-2xl: 4rem;
 
   /* 🔲 Bordes */
-  --radius-sm: 0.375rem;
+  --radius-sm: 0.8rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
 
@@ -46,6 +46,11 @@
   padding: 0;
   box-sizing: border-box;
 }
+.modal-backdrop.show {
+  opacity: 0.8; 
+}
+
+
 
 /* =========================================================
    TIPOGRAFÍA
@@ -386,41 +391,98 @@ input:-webkit-autofill {
   cursor: pointer;
   color: var(--color-text-secondary);
 }
-
 /* =========================================================
-   MODAL + LOADER
+   MODAL: UTP+Schedule
 ========================================================= */
 #loginModal {
-  background-color: rgba(201, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
   backdrop-filter: blur(100px);
 }
 
-.modal-content {
-  background-color: var(--color-bg-primary);
-  border-radius: var(--radius-md);
-  padding: var(--space-md);
+.modal-content.mcLogin {
+  padding: var(--space-lg);
+  box-shadow: none !important;
+  border: none;
+  margin: 0 auto;
+  max-width: 450px;
+  background-color: transparent;
 }
 
-.modal-header {
-  border-bottom: none;
-  padding-bottom: 0;
+/* Logo y título */
+.logo-container {
+  margin-bottom: var(--space-xs);
 }
 
-.modal-title {
+.logo-title {
   color: var(--color-text-primary);
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  font-weight: 700;
+  margin: 0;
+  font-size: 24px;
 }
 
-.modal-body {
-  padding-top: var(--space-xs);
+.logo-plus {
+  color: var(--color-primary);
 }
 
-#loginForm .btn {
-  background-color: var(--color-primary);
+.modal-subtitle {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  font-size: 1rem;
+  margin: 0 0 var(--space-md);
+}
+
+/* Formulario */
+.form-group {
+  margin-bottom: var(--space-md);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: var(--space-xs);
+  color: var(--color-text-primary);
+  font-weight: 500;
+  font-size: 0.8rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.form-control:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.2);
+}
+
+/* Botón de login */
+.btn-primary {
+  background-color: transparent;
   color: white;
+  border: none;
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  transition: background-color 0.3s;
+  margin-top: var(--space-sm);
+  border: 1px solid var(--color-border);
+}
+
+.btn-primary:hover {
+  border: 1px solid var(--color-primary);
+  background-color: color-mix(in srgb, var(--color-primary), black 20%);
+}
+
+/* Mensaje de privacidad */
+.privacy-notice {
+  text-align: center;
+  margin-top: var(--space-md);
+  font-size: 12px;
+  color: var(--color-text-secondary);
 }
 
 #loginLoader {
@@ -432,13 +494,7 @@ input:-webkit-autofill {
 
 /* Overlay con gradiente animado */
 .modal-loader-overlay {
-  background: linear-gradient(
-    -45deg,
-    #000b72,
-    #960000,
-    #3f00eb,
-    #000005
-  );
+  background: linear-gradient(-45deg, #000b72, #960000, #3f00eb, #000005);
   background-size: 400% 400%;
   background-repeat: no-repeat;
   animation: gradient 12s ease infinite;
@@ -448,7 +504,6 @@ input:-webkit-autofill {
   justify-content: center;
   align-items: center;
   z-index: 2000;
-  gap: 20px;
   transition: background 1s ease-in-out;
 }
 
@@ -758,6 +813,24 @@ input:-webkit-autofill {
 .welcome.show {
   opacity: 1;
   z-index: 50000;
+}
+.welcome .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #666;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.3s;
+}
+
+.close-btn:hover {
+  color: #333;
 }
 
 .welcome button a {

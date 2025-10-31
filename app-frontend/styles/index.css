@@ -1,9 +1,142 @@
-/* Home page specific styles */
+/* =========================================================
+   INDEX.CSS - Awwwards Edition (Sin Brillo Neón)
+   Animaciones profesionales y diseño moderno
+========================================================= */
+
+/* ============================================
+   1. PAGE LOADER
+============================================ */
+.page-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: var(--color-bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  transition: opacity 0.5s ease;
+}
+
+.loader-content {
+  text-align: center;
+}
+
+.loader-logo {
+  font-size: 4rem;
+  font-weight: 800;
+  color: white;
+  font-family: var(--font-primary);
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, white, #ffffff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.loader-bar {
+  width: 0;
+  height: 4px;
+  background: linear-gradient(135deg, white, #ffffff);
+  border-radius: 2px;
+}
+
+/* ============================================
+   2. CUSTOM CURSOR
+============================================ */
+.custom-cursor,
+.custom-cursor-dot {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+}
+
+.custom-cursor {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--color-primary);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.custom-cursor-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@media (max-width: 768px) {
+  .custom-cursor,
+  .custom-cursor-dot {
+    display: none;
+  }
+}
+
+/* ============================================
+   3. HERO SECTION ENHANCED
+============================================ */
 .hero-section {
   max-width: 80%;
   margin: auto;
-  padding-top: 80px;
-  padding-bottom: 60px;
+  padding-top: 120px;
+  padding-bottom: 80px;
+  position: relative;
+
+}
+
+.hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+
+  pointer-events: none;
+}
+
+.gradient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.2;
+  animation: float 8s ease-in-out infinite;
+}
+
+.orb-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--color-primary), transparent);
+  top: -200px;
+  right: -150px;
+}
+
+.orb-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #ff6b9d, transparent);
+  bottom: -100px;
+  left: -100px;
+}
+
+.orb-3 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, #6366f1, transparent);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(30px, -30px); }
 }
 
 .hero-container {
@@ -11,249 +144,809 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  gap: 40px;
+  gap: 60px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-content {
+  flex: 1;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(225, 17, 104, 0.1);
+  border: 1px solid rgba(225, 17, 104, 0.3);
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  color: var(--color-primary);
+  margin-bottom: 24px;
+  backdrop-filter: blur(10px);
+}
+
+.hero-badge i {
+  font-size: 1.1rem;
 }
 
 .hero-title {
-  font-size: 3rem;
-  font-weight: 700;
-  margin: 0 0 20px 0;
-  line-height: 1.2;
+  font-size: 4rem;
+  font-weight: 800;
+  margin: 0 0 30px 0;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.title-line {
+  display: block;
+  overflow: hidden;
 }
 
 .highlight {
   color: var(--color-primary);
-  text-decoration: underline;
-  text-decoration-color: rgba(225, 17, 104, 0.3);
-  text-decoration-thickness: 3px;
+  position: relative;
+  display: inline-block;
+}
+
+.highlight::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary), #ff6b9d);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: underline 1s ease forwards 0.5s;
+}
+
+@keyframes underline {
+  to { transform: scaleX(1); }
 }
 
 .hero-subtitle {
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   color: var(--color-text-secondary);
-  margin-bottom: 30px;
+  margin-bottom: 40px;
   font-weight: 400;
-  line-height: 1.5;
+  line-height: 1.6;
   max-width: 600px;
 }
 
 .hero-buttons {
   display: flex;
-  gap: 15px;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 60px;
+}
+
+.btn-magnetic {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.btn-content {
+  position: relative;
+  z-index: 2;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-primary), #360012);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+
+
+.btn-outline-primary {
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+  background: transparent;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+
+
+/* ============================================
+   4. HERO STATS
+============================================ */
+.hero-stats {
+  display: flex;
+  gap: 40px;
   flex-wrap: wrap;
 }
 
-.hero-image {
-  flex: 0 0 45%;
-  text-align: center;
+.stat-item {
+  text-align: left;
 }
 
-.hero-image img {
-  max-width: 80%;
+.stat-number {
+  font-size: 3rem;
+  font-weight: 800;
+  color: white;
+  font-family: var(--font-primary);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================
+   5. HERO IMAGE & FLOATING CARDS
+============================================ */
+.hero-image {
+  flex: 0 0 45%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.floating-card {
+  position: absolute;
+  background: rgba(15, 15, 15, 0.575);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 5px 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+
+.floating-card i {
+  font-size: 1.4rem;
+  color: var(--color-primary);
+}
+
+.card-1 {
+  top: 10%;
+  left: -10%;
+}
+
+.card-2 {
+  top: 50%;
+  right: -5%;
+}
+
+.card-3 {
+  bottom: 15%;
+  left: 5%;
+}
+
+.hero-main-image {
+  max-width: 90%;
   height: auto;
-  border-radius: var(--radius-lg);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================
+   6. SCROLL INDICATOR
+============================================ */
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  opacity: 0.7;
+  z-index: 1;
+}
+
+.scroll-mouse {
+  width: 24px;
+  height: 40px;
+  border: 2px solid var(--color-text-secondary);
+  border-radius: 12px;
+  position: relative;
+}
+
+.scroll-wheel {
+  width: 4px;
+  height: 8px;
+  background: var(--color-primary);
+  border-radius: 2px;
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.scroll-indicator span {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ============================================
+   7. SECTION STYLING
+============================================ */
+.features-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.section-tag {
+  display: inline-block;
+  background: rgba(225, 17, 104, 0.1);
+  color: var(--color-primary);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  margin-bottom: 20px;
 }
 
 .section-header h2 {
-  font-size: 2.2rem;
-  margin-bottom: 10px;
+  font-size: 3rem;
+  margin-bottom: 20px;
   font-family: var(--font-primary);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.reveal-line {
+  display: block;
+  overflow: hidden;
 }
 
 .section-subtitle {
   color: var(--color-text-secondary);
-  font-size: 1.1rem;
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
+/* ============================================
+   8. FEATURE CARDS ENHANCED
+============================================ */
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--space-lg);
-  margin-top: var(--space-md);
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+  margin-top: 60px;
 }
 
 .feature-card {
-  background-color: var(--color-bg-secondary);
+  background: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-xl);
-  text-align: center;
-  transition: all 0.3s ease;
+  border-radius: 20px;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
   height: 100%;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(225, 17, 104, 0.05), rgba(255, 107, 157, 0.05));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.feature-card:hover::before {
+  opacity: 1;
 }
 
 .feature-card:hover {
   border-color: var(--color-primary);
-  transform: translateY(-4px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(225, 17, 104, 0.15);
+}
+
+.feature-number {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 5rem;
+  font-weight: 900;
+  color: rgba(225, 17, 104, 0.05);
+  font-family: var(--font-primary);
+  line-height: 1;
 }
 
 .feature-icon {
-  width: 64px;
-  height: 64px;
-  background-color: var(--color-primary);
-  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  background: var(--color-primary);
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto var(--space-md);
-  font-size: 1.7rem;
+  margin-bottom: 24px;
+  font-size: 1.8rem;
   color: white;
-  transition: transform 0.3s ease;
+  position: relative;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.icon-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(1);
 }
 
 .feature-card:hover .feature-icon {
-  transform: scale(1.1);
+  transform: scale(1.1) rotate(5deg);
 }
 
 .feature-title {
-  font-size: 1.3rem;
-  font-weight: 600;
-  margin-bottom: var(--space-sm);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 16px;
   color: var(--color-text-primary);
+  font-family: var(--font-primary);
 }
 
 .feature-description {
   color: var(--color-text-secondary);
-  line-height: 1.6;
+  line-height: 1.7;
+  margin-bottom: 24px;
 }
 
-/* Testimonial Section */
+.feature-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: gap 0.3s ease;
+}
+
+.feature-card:hover .feature-link {
+  gap: 12px;
+}
+
+.feature-link i {
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover .feature-link i {
+  transform: translateX(4px);
+}
+
+/* ============================================
+   9. TESTIMONIAL SECTION ENHANCED
+============================================ */
 .testimonial-section {
-  background-color: var(--color-bg-secondary);
+
+  position: relative;
+  overflow: hidden;
+}
+
+.testimonials-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.testimonials-slider {
+  position: relative;
+  min-height: 350px;
 }
 
 .testimonial-card {
-  background-color: var(--color-bg-primary);
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(50px);
+  transition: all 0.6s ease;
+  pointer-events: none;
+}
+
+.testimonial-card.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+  position: relative;
+  pointer-events: auto;
+}
+
+.testimonial-content {
+  background: var(--color-bg-primary);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-xl);
-  max-width: 800px;
-  margin: 0 auto;
+  border-radius: 24px;
+  padding: 50px;
   text-align: center;
+  position: relative;
+}
+
+.quote-mark {
+  font-size: 6rem;
+  color: var(--color-primary);
+  opacity: 0.2;
+  font-family: Georgia, serif;
+  line-height: 1;
+  position: absolute;
+  top: 20px;
+  left: 30px;
 }
 
 .testimonial-text {
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   font-style: italic;
   color: var(--color-text-primary);
-  margin-bottom: var(--space-lg);
-  line-height: 1.6;
+  margin-bottom: 40px;
+  line-height: 1.7;
+  position: relative;
+  z-index: 1;
 }
 
 .testimonial-author {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 15px;
+  gap: 20px;
 }
 
 .author-avatar i {
-  font-size: 3rem;
+  font-size: 3.5rem;
   color: var(--color-primary);
 }
 
+.author-info {
+  text-align: left;
+}
+
 .author-name {
-  font-weight: 600;
+  font-weight: 700;
   color: var(--color-text-primary);
   display: block;
+  font-size: 1.1rem;
+  margin-bottom: 4px;
 }
 
 .author-role {
   color: var(--color-text-secondary);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
 }
 
-/* Status Card */
+.testimonial-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.testimonial-prev,
+.testimonial-next {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.testimonial-prev:hover,
+.testimonial-next:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  transform: scale(1.1);
+}
+
+.testimonial-dots {
+  display: flex;
+  gap: 12px;
+}
+
+.testimonial-dots .dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-border);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.testimonial-dots .dot.active {
+  background: var(--color-primary);
+  width: 32px;
+  border-radius: 6px;
+}
+
+/* ============================================
+   10. STATUS CARD
+============================================ */
 .status-card {
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
-  border: none;
-  background-color: var(--color-bg-secondary);
+  border: 2px solid var(--color-border);
+  background: var(--color-bg-secondary);
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.status-card .card-header {
+  background: linear-gradient(135deg, rgba(225, 17, 104, 0.1), rgba(255, 107, 157, 0.1));
+  border-bottom: 1px solid var(--color-border);
+  padding: 24px;
+}
+
+.status-card .card-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
 }
 
 .status-content {
-  padding: var(--space-lg);
+  padding: 50px 30px;
 }
 
 .status-icon {
-  font-size: 3rem;
+  font-size: 4rem;
   color: var(--color-primary);
-  margin-bottom: var(--space-sm);
+  margin-bottom: 20px;
   display: block;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 .status-message {
-  font-size: 1.2rem;
-  margin-bottom: var(--space-md);
+  font-size: 1.3rem;
+  margin-bottom: 30px;
+  color: var(--color-text-secondary);
 }
 
-/* Final CTA */
+/* ============================================
+   11. FINAL CTA SECTION
+============================================ */
 .final-cta {
   text-align: center;
-  padding: var(--space-2xl) 0;
-  background: linear-gradient(135deg, rgba(95, 39, 205, 0.1) 0%, rgba(225, 17, 104, 0.1) 100%);
+  padding: 100px 0;
+  position: relative;
+
 }
 
-.final-cta h2 {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
+.cta-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.cta-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.2;
+}
+
+.cta-orb-1 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, var(--color-primary), transparent);
+  top: -200px;
+  left: -150px;
+}
+
+.cta-orb-2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #6366f1, transparent);
+  bottom: -150px;
+  right: -100px;
+}
+
+.cta-title {
+  font-size: 3rem;
+  margin-bottom: 24px;
+  font-weight: 800;
+  position: relative;
+  z-index: 1;
 }
 
 .cta-subtitle {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   color: var(--color-text-secondary);
-  max-width: 600px;
-  margin: 0 auto var(--space-lg);
+  max-width: 700px;
+  margin: 0 auto 40px;
+  position: relative;
+  z-index: 1;
 }
 
-/* Responsive */
+/* ============================================
+   12. RESPONSIVE DESIGN
+============================================ */
+@media (max-width: 1200px) {
+  .hero-title {
+    font-size: 3.5rem;
+  }
+  
+  .section-header h2 {
+    font-size: 2.5rem;
+  }
+}
+
 @media (max-width: 992px) {
   .hero-container {
     flex-direction: column;
     text-align: center;
   }
-
+  
+  .hero-content {
+    max-width: 100%;
+  }
+  
+  .hero-title {
+    font-size: 3rem;
+  }
+  
+  .hero-stats {
+    justify-content: center;
+  }
+  
   .hero-image {
     flex: none;
-    margin-top: var(--space-lg);
+    margin-top: 60px;
+    width: 100%;
   }
-
-  .hero-title {
-    font-size: 2.2rem;
+  
+  .floating-card {
+    font-size: 0.8rem;
+    padding: 10px 16px;
   }
-
-  .hero-subtitle {
-    font-size: 1.1rem;
-    max-width: 100%;
+  
+  .card-1 {
+    top: 5%;
+    left: 0;
+  }
+  
+  .card-2 {
+    top: 50%;
+    right: 0;
+  }
+  
+  .card-3 {
+    bottom: 10%;
+    left: 10%;
   }
 }
 
 @media (max-width: 768px) {
   .hero-section {
     max-width: 90%;
-    padding-top: 60px;
+    padding-top: 80px;
   }
-
+  
   .hero-title {
-    font-size: 1.8rem;
+    font-size: 2.2rem;
   }
-
+  
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .stat-number {
+    font-size: 2.5rem;
+  }
+  
+  .hero-stats {
+    gap: 30px;
+  }
+  
   .features-grid {
     grid-template-columns: 1fr;
-    gap: var(--space-md);
+    gap: 24px;
   }
-
+  
   .feature-card {
-    padding: var(--space-lg);
+    padding: 30px;
   }
-
+  
+  .feature-number {
+    font-size: 4rem;
+  }
+  
+  .section-header h2 {
+    font-size: 2rem;
+  }
+  
+  .testimonial-content {
+    padding: 30px;
+  }
+  
   .testimonial-text {
     font-size: 1.1rem;
   }
+  
+  .testimonials-slider {
+    min-height: 400px;
+  }
+  
+  .cta-title {
+    font-size: 2.2rem;
+  }
+  
+  .cta-subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .scroll-indicator {
+    display: none;
+  }
+}
 
-  .final-cta h2 {
-    font-size: 2rem;
+@media (max-width: 576px) {
+  .hero-title {
+    font-size: 1.8rem;
+  }
+  
+  .hero-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .hero-buttons .btn {
+    width: 100%;
+  }
+  
+  .floating-card {
+    font-size: 0.7rem;
+    padding: 8px 12px;
+  }
+  
+  .loader-logo {
+    font-size: 3rem;
+  }
+  
+  .testimonial-content {
+    padding: 25px;
+  }
+  
+  .quote-mark {
+    font-size: 4rem;
+    top: 10px;
+    left: 15px;
   }
 }

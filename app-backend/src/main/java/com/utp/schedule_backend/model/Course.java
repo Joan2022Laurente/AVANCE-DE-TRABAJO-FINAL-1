@@ -1,5 +1,7 @@
 package com.utp.schedule_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -10,34 +12,52 @@ public class Course {
     private Long id;
 
     private String nombre;
-    private String codigo;
     private String docente;
 
-    @Column(name = "user_id")
-    private Long userId; // relación simple con User
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonBackReference
+    private User user;
 
-    public Course() {}
-
-    public Course(Long id, String nombre, String codigo, String docente, Long userId) {
-        this.id = id;
-        this.nombre = nombre;
-        this.codigo = codigo;
-        this.docente = docente;
-        this.userId = userId;
+    public Course() {
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Course(String nombre, String docente, User user) {
+        this.nombre = nombre;
+        this.docente = docente;
+        this.user = user;
+    }
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    // Getters y setters
+    public Long getId() {
+        return id;
+    }
 
-    public String getCodigo() { return codigo; }
-    public void setCodigo(String codigo) { this.codigo = codigo; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getDocente() { return docente; }
-    public void setDocente(String docente) { this.docente = docente; }
+    public String getNombre() {
+        return nombre;
+    }
 
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getDocente() {
+        return docente;
+    }
+
+    public void setDocente(String docente) {
+        this.docente = docente;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
