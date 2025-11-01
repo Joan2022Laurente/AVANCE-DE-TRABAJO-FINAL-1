@@ -284,8 +284,6 @@ export function initLogin() {
           loaderOverlay.style.display = "none";
           evtSource.close();
           updateLoginLinks();
-
-          // Enviar el nombre del estudiante al backend
           // Enviar el usuario y sus cursos al backend
           if (userData.nombreEstudiante) {
             try {

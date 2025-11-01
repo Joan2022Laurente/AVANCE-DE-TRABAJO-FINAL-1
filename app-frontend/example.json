@@ -1,0 +1,30 @@
+{
+  "estudiante": {
+    "nombre": "Joan Joaquin",
+    "codigo": "u23307609"
+  },
+  "cursos": [
+    {
+      "nombre": "Algoritmos y Estructuras de Datos",
+      "modalidad": "Presencial",
+      "docente": "Juan Francisco Vera Castillo"
+    }
+  ],
+  "horario": [
+    {
+      "dia": "Martes",
+      "fecha": "2025-10-28",
+      "hora": "06:30 p.m. - 08:00 p.m.",
+      "curso": "Negociación y Narrativa",
+      "modalidad": "Virtual en vivo"
+    }
+  ],
+  "actividades": [
+    {
+      "nombre": "Tarea 12",
+      "curso": "Negociación y Narrativa",
+      "fecha": "2025-10-28"
+    }
+  ]
+}
+

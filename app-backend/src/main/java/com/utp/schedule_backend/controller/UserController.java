@@ -15,14 +15,14 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // ✅ Registrar usuario (POST)
+    // Registrar usuario
     @PostMapping
     public ResponseEntity<User> registrarUsuario(@RequestBody User user) {
         User nuevoUsuario = userService.registrarUsuario(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoUsuario);
     }
 
-    // ✅ Listar todos los usuarios (GET)
+    // Listar todos los usuarios 
     @GetMapping
     public ResponseEntity<List<User>> listarUsuarios() {
         List<User> usuarios = userService.listarUsuarios();
