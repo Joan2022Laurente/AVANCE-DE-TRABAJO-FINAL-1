@@ -1,6 +1,6 @@
 // ============================================
 // INDEX.JS - Animaciones Awwwards Level
-// Sin brillo neón, carrusel de testimonios corregido
+// Con Stacking Cards Animation Premium
 // ============================================
 
 gsap.registerPlugin(ScrollTrigger);
@@ -74,14 +74,7 @@ window.addEventListener('load', () => {
 });
 
 // ============================================
-// 2. CUSTOM CURSOR
-// ============================================
-
-
-
-
-// ============================================
-// 4. ANIMATED COUNTER
+// 2. ANIMATED COUNTER
 // ============================================
 const animateCounter = (element) => {
   const target = parseInt(element.dataset.target);
@@ -101,7 +94,7 @@ const animateCounter = (element) => {
 document.querySelectorAll('.stat-number').forEach(animateCounter);
 
 // ============================================
-// 5. FLOATING CARDS ANIMATION
+// 3. FLOATING CARDS ANIMATION
 // ============================================
 gsap.to('.card-1', {
   y: -20,
@@ -133,7 +126,7 @@ gsap.to('.card-3', {
 });
 
 // ============================================
-// 6. GRADIENT ORBS ANIMATION
+// 4. GRADIENT ORBS ANIMATION
 // ============================================
 gsap.to('.orb-1', {
   x: 100,
@@ -166,7 +159,7 @@ gsap.to('.orb-3', {
 });
 
 // ============================================
-// 7. SCROLL INDICATOR
+// 5. SCROLL INDICATOR
 // ============================================
 gsap.to('.scroll-wheel', {
   y: 10,
@@ -195,7 +188,154 @@ ScrollTrigger.create({
 });
 
 // ============================================
-// 8. FEATURES CARDS REVEAL
+// 6. STACKING CARDS ANIMATION - ÉPICO
+// ============================================
+const initStackingCards = () => {
+  const cards = gsap.utils.toArray('.stack-card');
+  const stackingSection = document.querySelector('.stacking-section');
+  
+  if (!cards.length || !stackingSection) {
+    console.log('⚠️ No se encontraron las cards o la sección');
+    return;
+  }
+
+  console.log(`✅ ${cards.length} cards encontradas`);
+
+  // Estado inicial: todas las cards ocultas excepto la primera
+  cards.forEach((card, index) => {
+    if (index > 0) {
+      gsap.set(card, {
+        y: 100 + (index * 20),
+        opacity: 0,
+        scale: 0.9,
+        rotateX: -15,
+        rotateY: gsap.utils.random(-5, 5),
+        rotateZ: gsap.utils.random(-3, 3),
+        transformOrigin: 'center center',
+        zIndex: cards.length - index
+      });
+    } else {
+      gsap.set(card, {
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        rotateX: 0,
+        rotateY: 0,
+        rotateZ: 0,
+        zIndex: cards.length
+      });
+    }
+  });
+
+  // Timeline principal controlado por scroll
+  const mainTimeline = gsap.timeline({
+    scrollTrigger: {
+      trigger: '.ssttt',
+      start: 'top top',
+      end: '+=400%',
+      scrub: 1,
+      pin: '.stacking-cards-wrapper',
+      pinSpacing: true,
+      markers: false, // Cambiar a true para debug
+      anticipatePin: 1,
+      pinType: 'fixed',
+      onEnter: () => console.log('🎬 Entrando a stacking section'),
+      onLeave: () => console.log('👋 Saliendo de stacking section'),
+      onRefresh: (self) => {
+        // Forzar centrado correcto en refresh
+        const wrapper = document.querySelector('.stacking-cards-wrapper');
+        if (wrapper) {
+          wrapper.style.left = '50%';
+          wrapper.style.top = '50%';
+        }
+      }
+    }
+  });
+
+  cards.forEach((card, index) => {
+    const cardShine = card.querySelector('.card-shine');
+    const isLastCard = index === cards.length - 1;
+
+    // Animación de entrada de cada card
+    if (index > 0) {
+      // Card anterior se hace blur y se escala
+      mainTimeline.to(cards[index - 1], {
+        scale: 0.95,
+        filter: 'blur(3px)',
+        opacity: 0.6,
+        y: -20,
+        duration: 1,
+        ease: 'power2.inOut'
+      }, index * 1.5);
+
+      // Card nueva entra
+      mainTimeline.to(card, {
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        rotateX: 0,
+        rotateY: 0,
+        rotateZ: 0,
+        duration: 1,
+        ease: 'back.out(1.3)',
+        onStart: () => {
+          console.log(`🎴 Card ${index + 1} entrando`);
+          // Efecto de brillo al entrar
+          if (cardShine) {
+            gsap.fromTo(cardShine, 
+              {
+                opacity: 0,
+                x: -200,
+                y: -200
+              },
+              {
+                opacity: 1,
+                x: 200,
+                y: 200,
+                duration: 0.8,
+                ease: 'power2.out',
+                onComplete: () => {
+                  gsap.to(cardShine, {
+                    opacity: 0,
+                    duration: 0.3
+                  });
+                }
+              }
+            );
+          }
+        }
+      }, index * 1.5);
+    }
+
+    // Animación especial para la última card
+    if (isLastCard) {
+      // Fade out final de todas las cards
+      mainTimeline.to(cards, {
+        opacity: 0,
+        scale: 0.8,
+        y: -50,
+        filter: 'blur(10px)',
+        stagger: 0.05,
+        duration: 1,
+        ease: 'power2.in'
+      }, (cards.length * 1.5) + 0.5);
+    }
+  });
+
+  console.log('✨ Stacking cards animation initialized');
+};
+
+// Inicializar después de que el DOM esté listo
+setTimeout(() => {
+  if (document.querySelector('.stacking-section')) {
+    initStackingCards();
+  } else {
+    console.log('❌ .stacking-section no encontrada');
+  }
+}, 100);
+
+// ============================================
+// 7. FEATURES CARDS REVEAL
 // ============================================
 gsap.utils.toArray('.feature-card').forEach((card, index) => {
   gsap.from(card, {
@@ -238,7 +378,7 @@ document.querySelectorAll('.feature-card').forEach(card => {
 });
 
 // ============================================
-// 9. SECTION HEADERS REVEAL
+// 8. SECTION HEADERS REVEAL
 // ============================================
 gsap.utils.toArray('.reveal-line').forEach((line, index) => {
   gsap.from(line, {
@@ -255,7 +395,7 @@ gsap.utils.toArray('.reveal-line').forEach((line, index) => {
 });
 
 // ============================================
-// 10. TESTIMONIALS SLIDER - CORREGIDO
+// 9. TESTIMONIALS SLIDER - CORREGIDO
 // ============================================
 let currentTestimonial = 0;
 const testimonials = document.querySelectorAll('.testimonial-card');
@@ -345,7 +485,7 @@ if (testimonialSection) {
 }
 
 // ============================================
-// 11. CTA SECTION PARALLAX
+// 10. CTA SECTION PARALLAX
 // ============================================
 gsap.to('.cta-orb-1', {
   scrollTrigger: {
@@ -372,7 +512,7 @@ gsap.to('.cta-orb-2', {
 });
 
 // ============================================
-// 12. SMOOTH SCROLL FOR ANCHOR LINKS
+// 11. SMOOTH SCROLL FOR ANCHOR LINKS
 // ============================================
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function (e) {
@@ -395,7 +535,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ============================================
-// 13. PARALLAX HERO IMAGE
+// 12. PARALLAX HERO IMAGE
 // ============================================
 gsap.to('.hero-main-image', {
   scrollTrigger: {
@@ -410,7 +550,7 @@ gsap.to('.hero-main-image', {
 });
 
 // ============================================
-// 14. STATUS CARD ANIMATION
+// 13. STATUS CARD ANIMATION
 // ============================================
 gsap.from('.status-card', {
   scrollTrigger: {
@@ -423,3 +563,38 @@ gsap.from('.status-card', {
   duration: 0.8,
   ease: 'back.out(1.2)'
 });
+
+// ============================================
+// 14. STACKING SECTION HEADER ANIMATION
+// ============================================
+gsap.from('.stacking-section .section-header', {
+  scrollTrigger: {
+    trigger: '.stacking-section',
+    start: 'top 80%',
+    once: true
+  },
+  opacity: 0,
+  y: 50,
+  duration: 1,
+  ease: 'power3.out'
+});
+
+// ============================================
+// 15. PERFORMANCE OPTIMIZATIONS
+// ============================================
+
+// Refresh ScrollTrigger cuando las imágenes se cargan
+window.addEventListener('load', () => {
+  ScrollTrigger.refresh();
+});
+
+// Resize handler optimizado
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    ScrollTrigger.refresh();
+  }, 250);
+});
+
+console.log('🎨 UTP+Schedule - Stacking Cards Animation Loaded');

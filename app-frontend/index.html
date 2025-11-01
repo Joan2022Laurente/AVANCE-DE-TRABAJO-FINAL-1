@@ -14,8 +14,9 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
+        <link rel="stylesheet" href="styles/index.css" />
     <link rel="stylesheet" href="styles/common.css" />
-    <link rel="stylesheet" href="styles/index.css" />
+
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
@@ -31,17 +32,17 @@
   <body>
 
     <!-- Loader animado -->
-    <div class="page-loader">
+    <!-- <div class="page-loader">
       <div class="loader-content">
         <div class="loader-logo">UTP+Schedule</div>
         <div class="loader-bar"></div>
       </div>
-    </div>
+    </div> -->
 
     <div id="navbar"></div>
     <main>
       <div id="header"></div>
-      <div class="container pt-5">
+      <div class="container pt-5 overflow-hidden">
         <!-- Hero Section -->
         <section class="hero-section">
           <div class="hero-background">
@@ -128,6 +129,108 @@
 
         </section>
 
+        <!-- ============================================
+             STACKING CARDS SECTION - NUEVA
+        ============================================ -->
+        <section class="stacking-section">
+          <div class="stacking-container">
+            <div class="section-header text-center mb-5">
+              <div class="section-tag">Proceso</div>
+              <h2 class="reveal-text">
+                <span class="reveal-line">Tu camino hacia el</span>
+                <span class="reveal-line">
+                  <span class="highlight">éxito académico</span>
+                </span>
+              </h2>
+              <p class="section-subtitle">
+                Sigue estos pasos y transforma tu gestión universitaria
+              </p>
+            </div>
+
+            <!-- Trigger invisible para controlar el scroll -->
+            <div class="stacking-trigger"></div>
+              <div class="ssttt mt-2"> </div>
+            <!-- Cards Stack -->
+            <div class="stacking-cards-wrapper">
+
+              <!-- Card 1 -->
+              <div class="stack-card" data-card="1">
+                <div class="card-shine"></div>
+                <div class="card-number">01</div>
+                <div class="card-icon">
+                  <i class="bi bi-calendar-plus"></i>
+                </div>
+                <h3 class="card-title">Crea tu Horario</h3>
+                <p class="card-description">
+                  Comienza agregando tus cursos con un par de clics. 
+                  Nuestra interfaz intuitiva hace que sea súper rápido.
+                </p>
+                <div class="card-badge">Paso 1</div>
+              </div>
+
+              <!-- Card 2 -->
+              <div class="stack-card" data-card="2">
+                <div class="card-shine"></div>
+                <div class="card-number">02</div>
+                <div class="card-icon">
+                  <i class="bi bi-list-check"></i>
+                </div>
+                <h3 class="card-title">Organiza tus Tareas</h3>
+                <p class="card-description">
+                  Agrega tareas, fechas límite y prioridades. 
+                  El sistema te recordará automáticamente.
+                </p>
+                <div class="card-badge">Paso 2</div>
+              </div>
+
+              <!-- Card 3 -->
+              <div class="stack-card" data-card="3">
+                <div class="card-shine"></div>
+                <div class="card-number">03</div>
+                <div class="card-icon">
+                  <i class="bi bi-folder-fill"></i>
+                </div>
+                <h3 class="card-title">Centraliza Recursos</h3>
+                <p class="card-description">
+                  Guarda todos tus enlaces, documentos y notas en un solo lugar. 
+                  Accede desde cualquier dispositivo.
+                </p>
+                <div class="card-badge">Paso 3</div>
+              </div>
+
+              <!-- Card 4 -->
+              <div class="stack-card" data-card="4">
+                <div class="card-shine"></div>
+                <div class="card-number">04</div>
+                <div class="card-icon">
+                  <i class="bi bi-graph-up-arrow"></i>
+                </div>
+                <h3 class="card-title">Optimiza con IA</h3>
+                <p class="card-description">
+                  Recibe recomendaciones personalizadas para mejorar tu rendimiento 
+                  y gestionar mejor tu tiempo.
+                </p>
+                <div class="card-badge">Paso 4</div>
+              </div>
+
+              <!-- Card 5 - Final -->
+              <div class="stack-card stack-card-final" data-card="5">
+                <div class="card-shine"></div>
+                <div class="card-number">05</div>
+                <div class="card-icon">
+                  <i class="bi bi-trophy-fill"></i>
+                </div>
+                <h3 class="card-title">¡Alcanza tus Metas!</h3>
+                <p class="card-description">
+                  Con todo organizado, enfócate en lo importante: 
+                  aprender y destacar en tus estudios.
+                </p>
+                <div class="card-badge">Resultado</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <!-- Features Section -->
         <section id="features" class="py-5 features-section">
           <div class="container">
@@ -156,7 +259,6 @@
                   Agrega tus cursos con solo unos clics. Nuestra interfaz
                   intuitiva te guía paso a paso para construir tu horario ideal.
                 </p>
-
               </div>
 
               <div class="feature-card" data-feature="2">
@@ -170,7 +272,6 @@
                   Visualiza tu semana completa con colores personalizables,
                   recordatorios y sincronización con tu calendario.
                 </p>
-
               </div>
 
               <div class="feature-card" data-feature="3">
@@ -184,7 +285,6 @@
                   Prioriza tareas automáticamente, recibe alertas de fechas
                   límite y lleva un seguimiento de tu progreso académico.
                 </p>
-
               </div>
 
               <div class="feature-card" data-feature="4">
@@ -198,7 +298,6 @@
                   Guarda enlaces, documentos y notas por curso. Accede a todo
                   desde cualquier dispositivo, en cualquier momento.
                 </p>
-
               </div>
 
               <div class="feature-card" data-feature="5">
@@ -212,7 +311,6 @@
                   Recibe sugerencias personalizadas para optimizar tu tiempo de
                   estudio y mejorar tu rendimiento académico.
                 </p>
-
               </div>
 
               <div class="feature-card" data-feature="6">
@@ -226,7 +324,6 @@
                   Lleva tu horario en el bolsillo. Disponible en cualquier
                   navegador, sin necesidad de descargar apps.
                 </p>
-
               </div>
             </div>
           </div>
@@ -324,7 +421,6 @@
           </div>
         </section>
 
-
         <!-- Final CTA -->
         <section class="final-cta py-5">
           <div class="cta-background">
@@ -340,7 +436,6 @@
               Únete a cientos de estudiantes que ya están optimizando su tiempo
               con UTP+Schedule.
             </p>
-
           </div>
         </section>
       </div>
