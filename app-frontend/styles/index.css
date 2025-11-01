@@ -447,6 +447,7 @@
   left: -50%;
   width: 200%;
   height: 200%;
+
   background: linear-gradient(
     135deg,
     transparent 0%,
@@ -455,6 +456,8 @@
     rgba(225, 17, 104, 0.1) 55%,
     transparent 100%
   );
+  filter: blur(50px);
+
   transform: translateX(-100%) translateY(-100%) rotate(45deg);
   pointer-events: none;
   opacity: 0;

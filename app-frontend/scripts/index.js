@@ -261,8 +261,8 @@ const initStackingCards = () => {
       // Card anterior se hace blur y se escala
       mainTimeline.to(cards[index - 1], {
         scale: 0.95,
-        filter: 'blur(3px)',
-        opacity: 0.6,
+        filter: 'blur(8px)',
+        opacity: 0.1,
         y: -20,
         duration: 1,
         ease: 'power2.inOut'
