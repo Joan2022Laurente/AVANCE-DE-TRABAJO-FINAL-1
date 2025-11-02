@@ -1,90 +1,60 @@
 // ============================================
 // INDEX.JS - Animaciones Awwwards Level
-// Con Stacking Cards Animation Premium
+// Con Stacking Cards Animation Premium (Optimized & Robust)
 // ============================================
 
 gsap.registerPlugin(ScrollTrigger);
 
 // ============================================
-// 1. PAGE LOADER
+// 1. PAGE LOADER (con protección de errores)
 // ============================================
 window.addEventListener('load', () => {
-  const tl = gsap.timeline();
-  
-  tl.to('.loader-bar', {
-    width: '100%',
-    duration: 1.5,
-    ease: 'power2.inOut'
-  })
-  .to('.loader-content', {
-    opacity: 0,
-    y: -50,
-    duration: 0.5
-  })
-  .to('.page-loader', {
-    opacity: 0,
-    duration: 0.5,
-    onComplete: () => {
-      document.querySelector('.page-loader').style.display = 'none';
-    }
-  })
-  .from('.hero-badge', {
-    opacity: 0,
-    y: 30,
-    duration: 0.8,
-    ease: 'power3.out'
-  })
-  .from('.title-line', {
-    opacity: 0,
-    y: 50,
-    stagger: 0.2,
-    duration: 1,
-    ease: 'power3.out'
-  }, '-=0.3')
-  .from('.hero-subtitle', {
-    opacity: 0,
-    y: 30,
-    duration: 0.8
-  }, '-=0.5')
-  .from('.hero-buttons .btn', {
-    opacity: 0,
-    y: 30,
-    stagger: 0.15,
-    duration: 0.8
-  }, '-=0.4')
-  .from('.hero-stats .stat-item', {
-    opacity: 0,
-    y: 30,
-    stagger: 0.1,
-    duration: 0.8
-  }, '-=0.4')
-  .from('.hero-main-image', {
-    opacity: 0,
-    scale: 0.8,
-    duration: 1,
-    ease: 'back.out(1.2)'
-  }, '-=0.8')
-  .from('.floating-card', {
-    opacity: 0,
-    scale: 0,
-    stagger: 0.1,
-    duration: 0.6,
-    ease: 'back.out(1.7)'
-  }, '-=0.5');
+  const loader = document.querySelector('.page-loader');
+  const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
+
+  if (loader) {
+    tl.to('.loader-bar', {
+      width: '100%',
+      duration: 1.5,
+      ease: 'power2.inOut'
+    })
+    .to('.loader-content', {
+      opacity: 0,
+      y: -50,
+      duration: 0.5
+    })
+    .to('.page-loader', {
+      opacity: 0,
+      duration: 0.5,
+      onComplete: () => loader.style.display = 'none'
+    });
+  }
+
+  // Hero content entrada segura
+  gsap.timeline({ defaults: { ease: 'power3.out' } })
+    .from('.hero-badge', { opacity: 0, y: 30, duration: 0.8 })
+    .from('.title-line', { opacity: 0, y: 50, stagger: 0.2, duration: 1 }, '-=0.3')
+    .from('.hero-subtitle', { opacity: 0, y: 30, duration: 0.8 }, '-=0.5')
+    .from('.hero-buttons .btn', { opacity: 0, y: 30, stagger: 0.15, duration: 0.8 }, '-=0.4')
+    .from('.hero-stats .stat-item', { opacity: 0, y: 30, stagger: 0.1, duration: 0.8 }, '-=0.4')
+    .from('.hero-main-image', { opacity: 0, scale: 0.8, duration: 1, ease: 'back.out(1.2)' }, '-=0.8')
+    .from('.floating-card', { opacity: 0, scale: 0, stagger: 0.1, duration: 0.6, ease: 'back.out(1.7)' }, '-=0.5');
 });
 
 // ============================================
-// 2. ANIMATED COUNTER
+// 2. ANIMATED COUNTER (con validación)
 // ============================================
-const animateCounter = (element) => {
-  const target = parseInt(element.dataset.target);
-  gsap.to(element, {
+const animateCounter = (el) => {
+  const target = parseInt(el.dataset.target);
+  if (isNaN(target)) return;
+
+  gsap.to(el, {
     innerHTML: target,
     duration: 2,
     ease: 'power1.inOut',
     snap: { innerHTML: 1 },
     scrollTrigger: {
-      trigger: element,
+      trigger: el,
       start: 'top 80%',
       once: true
     }
@@ -94,442 +64,191 @@ const animateCounter = (element) => {
 document.querySelectorAll('.stat-number').forEach(animateCounter);
 
 // ============================================
-// 3. FLOATING CARDS ANIMATION
+// 3. FLOATING CARDS ANIMATION (loop suave y seguro)
 // ============================================
-gsap.to('.card-1', {
-  y: -20,
-  rotation: -5,
-  repeat: -1,
-  yoyo: true,
-  duration: 2.5,
-  ease: 'sine.inOut'
-});
+const safeFloat = (selector, y, rot, dur, delay = 0) => {
+  if (document.querySelector(selector)) {
+    gsap.to(selector, {
+      y,
+      rotation: rot,
+      repeat: -1,
+      yoyo: true,
+      duration: dur,
+      ease: 'sine.inOut',
+      delay
+    });
+  }
+};
 
-gsap.to('.card-2', {
-  y: -15,
-  rotation: 5,
-  repeat: -1,
-  yoyo: true,
-  duration: 3,
-  ease: 'sine.inOut',
-  delay: 0.5
-});
-
-gsap.to('.card-3', {
-  y: -18,
-  rotation: -3,
-  repeat: -1,
-  yoyo: true,
-  duration: 2.8,
-  ease: 'sine.inOut',
-  delay: 1
-});
+safeFloat('.card-1', -20, -5, 2.5);
+safeFloat('.card-2', -15, 5, 3, 0.5);
+safeFloat('.card-3', -18, -3, 2.8, 1);
 
 // ============================================
 // 4. GRADIENT ORBS ANIMATION
 // ============================================
-gsap.to('.orb-1', {
-  x: 100,
-  y: -100,
-  scale: 1.2,
-  repeat: -1,
-  yoyo: true,
-  duration: 8,
-  ease: 'sine.inOut'
-});
-
-gsap.to('.orb-2', {
-  x: -80,
-  y: 80,
-  scale: 0.8,
-  repeat: -1,
-  yoyo: true,
-  duration: 10,
-  ease: 'sine.inOut'
-});
-
-gsap.to('.orb-3', {
-  x: 50,
-  y: 100,
-  scale: 1.1,
-  repeat: -1,
-  yoyo: true,
-  duration: 7,
-  ease: 'sine.inOut'
+[['.orb-1', 100, -100, 1.2, 8], ['.orb-2', -80, 80, 0.8, 10], ['.orb-3', 50, 100, 1.1, 7]].forEach(([sel, x, y, s, d]) => {
+  if (document.querySelector(sel)) {
+    gsap.to(sel, {
+      x, y, scale: s,
+      repeat: -1, yoyo: true,
+      duration: d, ease: 'sine.inOut'
+    });
+  }
 });
 
 // ============================================
 // 5. SCROLL INDICATOR
 // ============================================
-gsap.to('.scroll-wheel', {
-  y: 10,
-  repeat: -1,
-  yoyo: true,
-  duration: 0.8,
-  ease: 'power1.inOut'
-});
+gsap.to('.scroll-wheel', { y: 10, repeat: -1, yoyo: true, duration: 0.8, ease: 'power1.inOut' });
 
-// Hide on scroll
 ScrollTrigger.create({
   trigger: '.hero-section',
   start: 'bottom top',
-  onEnter: () => {
-    gsap.to('.scroll-indicator', {
-      opacity: 0,
-      duration: 0.3
-    });
-  },
-  onLeaveBack: () => {
-    gsap.to('.scroll-indicator', {
-      opacity: 1,
-      duration: 0.3
-    });
-  }
+  onEnter: () => gsap.to('.scroll-indicator', { opacity: 0, duration: 0.3 }),
+  onLeaveBack: () => gsap.to('.scroll-indicator', { opacity: 1, duration: 0.3 })
 });
 
 // ============================================
-// 6. STACKING CARDS ANIMATION - ÉPICO
+// 6. STACKING CARDS ANIMATION (Optimizado y seguro)
 // ============================================
-const initStackingCards = () => {
+function initStackingCards() {
   const cards = gsap.utils.toArray('.stack-card');
-  const stackingSection = document.querySelector('.stacking-section');
-  
-  if (!cards.length || !stackingSection) {
-    console.log('⚠️ No se encontraron las cards o la sección');
-    return;
-  }
+  const wrapper = document.querySelector('.stacking-cards-wrapper');
+  if (!cards.length || !wrapper) return console.warn('⚠️ No se encontraron las cards o wrapper');
 
-  console.log(`✅ ${cards.length} cards encontradas`);
-
-  // Estado inicial: todas las cards ocultas excepto la primera
-  cards.forEach((card, index) => {
-    if (index > 0) {
-      gsap.set(card, {
-        y: 100 + (index * 20),
-        opacity: 0,
-        scale: 0.9,
-        rotateX: -15,
-        rotateY: gsap.utils.random(-5, 5),
-        rotateZ: gsap.utils.random(-3, 3),
-        transformOrigin: 'center center',
-        zIndex: cards.length - index
-      });
-    } else {
-      gsap.set(card, {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        rotateX: 0,
-        rotateY: 0,
-        rotateZ: 0,
-        zIndex: cards.length
-      });
-    }
+  cards.forEach((card, i) => {
+    const initProps = i === 0 ? 
+      { y: 0, opacity: 1, scale: 1, rotateX: 0, rotateY: 0, rotateZ: 0 } :
+      { y: 100 + (i * 20), opacity: 0, scale: 0.9, rotateX: -15, rotateY: gsap.utils.random(-5, 5), rotateZ: gsap.utils.random(-3, 3) };
+    gsap.set(card, { ...initProps, zIndex: cards.length - i, transformOrigin: 'center center' });
   });
 
-  // Timeline principal controlado por scroll
-  const mainTimeline = gsap.timeline({
+  const mainTL = gsap.timeline({
     scrollTrigger: {
       trigger: '.ssttt',
       start: 'top top',
       end: '+=400%',
       scrub: 1,
       pin: '.stacking-cards-wrapper',
-      pinSpacing: true,
-      markers: false, // Cambiar a true para debug
       anticipatePin: 1,
+      pinSpacing: true,
       pinType: 'fixed',
-      onEnter: () => console.log('🎬 Entrando a stacking section'),
-      onLeave: () => console.log('👋 Saliendo de stacking section'),
-      onRefresh: (self) => {
-        // Forzar centrado correcto en refresh
-        const wrapper = document.querySelector('.stacking-cards-wrapper');
-        if (wrapper) {
-          wrapper.style.left = '50%';
-          wrapper.style.top = '50%';
-        }
-      }
+      invalidateOnRefresh: true,
+      onRefresh: () => ScrollTrigger.refresh(true)
     }
   });
 
-  cards.forEach((card, index) => {
-    const cardShine = card.querySelector('.card-shine');
-    const isLastCard = index === cards.length - 1;
-
-    // Animación de entrada de cada card
-    if (index > 0) {
-      // Card anterior se hace blur y se escala
-      mainTimeline.to(cards[index - 1], {
-        scale: 0.95,
-        filter: 'blur(8px)',
-        opacity: 0.1,
-        y: -20,
-        duration: 1,
-        ease: 'power2.inOut'
-      }, index * 1.5);
-
-      // Card nueva entra
-      mainTimeline.to(card, {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        rotateX: 0,
-        rotateY: 0,
-        rotateZ: 0,
-        duration: 1,
-        ease: 'back.out(1.3)',
+  cards.forEach((card, i) => {
+    const shine = card.querySelector('.card-shine');
+    if (i > 0) {
+      mainTL.to(cards[i - 1], { scale: 0.95, filter: 'blur(8px)', opacity: 0.1, y: -20, duration: 1, ease: 'power2.inOut' }, i * 1.5);
+      mainTL.to(card, {
+        y: 0, opacity: 1, scale: 1, rotateX: 0, rotateY: 0, rotateZ: 0, duration: 1, ease: 'back.out(1.3)',
         onStart: () => {
-          console.log(`🎴 Card ${index + 1} entrando`);
-          // Efecto de brillo al entrar
-          if (cardShine) {
-            gsap.fromTo(cardShine, 
-              {
-                opacity: 0,
-                x: -200,
-                y: -200
-              },
-              {
-                opacity: 1,
-                x: 200,
-                y: 200,
-                duration: 0.8,
-                ease: 'power2.out',
-                onComplete: () => {
-                  gsap.to(cardShine, {
-                    opacity: 0,
-                    duration: 0.3
-                  });
-                }
-              }
-            );
+          if (shine) {
+            gsap.fromTo(shine, { opacity: 0, x: -200, y: -200 }, { opacity: 1, x: 200, y: 200, duration: 0.8, ease: 'power2.out', onComplete: () => gsap.to(shine, { opacity: 0, duration: 0.3 }) });
           }
         }
-      }, index * 1.5);
+      }, i * 1.5);
     }
-
-    // Animación especial para la última card
-    if (isLastCard) {
-      // Fade out final de todas las cards
-      mainTimeline.to(cards, {
-        opacity: 0,
-        scale: 0.8,
-        y: -50,
-        filter: 'blur(10px)',
-        stagger: 0.05,
-        duration: 1,
-        ease: 'power2.in'
-      }, (cards.length * 1.5) + 0.5);
+    if (i === cards.length - 1) {
+      mainTL.to(cards, { opacity: 0, scale: 0.8, y: -50, filter: 'blur(10px)', stagger: 0.05, duration: 1, ease: 'power2.in' }, (cards.length * 1.5) + 0.5);
     }
   });
+}
 
-  console.log('✨ Stacking cards animation initialized');
-};
-
-// Inicializar después de que el DOM esté listo
 setTimeout(() => {
-  if (document.querySelector('.stacking-section')) {
-    initStackingCards();
-  } else {
-    console.log('❌ .stacking-section no encontrada');
-  }
+  if (document.querySelector('.stacking-section')) initStackingCards();
 }, 100);
 
 // ============================================
 // 7. FEATURES CARDS REVEAL
 // ============================================
-gsap.utils.toArray('.feature-card').forEach((card, index) => {
+gsap.utils.toArray('.feature-card').forEach((card, i) => {
   gsap.from(card, {
-    scrollTrigger: {
-      trigger: card,
-      start: 'top 85%',
-      end: 'top 60%',
-      toggleActions: 'play none none reverse'
-    },
-    opacity: 0,
-    y: 60,
-    rotation: 5,
-    duration: 0.8,
-    delay: index * 0.1,
-    ease: 'power3.out'
+    scrollTrigger: { trigger: card, start: 'top 85%', end: 'top 60%', toggleActions: 'play none none reverse' },
+    opacity: 0, y: 60, rotation: 5, duration: 0.8, delay: i * 0.1, ease: 'power3.out'
   });
 });
 
-// Feature card hover effect
 document.querySelectorAll('.feature-card').forEach(card => {
-  const iconBg = card.querySelector('.icon-bg');
-  
-  card.addEventListener('mouseenter', () => {
-    gsap.to(iconBg, {
-      scale: 15,
-      opacity: 0.1,
-      duration: 0.6,
-      ease: 'power2.out'
-    });
-  });
-  
-  card.addEventListener('mouseleave', () => {
-    gsap.to(iconBg, {
-      scale: 1,
-      opacity: 0,
-      duration: 0.6,
-      ease: 'power2.out'
-    });
-  });
+  const bg = card.querySelector('.icon-bg');
+  if (!bg) return;
+  card.addEventListener('mouseenter', () => gsap.to(bg, { scale: 15, opacity: 0.1, duration: 0.6, ease: 'power2.out' }));
+  card.addEventListener('mouseleave', () => gsap.to(bg, { scale: 1, opacity: 0, duration: 0.6, ease: 'power2.out' }));
 });
 
 // ============================================
 // 8. SECTION HEADERS REVEAL
 // ============================================
-gsap.utils.toArray('.reveal-line').forEach((line, index) => {
-  gsap.from(line, {
-    scrollTrigger: {
-      trigger: line,
-      start: 'top 85%'
-    },
-    opacity: 0,
-    y: 50,
-    duration: 1,
-    delay: index * 0.2,
-    ease: 'power3.out'
-  });
+gsap.utils.toArray('.reveal-line').forEach((line, i) => {
+  gsap.from(line, { scrollTrigger: { trigger: line, start: 'top 85%' }, opacity: 0, y: 50, duration: 1, delay: i * 0.2, ease: 'power3.out' });
 });
 
 // ============================================
-// 9. TESTIMONIALS SLIDER - CORREGIDO
+// 9. TESTIMONIALS SLIDER
 // ============================================
 let currentTestimonial = 0;
 const testimonials = document.querySelectorAll('.testimonial-card');
 const dots = document.querySelectorAll('.testimonial-dots .dot');
-const prevBtn = document.querySelector('.testimonial-prev');
-const nextBtn = document.querySelector('.testimonial-next');
-let autoRotateInterval;
+const prev = document.querySelector('.testimonial-prev');
+const next = document.querySelector('.testimonial-next');
+let rotateInt;
 
-function showTestimonial(index) {
-  // Validar índice
-  if (index < 0) index = testimonials.length - 1;
-  if (index >= testimonials.length) index = 0;
-  
-  currentTestimonial = index;
-  
-  // Actualizar testimonios
-  testimonials.forEach((card, i) => {
-    if (i === index) {
-      card.classList.add('active');
-      gsap.fromTo(card, 
-        { opacity: 0, x: 50 },
-        { opacity: 1, x: 0, duration: 0.6, ease: 'power2.out' }
-      );
-    } else {
-      card.classList.remove('active');
-    }
+function showTestimonial(i) {
+  if (!testimonials.length) return;
+  if (i < 0) i = testimonials.length - 1;
+  if (i >= testimonials.length) i = 0;
+  currentTestimonial = i;
+  testimonials.forEach((t, idx) => {
+    t.classList.toggle('active', idx === i);
+    if (idx === i) gsap.fromTo(t, { opacity: 0, x: 50 }, { opacity: 1, x: 0, duration: 0.6 });
   });
-  
-  // Actualizar dots
-  dots.forEach((dot, i) => {
-    if (i === index) {
-      dot.classList.add('active');
-    } else {
-      dot.classList.remove('active');
-    }
-  });
+  dots.forEach((d, idx) => d.classList.toggle('active', idx === i));
 }
 
-// Event listeners para botones
-if (nextBtn) {
-  nextBtn.addEventListener('click', () => {
-    showTestimonial(currentTestimonial + 1);
-    resetAutoRotate();
-  });
-}
+[next, prev].forEach(btn => btn && btn.addEventListener('click', () => {
+  showTestimonial(btn === next ? currentTestimonial + 1 : currentTestimonial - 1);
+  resetRotate();
+}));
 
-if (prevBtn) {
-  prevBtn.addEventListener('click', () => {
-    showTestimonial(currentTestimonial - 1);
-    resetAutoRotate();
-  });
-}
+dots.forEach((dot, i) => dot.addEventListener('click', () => { showTestimonial(i); resetRotate(); }));
 
-// Event listeners para dots
-dots.forEach((dot, index) => {
-  dot.addEventListener('click', () => {
-    showTestimonial(index);
-    resetAutoRotate();
-  });
-});
+function autoRotate() { rotateInt = setInterval(() => showTestimonial(currentTestimonial + 1), 5000); }
+function resetRotate() { clearInterval(rotateInt); autoRotate(); }
 
-// Auto-rotate testimonials
-function startAutoRotate() {
-  autoRotateInterval = setInterval(() => {
-    showTestimonial(currentTestimonial + 1);
-  }, 5000);
-}
+autoRotate();
 
-function resetAutoRotate() {
-  clearInterval(autoRotateInterval);
-  startAutoRotate();
-}
-
-// Iniciar auto-rotate
-startAutoRotate();
-
-// Pausar auto-rotate cuando el mouse está sobre los testimonios
-const testimonialSection = document.querySelector('.testimonial-section');
-if (testimonialSection) {
-  testimonialSection.addEventListener('mouseenter', () => {
-    clearInterval(autoRotateInterval);
-  });
-  
-  testimonialSection.addEventListener('mouseleave', () => {
-    startAutoRotate();
-  });
+const tSection = document.querySelector('.testimonial-section');
+if (tSection) {
+  tSection.addEventListener('mouseenter', () => clearInterval(rotateInt));
+  tSection.addEventListener('mouseleave', autoRotate);
 }
 
 // ============================================
 // 10. CTA SECTION PARALLAX
 // ============================================
-gsap.to('.cta-orb-1', {
-  scrollTrigger: {
-    trigger: '.final-cta',
-    start: 'top bottom',
-    end: 'bottom top',
-    scrub: 1
-  },
-  y: -100,
-  x: 50,
-  scale: 1.3
-});
-
-gsap.to('.cta-orb-2', {
-  scrollTrigger: {
-    trigger: '.final-cta',
-    start: 'top bottom',
-    end: 'bottom top',
-    scrub: 1
-  },
-  y: 100,
-  x: -50,
-  scale: 0.8
+[['.cta-orb-1', -100, 50, 1.3], ['.cta-orb-2', 100, -50, 0.8]].forEach(([sel, y, x, s]) => {
+  if (document.querySelector(sel)) {
+    gsap.to(sel, {
+      scrollTrigger: { trigger: '.final-cta', start: 'top bottom', end: 'bottom top', scrub: 1 },
+      y, x, scale: s
+    });
+  }
 });
 
 // ============================================
-// 11. SMOOTH SCROLL FOR ANCHOR LINKS
+// 11. SMOOTH SCROLL
 // ============================================
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function (e) {
-    const href = this.getAttribute('href');
-    if (href === '#') return;
-    
+  anchor.addEventListener('click', e => {
+    const href = anchor.getAttribute('href');
+    if (!href || href === '#') return;
     e.preventDefault();
     const target = document.querySelector(href);
-    
     if (target) {
-      const offset = 80;
-      const targetPosition = target.offsetTop - offset;
-      
-      window.scrollTo({
-        top: targetPosition,
-        behavior: 'smooth'
-      });
+      window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
     }
   });
 });
@@ -537,64 +256,38 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // ============================================
 // 12. PARALLAX HERO IMAGE
 // ============================================
-gsap.to('.hero-main-image', {
-  scrollTrigger: {
-    trigger: '.hero-section',
-    start: 'top top',
-    end: 'bottom top',
-    scrub: 1
-  },
-  y: 150,
-  scale: 1.1,
-  ease: 'none'
-});
+if (document.querySelector('.hero-main-image')) {
+  gsap.to('.hero-main-image', {
+    scrollTrigger: { trigger: '.hero-section', start: 'top top', end: 'bottom top', scrub: 1 },
+    y: 150, scale: 1.1, ease: 'none'
+  });
+}
 
 // ============================================
 // 13. STATUS CARD ANIMATION
 // ============================================
 gsap.from('.status-card', {
-  scrollTrigger: {
-    trigger: '.status-card',
-    start: 'top 80%'
-  },
-  opacity: 0,
-  y: 50,
-  scale: 0.95,
-  duration: 0.8,
-  ease: 'back.out(1.2)'
+  scrollTrigger: { trigger: '.status-card', start: 'top 80%' },
+  opacity: 0, y: 50, scale: 0.95, duration: 0.8, ease: 'back.out(1.2)'
 });
 
 // ============================================
-// 14. STACKING SECTION HEADER ANIMATION
+// 14. STACKING SECTION HEADER
 // ============================================
 gsap.from('.stacking-section .section-header', {
-  scrollTrigger: {
-    trigger: '.stacking-section',
-    start: 'top 80%',
-    once: true
-  },
-  opacity: 0,
-  y: 50,
-  duration: 1,
-  ease: 'power3.out'
+  scrollTrigger: { trigger: '.stacking-section', start: 'top 80%', once: true },
+  opacity: 0, y: 50, duration: 1, ease: 'power3.out'
 });
 
 // ============================================
 // 15. PERFORMANCE OPTIMIZATIONS
 // ============================================
-
-// Refresh ScrollTrigger cuando las imágenes se cargan
-window.addEventListener('load', () => {
-  ScrollTrigger.refresh();
-});
-
-// Resize handler optimizado
+window.addEventListener('load', () => ScrollTrigger.refresh());
 let resizeTimer;
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => {
-    ScrollTrigger.refresh();
-  }, 250);
+  resizeTimer = setTimeout(() => ScrollTrigger.refresh(), 300);
 });
+window.addEventListener('orientationchange', () => ScrollTrigger.refresh());
 
-console.log('🎨 UTP+Schedule - Stacking Cards Animation Loaded');
+console.log('🎨 UTP+Schedule - Stacking Cards Animation (Optimized Build)');
