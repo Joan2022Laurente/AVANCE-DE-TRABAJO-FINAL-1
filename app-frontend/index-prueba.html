@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UTP+Schedule | Gestión Inteligente de Horarios Universitarios</title>
+    <meta
+      name="description"
+      content="Optimiza tu vida universitaria con UTP+Schedule. Crea horarios, organiza tareas y accede a recursos de estudio en un solo lugar, con recomendaciones personalizadas por IA."
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="styles/index-prueba.css" />
+    <link rel="stylesheet" href="styles/common.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+    <meta name="theme-color" content="#6366f1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <!-- Loader animado -->
+    <!-- <div class="page-loader">
+      <div class="loader-content">
+        <div class="loader-logo">UTP+Schedule</div>
+        <div class="loader-bar"></div>
+      </div>
+    </div> -->
+
+    <div id="navbar"></div>
+    <main>
+      <div id="header"></div>
+      <div class="container pt-5 overflow-hidden">
+        <!-- ============================================
+             STACKING CARDS SECTION - NUEVA
+        ============================================ -->
+        <section class="stacking-section">
+          <div class="stacking-container">
+            <div class="section-header text-center mb-5">
+              <div class="section-tag">Proceso</div>
+              <h2 class="reveal-text">
+                <span class="reveal-line">Tu camino hacia el</span>
+                <span class="reveal-line">
+                  <span class="highlight">éxito académico</span>
+                </span>
+              </h2>
+              <p class="section-subtitle">
+                Sigue estos pasos y transforma tu gestión universitaria
+              </p>
+            </div>
+
+            <!-- Trigger invisible para controlar el scroll -->
+            <div class="stacking-trigger"></div>
+
+
+            <!-- Cards Stack -->
+            <div class="stacking-cards-wrapper">
+              <!-- Card 1 -->
+
+              <div class="stack-card" data-card="1">
+                <div class="card-shine"></div>
+                <div class="card-number">01</div>
+                <div class="card-icon">
+                  <i class="bi bi-calendar-plus"></i>
+                </div>
+                <h3 class="card-title">Crea tu Horario</h3>
+                <p class="card-description">
+                  Comienza agregando tus cursos con un par de clics. Nuestra
+                  interfaz intuitiva hace que sea súper rápido.
+                </p>
+                <div class="card-badge">Paso 1</div>
+              </div>
+
+              <!-- Card 2 -->
+              <div class="stack-card" data-card="2">
+                <div class="card-shine"></div>
+                <div class="card-number">02</div>
+                <div class="card-icon">
+                  <i class="bi bi-list-check"></i>
+                </div>
+                <h3 class="card-title">Organiza tus Tareas</h3>
+                <p class="card-description">
+                  Agrega tareas, fechas límite y prioridades. El sistema te
+                  recordará automáticamente.
+                </p>
+                <div class="card-badge">Paso 2</div>
+              </div>
+
+              <!-- Card 3 -->
+              <div class="stack-card" data-card="3">
+                <div class="card-shine"></div>
+                <div class="card-number">03</div>
+                <div class="card-icon">
+                  <i class="bi bi-folder-fill"></i>
+                </div>
+                <h3 class="card-title">Centraliza Recursos</h3>
+                <p class="card-description">
+                  Guarda todos tus enlaces, documentos y notas en un solo lugar.
+                  Accede desde cualquier dispositivo.
+                </p>
+                <div class="card-badge">Paso 3</div>
+              </div>
+
+              <!-- Card 4 -->
+              <div class="stack-card" data-card="4">
+                <div class="card-shine"></div>
+                <div class="card-number">04</div>
+                <div class="card-icon">
+                  <i class="bi bi-graph-up-arrow"></i>
+                </div>
+                <h3 class="card-title">Optimiza con IA</h3>
+                <p class="card-description">
+                  Recibe recomendaciones personalizadas para mejorar tu
+                  rendimiento y gestionar mejor tu tiempo.
+                </p>
+                <div class="card-badge">Paso 4</div>
+              </div>
+
+              <!-- Card 5 - Final -->
+              <div class="stack-card stack-card-final" data-card="5">
+                <div class="card-shine"></div>
+                <div class="card-number">05</div>
+                <div class="card-icon">
+                  <i class="bi bi-trophy-fill"></i>
+                </div>
+                <h3 class="card-title">¡Alcanza tus Metas!</h3>
+                <p class="card-description">
+                  Con todo organizado, enfócate en lo importante: aprender y
+                  destacar en tus estudios.
+                </p>
+                <div class="card-badge">Resultado</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- GSAP para animaciones profesionales -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script type="module" src="scripts/main.js"></script>
+    <script src="scripts/index-prueba.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

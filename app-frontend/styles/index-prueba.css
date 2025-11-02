@@ -1,0 +1,324 @@
+/* ============================================
+   STACKING CARDS SECTION - ESSENTIAL
+============================================ */
+.stacking-section {
+  position: relative;
+  min-height: 600vh; /* ajustado dinámicamente por JS */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 10vh;
+  overflow: visible;
+}
+
+
+.stacking-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* Trigger invisible para ScrollTrigger */
+.stacking-trigger {
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh; /* o algo visible */
+  pointer-events: none;
+}
+
+
+
+/* Wrapper de las cards (centrado y sticky) */
+.stacking-cards-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  height: 600px;
+  perspective: 2000px;
+  transform: translateY(0);
+  will-change: transform;
+}
+
+/* Estilo base de cada card */
+.stack-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--color-bg-secondary, #1a1a2e);
+  border: 2px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  border-radius: 32px;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  transform-origin: center bottom;
+  overflow: hidden;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+  will-change: transform, opacity, filter;
+}
+
+/* Efecto de brillo */
+.card-shine {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    rgba(225, 17, 104, 0.1) 45%,
+    rgba(255, 107, 157, 0.3) 50%,
+    rgba(225, 17, 104, 0.1) 55%,
+    transparent 100%
+  );
+  filter: blur(50px);
+  transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* Número decorativo */
+.card-number {
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  font-size: 8rem;
+  font-weight: 900;
+  color: rgba(225, 17, 104, 0.06);
+  font-family: var(--font-primary, sans-serif);
+  line-height: 1;
+  user-select: none;
+}
+
+/* Icono de la card */
+.card-icon {
+  width: 90px;
+  height: 90px;
+  background: linear-gradient(135deg, #e11168, #ff6b9d);
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: white;
+  margin-bottom: 32px;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 10px 30px rgba(225, 17, 104, 0.3);
+}
+
+/* Título y descripción */
+.card-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: var(--color-text-primary, #ffffff);
+  font-family: var(--font-primary, sans-serif);
+  position: relative;
+  z-index: 2;
+  line-height: 1.2;
+}
+
+.card-description {
+  font-size: 1.2rem;
+  color: var(--color-text-secondary, rgba(255, 255, 255, 0.7));
+  line-height: 1.8;
+  max-width: 500px;
+  margin: 0 auto 32px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Badge decorativo */
+.card-badge {
+  display: inline-block;
+  background: rgba(225, 17, 104, 0.15);
+  border: 1px solid rgba(225, 17, 104, 0.3);
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  color: #e11168;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  position: relative;
+  z-index: 2;
+}
+
+/* Card final (última) */
+.stack-card-final {
+  background: linear-gradient(
+    135deg,
+    rgba(225, 17, 104, 0.05),
+    rgba(255, 107, 157, 0.05)
+  );
+  border-color: #e11168;
+}
+
+.stack-card-final .card-icon {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 10px 30px rgba(225, 17, 104, 0.3);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 15px 50px rgba(225, 17, 104, 0.5);
+  }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN - STACKING CARDS
+============================================ */
+@media (max-width: 1200px) {
+  .stacking-cards-wrapper {
+    max-width: 600px;
+    height: 550px;
+  }
+
+  .stack-card {
+    padding: 50px 40px;
+  }
+
+  .card-title {
+    font-size: 2rem;
+  }
+
+  .card-description {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .stacking-section {
+    min-height: 400vh;
+    padding: 80px 0;
+  }
+
+  .stacking-cards-wrapper {
+    top: 100px;
+    height: 500px;
+  }
+
+  .stack-card {
+    padding: 40px 30px;
+  }
+
+  .card-number {
+    font-size: 6rem;
+    top: 20px;
+    right: 30px;
+  }
+
+  .card-icon {
+    width: 80px;
+    height: 80px;
+    font-size: 2rem;
+  }
+
+  .card-title {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .stacking-section {
+    min-height: 350vh;
+    padding: 60px 0;
+  }
+
+  .stacking-container {
+    padding: 0 24px;
+  }
+
+  .stacking-cards-wrapper {
+    top: 80px;
+    height: 450px;
+    max-width: 100%;
+  }
+
+  .stack-card {
+    padding: 40px 24px;
+    border-radius: 24px;
+  }
+
+  .card-number {
+    font-size: 5rem;
+    top: 15px;
+    right: 20px;
+  }
+
+  .card-icon {
+    width: 70px;
+    height: 70px;
+    font-size: 1.8rem;
+    margin-bottom: 24px;
+  }
+
+  .card-title {
+    font-size: 1.6rem;
+    margin-bottom: 16px;
+  }
+
+  .card-description {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .card-badge {
+    font-size: 0.8rem;
+    padding: 6px 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .stacking-section {
+    min-height: 320vh;
+    padding: 40px 0;
+  }
+
+  .stacking-cards-wrapper {
+    top: 60px;
+    height: 400px;
+  }
+
+  .stack-card {
+    padding: 32px 20px;
+  }
+
+  .card-number {
+    font-size: 4rem;
+    top: 10px;
+    right: 15px;
+  }
+
+  .card-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    border-radius: 16px;
+  }
+
+  .card-title {
+    font-size: 1.4rem;
+  }
+
+  .card-description {
+    font-size: 0.95rem;
+  }
+}
