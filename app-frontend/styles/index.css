@@ -87,7 +87,6 @@
   padding-top: 120px;
   padding-bottom: 80px;
   position: relative;
-
 }
 
 .hero-background {
@@ -135,8 +134,13 @@
 }
 
 @keyframes float {
-  0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(30px, -30px); }
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(30px, -30px);
+  }
 }
 
 .hero-container {
@@ -191,7 +195,7 @@
 }
 
 .highlight::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   bottom: 0;
@@ -204,7 +208,9 @@
 }
 
 @keyframes underline {
-  to { transform: scaleX(1); }
+  to {
+    transform: scaleX(1);
+  }
 }
 
 .hero-subtitle {
@@ -227,7 +233,9 @@
   position: relative;
   overflow: hidden;
   transition: transform 0.3s ease;
+  
 }
+
 
 .btn-content {
   position: relative;
@@ -240,8 +248,6 @@
   transition: all 0.3s ease;
 }
 
-
-
 .btn-outline-primary {
   border: 2px solid var(--color-primary);
   color: var(--color-primary);
@@ -249,8 +255,6 @@
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
 }
-
-
 
 /* ============================================
    4. HERO STATS
@@ -429,13 +433,12 @@
   padding: 60px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: start;
+  align-items: baseline;
   text-align: center;
   transform-origin: center bottom;
   overflow: hidden;
-  box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.4),
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
     0 0 0 1px rgba(255, 255, 255, 0.05);
   will-change: transform, opacity, filter;
 }
@@ -511,31 +514,23 @@
   color: var(--color-text-secondary);
   line-height: 1.8;
   max-width: 500px;
-  margin: 0 auto 32px;
+  text-align: left;
   position: relative;
   z-index: 2;
 }
 
-/* Badge decorativo */
-.card-badge {
-  display: inline-block;
-  background: rgba(225, 17, 104, 0.15);
-  border: 1px solid rgba(225, 17, 104, 0.3);
-  padding: 8px 20px;
-  border-radius: 50px;
-  font-size: 0.9rem;
-  color: var(--color-primary);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  position: relative;
-  z-index: 2;
+.card-video {
+  width: 70%;
+  object-fit: cover;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 30px;
 }
 
 /* Card final (última del stack) con estilo especial */
 .stack-card-final {
-  background: linear-gradient(135deg, 
-    rgba(225, 17, 104, 0.05), 
+  background: linear-gradient(
+    135deg,
+    rgba(225, 17, 104, 0.05),
     rgba(255, 107, 157, 0.05)
   );
   border-color: var(--color-primary);
@@ -546,7 +541,8 @@
 }
 
 @keyframes pulseGlow {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     box-shadow: 0 10px 30px rgba(225, 17, 104, 0.3);
   }
@@ -620,13 +616,17 @@
 }
 
 .feature-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(225, 17, 104, 0.05), rgba(255, 107, 157, 0.05));
+  background: linear-gradient(
+    135deg,
+    rgba(225, 17, 104, 0.05),
+    rgba(255, 107, 157, 0.05)
+  );
   opacity: 0;
   transition: opacity 0.4s ease;
 }
@@ -721,7 +721,6 @@
    10. TESTIMONIAL SECTION ENHANCED
 ============================================ */
 .testimonial-section {
-
   position: relative;
   overflow: hidden;
 }
@@ -879,7 +878,11 @@
 }
 
 .status-card .card-header {
-  background: linear-gradient(135deg, rgba(225, 17, 104, 0.1), rgba(255, 107, 157, 0.1));
+  background: linear-gradient(
+    135deg,
+    rgba(225, 17, 104, 0.1),
+    rgba(255, 107, 157, 0.1)
+  );
   border-bottom: 1px solid var(--color-border);
   padding: 24px;
 }
@@ -903,8 +906,13 @@
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 .status-message {
@@ -920,7 +928,6 @@
   text-align: center;
   padding: 100px 0;
   position: relative;
-
 }
 
 .cta-background {
@@ -979,24 +986,24 @@
   .hero-title {
     font-size: 3.5rem;
   }
-  
+
   .section-header h2 {
     font-size: 2.5rem;
   }
-  
+
   .stacking-cards-wrapper {
     max-width: 600px;
     height: 550px;
   }
-  
+
   .stack-card {
     padding: 50px 40px;
   }
-  
+
   .card-title {
     font-size: 2rem;
   }
-  
+
   .card-description {
     font-size: 1.1rem;
   }
@@ -1007,73 +1014,80 @@
     flex-direction: column;
     text-align: center;
   }
-  
+
   .hero-content {
     max-width: 100%;
   }
-  
+
   .hero-title {
     font-size: 3rem;
   }
-  
+
   .hero-stats {
     justify-content: center;
   }
-  
+
   .hero-image {
     flex: none;
     margin-top: 60px;
     width: 100%;
   }
-  
+
   .floating-card {
     font-size: 0.8rem;
     padding: 10px 16px;
   }
-  
+
   .card-1 {
     top: 5%;
     left: 0;
   }
-  
+
   .card-2 {
     top: 50%;
     right: 0;
   }
-  
+
   .card-3 {
     bottom: 10%;
     left: 10%;
   }
-  
+
   .stacking-section {
     min-height: 400vh;
     padding: 80px 0;
   }
-  
+
   .stacking-cards-wrapper {
     top: 100px;
     height: 500px;
   }
-  
+
   .stack-card {
     padding: 40px 30px;
   }
-  
+
   .card-number {
     font-size: 6rem;
     top: 20px;
     right: 30px;
   }
-  
+
   .card-icon {
     width: 80px;
     height: 80px;
     font-size: 2rem;
   }
-  
+
   .card-title {
     font-size: 1.8rem;
+  }
+
+  .card-video {
+    width: 60%;
+    object-fit: cover;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 30px;
   }
 }
 
@@ -1082,107 +1096,114 @@
     max-width: 90%;
     padding-top: 80px;
   }
-  
+
   .hero-title {
     font-size: 2.2rem;
   }
-  
+
   .hero-subtitle {
     font-size: 1.1rem;
   }
-  
+
   .stat-number {
     font-size: 2.5rem;
   }
-  
+
   .hero-stats {
     gap: 30px;
   }
-  
+
   .features-grid {
     grid-template-columns: 1fr;
     gap: 24px;
   }
-  
+
   .feature-card {
     padding: 30px;
   }
-  
+
   .feature-number {
     font-size: 4rem;
   }
-  
+
   .section-header h2 {
     font-size: 2rem;
   }
-  
+
   .testimonial-content {
     padding: 30px;
   }
-  
+
   .testimonial-text {
     font-size: 1.1rem;
   }
-  
+
   .testimonials-slider {
     min-height: 400px;
   }
-  
+
   .cta-title {
     font-size: 2.2rem;
   }
-  
+
   .stacking-section {
     min-height: 350vh;
     padding: 60px 0;
   }
-  
+
   .stacking-container {
     padding: 0 24px;
   }
-  
+
   .stacking-cards-wrapper {
     top: 80px;
     height: 450px;
     max-width: 100%;
   }
-  
+
   .stack-card {
     padding: 40px 24px;
     border-radius: 24px;
   }
-  
+
   .card-number {
     font-size: 5rem;
     top: 15px;
     right: 20px;
   }
-  
+
   .card-icon {
     width: 70px;
     height: 70px;
     font-size: 1.8rem;
     margin-bottom: 24px;
   }
-  
+
   .card-title {
     font-size: 1.6rem;
     margin-bottom: 16px;
   }
-  
+
   .card-description {
     font-size: 1rem;
     line-height: 1.6;
     margin-bottom: 24px;
   }
-  
+
   .card-badge {
     font-size: 0.8rem;
     padding: 6px 16px;
   }
-  
+
   .scroll-indicator {
     display: none;
+  }
+
+    .card-video {
+    width: 50%;
+    object-fit: cover;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 30px;
   }
 }
 
@@ -1190,55 +1211,55 @@
   .hero-title {
     font-size: 1.8rem;
   }
-  
+
   .hero-buttons {
     flex-direction: column;
     width: 100%;
   }
-  
+
   .hero-buttons .btn {
     width: 100%;
   }
-  
+
   .floating-card {
     font-size: 0.7rem;
     padding: 8px 12px;
   }
-  
+
   .loader-logo {
     font-size: 3rem;
   }
-  
+
   .testimonial-content {
     padding: 25px;
   }
-  
+
   .quote-mark {
     font-size: 4rem;
     top: 10px;
     left: 15px;
   }
-  
+
   .stacking-section {
     min-height: 320vh;
     padding: 40px 0;
   }
-  
+
   .stacking-cards-wrapper {
     top: 60px;
     height: 400px;
   }
-  
+
   .stack-card {
     padding: 32px 20px;
   }
-  
+
   .card-number {
     font-size: 4rem;
     top: 10px;
     right: 15px;
   }
-  
+
   .card-icon {
     width: 60px;
     height: 60px;
@@ -1246,12 +1267,19 @@
     margin-bottom: 20px;
     border-radius: 16px;
   }
-  
+
   .card-title {
     font-size: 1.4rem;
   }
-  
+
   .card-description {
-    font-size: 0.95rem;
+    font-size: 0.75rem;
+  }
+
+    .card-video {
+    width: 100%;
+    object-fit: cover;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 30px;
   }
 }

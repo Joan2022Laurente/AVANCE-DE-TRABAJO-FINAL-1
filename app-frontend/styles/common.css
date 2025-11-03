@@ -47,10 +47,8 @@
   box-sizing: border-box;
 }
 .modal-backdrop.show {
-  opacity: 0.8; 
+  opacity: 0.8;
 }
-
-
 
 /* =========================================================
    TIPOGRAFÍA
@@ -123,7 +121,10 @@ main.collapsed {
   padding: 20px;
   border-bottom: 1px solid var(--color-border);
 }
+.btn:focus {
+  box-shadow: none !important; 
 
+}
 .navbar-toggler {
   box-shadow: none !important;
   padding: 0;
