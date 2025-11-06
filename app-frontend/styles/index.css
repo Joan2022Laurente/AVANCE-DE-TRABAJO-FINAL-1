@@ -471,7 +471,7 @@
   right: 40px;
   font-size: 8rem;
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.171);
   font-family: var(--font-primary);
   line-height: 1;
   user-select: none;
@@ -517,10 +517,11 @@
 }
 
 .card-video {
-  width: 70%;
+  width: 50%;
   object-fit: cover;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 30px;
+  margin-top: 20px;
 }
 
 /* Card final (última del stack) con estilo especial */
