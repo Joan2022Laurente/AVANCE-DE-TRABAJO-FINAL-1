@@ -183,7 +183,7 @@ function initStackingCards() {
         {
           scale: 0.95,
           filter: "blur(8px)",
-          opacity: 0.1,
+          opacity: 0,
           y: -20,
           duration: 1,
           ease: "power2.inOut",
@@ -210,7 +210,7 @@ function initStackingCards() {
                   opacity: 1,
                   x: 200,
                   y: 200,
-                  duration: 0.8,
+                  duration: 0.5,
                   ease: "power2.out",
                   onComplete: () =>
                     gsap.to(shine, { opacity: 0, duration: 0.3 }),

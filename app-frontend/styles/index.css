@@ -392,7 +392,7 @@
 }
 
 .stacking-container {
-  max-width: 1200px;
+  width: 98%;
   margin: 0 auto;
   padding: 0 40px;
 }
@@ -412,7 +412,7 @@
   position: sticky;
   top: 0px;
   width: 100%;
-  max-width: 700px;
+  max-width: 900px;
   margin: 80px auto 0;
   height: 600px;
   perspective: 2000px;
