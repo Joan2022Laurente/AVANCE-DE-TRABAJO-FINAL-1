@@ -435,9 +435,9 @@
   align-items: start;
   text-align: center;
   transform-origin: center bottom;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(255, 255, 255, 0.05);
+  overflow: visible;
+  /* box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05); */
   will-change: transform, opacity, filter;
 }
 
@@ -470,7 +470,7 @@
   top: 30px;
   right: 40px;
   font-size: 8rem;
-  font-weight: 900;
+  font-weight: 400;
   color: rgba(255, 255, 255, 0.06);
   font-family: var(--font-primary);
   line-height: 1;
