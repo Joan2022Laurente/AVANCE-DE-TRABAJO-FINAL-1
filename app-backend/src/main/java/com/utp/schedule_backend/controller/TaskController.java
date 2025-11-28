@@ -28,6 +28,12 @@ public class TaskController {
         return ResponseEntity.ok(taskService.listarPorCurso(cursoId));
     }
 
+    // Listar tareas por usuario
+    @GetMapping("/usuario/{userId}")
+    public ResponseEntity<List<Task>> listarPorUsuario(@PathVariable Long userId) {
+        return ResponseEntity.ok(taskService.listarPorUsuario(userId));
+    }
+
     // Listar tareas
     @GetMapping
     public ResponseEntity<List<Task>> listarTareas() {

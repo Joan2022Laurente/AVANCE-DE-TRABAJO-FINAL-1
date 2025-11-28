@@ -24,6 +24,10 @@ public class TaskService {
         return false;
     }
 
+    public List<Task> listarPorUsuario(Long userId) {
+        return taskRepository.findByCourse_User_Id(userId);
+    }
+
     public Task crearTarea(Task task) {
         if (task.getEstado() == null) {
             task.setEstado("pendiente");
