@@ -1,60 +1,80 @@
 package com.utp.schedule_backend.model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "tasks") // nombre de la tabla en la BD
+@Table(name = "tasks")
 public class Task {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "curso_id")
-    private Long cursoId;
-
-    @Column(nullable = false)
     private String titulo;
-
-    @Column(length = 500)
     private String descripcion;
-
-    @Column(name = "fecha_entrega")
     private LocalDate fechaEntrega;
+    private String estado;
 
-    @Column(nullable = false)
-    private String estado; // Ej: "pendiente", "completada"
+    @ManyToOne
+    @JoinColumn(name = "curso_id", nullable = false)
+    private Course course;
 
-    // Constructor vacío (obligatorio para JPA)
-    public Task() {}
+    public Task() {
+    }
 
-    // Constructor completo
-    public Task(Long id, Long cursoId, String titulo, String descripcion, LocalDate fechaEntrega, String estado) {
-        this.id = id;
-        this.cursoId = cursoId;
+    public Task(String titulo, String descripcion, LocalDate fechaEntrega, String estado, Course course) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.fechaEntrega = fechaEntrega;
         this.estado = estado;
+        this.course = course;
     }
 
-    // Getters y Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public Long getCursoId() { return cursoId; }
-    public void setCursoId(Long cursoId) { this.cursoId = cursoId; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getTitulo() { return titulo; }
-    public void setTitulo(String titulo) { this.titulo = titulo; }
+    public String getTitulo() {
+        return titulo;
+    }
 
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
 
-    public LocalDate getFechaEntrega() { return fechaEntrega; }
-    public void setFechaEntrega(LocalDate fechaEntrega) { this.fechaEntrega = fechaEntrega; }
+    public String getDescripcion() {
+        return descripcion;
+    }
 
-    public String getEstado() { return estado; }
-    public void setEstado(String estado) { this.estado = estado; }
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public LocalDate getFechaEntrega() {
+        return fechaEntrega;
+    }
+
+    public void setFechaEntrega(LocalDate fechaEntrega) {
+        this.fechaEntrega = fechaEntrega;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
 }

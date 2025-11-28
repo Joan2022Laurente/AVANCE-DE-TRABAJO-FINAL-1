@@ -302,6 +302,11 @@ export function initLogin() {
                 body: JSON.stringify(payload),
               });
 
+              const savedUser = await response.json();
+              console.log("aksdmaksdmkasd")
+              console.log(savedUser);
+              localStorage.setItem("userId", savedUser.id);
+
               if (!response.ok) {
                 console.warn(
                   "No se pudo registrar el usuario:",

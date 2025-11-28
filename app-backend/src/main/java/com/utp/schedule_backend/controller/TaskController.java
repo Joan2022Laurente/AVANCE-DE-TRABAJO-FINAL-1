@@ -23,10 +23,26 @@ public class TaskController {
         return ResponseEntity.ok(taskService.crearTarea(task));
     }
 
+    @GetMapping("/curso/{cursoId}")
+    public ResponseEntity<List<Task>> listarPorCurso(@PathVariable Long cursoId) {
+        return ResponseEntity.ok(taskService.listarPorCurso(cursoId));
+    }
+
     // Listar tareas
     @GetMapping
     public ResponseEntity<List<Task>> listarTareas() {
         return ResponseEntity.ok(taskService.listarTareas());
+    }
+
+    // Eliminar tarea por ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarTarea(@PathVariable Long id) {
+        boolean eliminada = taskService.eliminarTarea(id);
+        if (eliminada) {
+            return ResponseEntity.noContent().build(); // 204
+        } else {
+            return ResponseEntity.notFound().build(); // 404
+        }
     }
 
     // Actualizar estado de tarea
@@ -36,6 +52,6 @@ public class TaskController {
             @RequestParam String estado) {
         Optional<Task> tarea = taskService.actualizarEstado(id, estado);
         return tarea.map(ResponseEntity::ok)
-                    .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

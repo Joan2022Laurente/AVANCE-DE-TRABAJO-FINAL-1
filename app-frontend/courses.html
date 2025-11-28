@@ -21,68 +21,125 @@
   </head>
   <body>
     <div id="navbar"></div>
+    
     <main>
       <div id="header"></div>
+      
       <div class="courses-container">
-        <div class="courses-header text-center mb-4">
-          <h1>Mis Cursos</h1>
-          <p>Selecciona un curso para ver o agregar recursos de estudio.</p>
+        <!-- Header Hero -->
+        <div class="courses-header">
+          <div class="header-badge">
+            <i class="bi bi-mortarboard-fill"></i>
+            <span>Mis Cursos</span>
+          </div>
+          <h1>Gestiona tu Aprendizaje</h1>
+          <p>Accede a recursos y tareas organizados por curso</p>
         </div>
 
-        <!-- Guía para el usuario -->
-        <div class="guide-text">
-          <h4><i class="bi bi-info-circle me-2"></i>¿Cómo empezar?</h4>
-          <p>
-            Aquí encontrarás todos tus cursos registrados. Haz click en
-            cualquier tarjeta para acceder a los recursos asociados.
-          </p>
-        </div>
-
-        <div id="courses-content">
-          <!-- Estado vacío -->
-          <div class="empty-state" id="empty-state">
-            <i class="bi bi-book"></i>
-            <h3>No tienes cursos registrados</h3>
-            <p>
-              Parece que aún no has registrado cursos.
-              <a
-                href="#"
-                class="text-decoration-none"
-                data-bs-toggle="tooltip"
-                title="Próximamente"
-              >
-                Agrega cursos desde tu perfil
-                <span
-                  class="tooltip-guide"
-                  data-tooltip="Próximamente podrás agregar cursos directamente desde esta pantalla. Por ahora, contacta a tu administrador o edita tu perfil."
-                ></span>
-              </a>
-              para comenzar.
-            </p>
+        <!-- Stats Section -->
+        <div class="courses-stats" id="courses-stats" style="display: none;">
+          <div class="stat-card">
+            <i class="bi bi-journal-bookmark"></i>
+            <div class="stat-content">
+              <span class="stat-number" id="total-courses">0</span>
+              <span class="stat-label">Cursos Activos</span>
+            </div>
           </div>
         </div>
+
+        <!-- Guide Text -->
+        <div class="guide-section">
+          <div class="guide-card">
+            <i class="bi bi-lightbulb"></i>
+            <div>
+              <h4>¿Cómo funciona?</h4>
+              <p>Haz clic en cualquier curso para acceder a sus recursos o tareas organizadas</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Skeleton Loader -->
+        <div id="skeleton-loader" class="skeleton-courses" style="display: none;">
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+        </div>
+
+        <!-- Courses Grid -->
+        <div id="courses-content"></div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="empty-state" style="display: none;">
+          <div class="empty-icon">
+            <i class="bi bi-book"></i>
+          </div>
+          <h3>No tienes cursos registrados</h3>
+          <p>
+            Aún no has sido asignado a ningún curso.<br>
+            Contacta con tu administrador para que te agregue a tus cursos.
+          </p>
+        </div>
       </div>
-
-
     </main>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-      crossorigin="anonymous"
-    ></script>
+    <!-- Course Options Modal -->
+    <div class="course-modal" id="course-modal">
+      <div class="course-modal-backdrop" id="modal-backdrop"></div>
+      <div class="course-modal-content">
+        <div class="course-modal-header">
+          <div class="course-modal-icon">
+            <i class="bi bi-book-half"></i>
+          </div>
+          <div class="course-modal-info">
+            <h3 id="modal-course-name">Curso</h3>
+            <p id="modal-course-teacher">Docente</p>
+          </div>
+          <button class="modal-close-btn" id="close-modal">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        
+        <div class="course-modal-body">
+          <button class="course-option-btn resources-btn" data-action="resources">
+            <div class="option-icon">
+              <i class="bi bi-journal-text"></i>
+            </div>
+            <div class="option-content">
+              <h4>Recursos</h4>
+              <p>Documentos, enlaces y materiales de estudio</p>
+            </div>
+            <i class="bi bi-chevron-right option-arrow"></i>
+          </button>
+
+          <button class="course-option-btn tasks-btn" data-action="tasks">
+            <div class="option-icon">
+              <i class="bi bi-list-check"></i>
+            </div>
+            <div class="option-content">
+              <h4>Tareas</h4>
+              <p>Gestiona tus actividades y entregas</p>
+            </div>
+            <i class="bi bi-chevron-right option-arrow"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+      <div id="toast-notification" class="toast" role="alert">
+        <div class="toast-header">
+          <i class="bi bi-check-circle-fill text-success me-2"></i>
+          <strong class="me-auto">Notificación</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body"></div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="scripts/courses.js"></script>
     <script type="module" src="scripts/main.js"></script>
-    <script>
-      // Inicializar tooltips de Bootstrap
-      document.addEventListener("DOMContentLoaded", function () {
-        const tooltipTriggerList = [].slice.call(
-          document.querySelectorAll('[data-bs-toggle="tooltip"]')
-        );
-        tooltipTriggerList.map(function (tooltipTriggerEl) {
-          return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
-      });
-    </script>
   </body>
 </html>
