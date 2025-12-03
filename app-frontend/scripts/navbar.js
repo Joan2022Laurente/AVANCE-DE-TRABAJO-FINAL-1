@@ -1,46 +1,53 @@
 import { initLogin } from "./login.js";
-export function loadNavbarAndHeader() {
-  // Cargar el navbar (sidebar)
-  fetch("navbar.html")
-    .then((res) => res.text())
-    .then((data) => {
-      document.getElementById("navbar").innerHTML = data;
-      const collapseBtn = document.getElementById("collapseBtn");
-      const sidebar = document.getElementById("sidebar");
-      const main = document.querySelector("main");
-      if (collapseBtn) {
-        collapseBtn.addEventListener("click", () => {
-          sidebar.classList.toggle("collapsed");
-          main.classList.toggle("collapsed");
+export async function loadNavbarAndHeader() {
+  try {
+    // Cargar ambos en paralelo
+    const [navbarRes, headerRes] = await Promise.all([
+      fetch("navbar.html"),
+      fetch("header.html"),
+    ]);
+
+    const [navbarHtml, headerHtml] = await Promise.all([
+      navbarRes.text(),
+      headerRes.text(),
+    ]);
+
+    // Insertar ambos
+    document.getElementById("navbar").innerHTML = navbarHtml;
+    document.getElementById("header").innerHTML = headerHtml;
+
+    // Inicializaciones que dependen del DOM ya insertado
+    const collapseBtn = document.getElementById("collapseBtn");
+    const sidebar = document.getElementById("sidebar");
+    const main = document.querySelector("main");
+    if (collapseBtn) {
+      collapseBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("collapsed");
+        main.classList.toggle("collapsed");
+      });
+    }
+
+    // Cerrar dropdowns al hacer clic fuera
+    document.addEventListener("click", (e) => {
+      if (
+        !e.target.closest(".dropdown") &&
+        !e.target.closest(".dropdown-toggle")
+      ) {
+        document.querySelectorAll(".dropdown-menu.show").forEach((dropdown) => {
+          dropdown.classList.remove("show");
         });
       }
-      // Cerrar dropdowns al hacer clic fuera
-      document.addEventListener("click", (e) => {
-        if (
-          !e.target.closest(".dropdown") &&
-          !e.target.closest(".dropdown-toggle")
-        ) {
-          document
-            .querySelectorAll(".dropdown-menu.show")
-            .forEach((dropdown) => {
-              dropdown.classList.remove("show");
-            });
-        }
-      });
-      // Ocultar Dashboard y Gestión Académica si no está logeado
-      checkAuthAndHideElements();
-      initLogin();
-    })
-    .catch((error) => console.error("Error al cargar el sidebar:", error));
-
-  // Cargar header
-  fetch("header.html")
-    .then((res) => res.text())
-    .then((html) => {
-      document.getElementById("header").innerHTML = html;
-      renderHeaderUserInfo();
-      checkAuthAndHideElements(); // <-- Asegúrate de que esto esté aquí
     });
+
+    // Render del header (user info) y ocultar links según auth
+    renderHeaderUserInfo();
+    checkAuthAndHideElements();
+
+    // Finalmente inicializar login (ahora sí encontrará el enlace móvil)
+    initLogin();
+  } catch (error) {
+    console.error("Error cargando navbar + header:", error);
+  }
 }
 
 function checkAuthAndHideElements() {
