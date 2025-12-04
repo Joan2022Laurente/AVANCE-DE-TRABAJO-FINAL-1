@@ -50,7 +50,7 @@
   opacity: 0.8;
 }
 
-button{
+button {
   border-radius: 30px !important;
 }
 
@@ -125,9 +125,9 @@ main.collapsed {
   padding: 20px;
   border-bottom: 1px solid var(--color-border);
 }
-.btn:focus {
-  box-shadow: none !important; 
 
+.btn:focus {
+  box-shadow: none !important;
 }
 .navbar-toggler {
   box-shadow: none !important;
@@ -149,6 +149,8 @@ main.collapsed {
 
 /* =========================================================
    SIDEBAR
+========================================================= *//* =========================================================
+   SIDEBAR PREMIUM (AWWWARDS STYLE)
 ========================================================= */
 .sidebar {
   width: var(--sidebar-width);
@@ -157,129 +159,236 @@ main.collapsed {
   top: 0;
   left: 0;
   background: var(--sidebar-bg);
-  color: var(--sidebar-text);
+  backdrop-filter: blur(20px); /* Efecto cristal premium */
+  -webkit-backdrop-filter: blur(20px);
+  border-right: 1px solid var(--sidebar-border);
   display: flex;
   flex-direction: column;
-  padding: 1.25rem 0.75rem;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-  transition: width var(--sidebar-transition),
-    box-shadow var(--sidebar-transition);
+  padding: 1.5rem 1rem;
   z-index: 1000;
-  overflow-y: auto;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); /* Transición suave Apple-like */
 }
 
-.sidebar.collapsed {
-  width: var(--sidebar-collapsed-width);
-  box-shadow: none;
+/* Scrollbar invisible pero funcional */
+.sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Logo Area dentro del Sidebar */
+.sidebar-header {
+  margin-bottom: 2rem;
+  padding: 0 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.sidebar-brand {
+  font-family: var(--font-primary);
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+/* Grupos de navegación */
+.nav-group-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #52525b; /* Texto muy sutil */
+  margin: 1.5rem 0 0.5rem 1rem;
+  font-weight: 600;
+  transition: opacity 0.3s;
 }
 
 .sidebar ul {
-  width: 100%;
-  overflow-x: hidden;
+  list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px; /* Espacio entre items */
 }
 
 /* Links */
 .sidebar .nav-link,
 .sidebar .collapse-link {
-  color: rgba(255, 255, 255, 0.85) !important;
-  font-weight: 500;
-  border-radius: var(--sidebar-border-radius);
-  transition: all 0.2s ease;
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.65rem 1rem;
-  margin: 0.25rem 0;
-  white-space: nowrap;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  color: var(--sidebar-text) !important;
+  text-decoration: none;
+  border-radius: 12px; /* Bordes más redondeados modernos */
+  transition: all 0.3s ease;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 500;
+  overflow: hidden;
 }
 
-.sidebar .nav-link:hover,
-.sidebar .nav-link.active,
-.sidebar .collapse-link:hover {
-  color: var(--sidebar-hover-text) !important;
-  background-color: var(--sidebar-hover-bg);
-}
-
-.sidebar.collapsed .nav-link,
-.sidebar.collapsed .collapse-link {
-  justify-content: center;
-  padding: 0.65rem 0;
-}
-
-.sidebar.collapsed .link-text {
-  display: none;
-}
-
+/* Iconos */
 .sidebar .nav-link i,
 .sidebar .collapse-link i {
-  font-size: 1rem;
-  min-width: 1rem;
-  text-align: center;
-}
-
-.sidebar .nav-item,
-.sidebar .nav-link {
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* Dropdown */
-.sidebar .dropdown {
-  position: static;
-}
-
-.sidebar .dropdown-menu {
-  background-color: var(--sidebar-bg);
-  border: none;
-  border-radius: var(--sidebar-border-radius);
-  padding: 0.5rem 0;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.sidebar .dropdown-item {
-  color: rgba(255, 255, 255, 0.85) !important;
-  padding: 0.5rem 1.5rem;
+  font-size: 1.2rem;
+  min-width: 1.5rem;
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 0.75rem;
-  border-radius: var(--sidebar-border-radius);
+  transition: transform 0.3s var(--ease-spring), color 0.3s;
 }
 
-.sidebar .dropdown-item:hover {
-  color: var(--sidebar-hover-text) !important;
-  background-color: var(--sidebar-hover-bg);
+/* Estados Hover */
+.sidebar .nav-link:hover,
+.sidebar .collapse-link:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+  color: var(--sidebar-text-hover) !important;
 }
 
-/* Botón de colapso */
+.sidebar .nav-link:hover i {
+  transform: scale(1.1); /* Pequeño pop al hover */
+  color: var(--color-text-primary);
+}
+
+/* Estado ACTIVO (El toque Awwwards) */
+.sidebar .nav-link.active,
+.sidebar .nav-link[aria-expanded="true"] {
+  background: var(--sidebar-active-bg);
+  color: var(--color-primary) !important;
+}
+
+.sidebar .nav-link.active i {
+  color: var(--color-primary);
+  filter: drop-shadow(0 0 8px rgba(225, 17, 104, 0.4)); /* Glow sutil en el icono */
+}
+
+/* Indicador lateral sutil para items activos */
+.sidebar .nav-link.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 20px;
+  width: 3px;
+  background-color: var(--color-primary);
+  border-radius: 0 4px 4px 0;
+  box-shadow: 0 0 10px var(--color-primary);
+}
+
+/* Dropdowns Animation */
+.sidebar .collapse {
+  transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar .nav-sub-item {
+  padding-left: 3.5rem; /* Indentación visual */
+  font-size: 0.9rem;
+  color: #71717a !important;
+  position: relative;
+}
+
+.sidebar .nav-sub-item::before {
+  content: '';
+  position: absolute;
+  left: 2.2rem;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  background-color: #333;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  transition: background-color 0.3s;
+}
+
+.sidebar .nav-sub-item:hover::before,
+.sidebar .nav-sub-item.active::before {
+  background-color: var(--color-primary);
+}
+
+/* =========================================================
+   ESTADO COLAPSADO (Minimalismo Puro)
+========================================================= */
+.sidebar.collapsed {
+  width: var(--sidebar-collapsed-width);
+}
+
+.sidebar.collapsed .sidebar-header {
+  justify-content: center;
+  padding: 0;
+}
+
+.sidebar.collapsed .logo-text, 
+.sidebar.collapsed .nav-group-label,
+.sidebar.collapsed .link-text,
+.sidebar.collapsed .collapse-arrow {
+  display: none;
+  opacity: 0;
+}
+
+.sidebar.collapsed .nav-link {
+  justify-content: center;
+  padding: 0.85rem 0;
+}
+
+.sidebar.collapsed .nav-link i {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+/* En modo colapsado, el indicador activo cambia de posición */
+.sidebar.collapsed .nav-link.active::before {
+  left: 50%;
+  top: auto;
+  bottom: 5px;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  border-radius: 4px 4px 0 0;
+}
+
+/* Tooltips custom para modo colapsado (Opcional, requiere CSS extra) */
+.sidebar.collapsed .nav-link:hover::after {
+  /* Puedes añadir tooltips CSS puros aquí si lo deseas */
+}
+
+/* Botón Colapso Flotante */
+.collapse-btn-wrapper {
+  margin-top: auto; /* Empuja al fondo */
+  padding-top: 1rem;
+  border-top: 1px solid var(--sidebar-border);
+}
+
 .sidebar .collapse-btn {
-  background: var(--sidebar-hover-bg);
-  border: none;
-  border-radius: var(--sidebar-border-radius);
+  background: transparent;
+  color: var(--sidebar-text);
+  border: 1px solid var(--sidebar-border);
   width: 100%;
   height: 40px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--sidebar-text);
-  transition: transform 0.3s ease;
-  margin-bottom: 20px;
+  transition: all 0.3s ease;
 }
 
 .sidebar .collapse-btn:hover {
-  background: var(--sidebar-hover-bg);
-  color: var(--sidebar-hover-text);
+  background: var(--color-bg-tertiary);
+  color: #fff;
+  border-color: #fff;
 }
-
-.sidebar.collapsed #collapseIcon {
-  transform: rotate(180deg);
-  transition: transform 0.3s ease;
-}
-
 /* =========================================================
    BOTONES
 ========================================================= */

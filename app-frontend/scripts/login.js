@@ -84,9 +84,11 @@ export function initLogin() {
   // ---------- UI / login helpers ----------
   function updateLoginLinks() {
     const isLoggedIn = !!localStorage.getItem("userData");
+
     const mobileLoginLink = document.querySelector(
-      "#mobileNavbarMenu .nav-link.loginLinkMobile"
+      "#navbarMenu .nav-link.loginLinkMobile"
     );
+
     const sidebarLoginLink = document.querySelector(
       "#sidebar .loginLinkDesktop"
     );
@@ -123,7 +125,6 @@ export function initLogin() {
       }
     }
   }
-
   function cerrarSesion(e) {
     e && e.preventDefault();
     localStorage.removeItem("userData");
@@ -217,11 +218,16 @@ export function initLogin() {
       const url = `${server}/api/eventos-stream?username=${encodeURIComponent(
         username
       )}&password=${encodeURIComponent(password)}`;
-      // console.log("Conectando a:", url);
-
+      
       const evtSource = new EventSource(url);
 
-      let userData = {};
+      // Inicializamos el objeto con arrays vacíos para evitar undefined
+      let userData = {
+          clases: [],
+          actividades: [],
+          cursos: [],
+          semanaInfo: {}
+      };
 
       evtSource.addEventListener("estado", async (event) => {
         try {
@@ -254,16 +260,26 @@ export function initLogin() {
         }
       });
 
+      // ✅ NUEVO LISTENER: Recibe las actividades detalladas del nuevo scraper
+      evtSource.addEventListener("actividades", (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          userData.actividades = data.actividades || [];
+          console.log("Actividades cargadas:", userData.actividades.length);
+        } catch (err) {
+          console.warn("Error al procesar actividades:", err);
+        }
+      });
+
+      // ✅ LISTENER MODIFICADO: Recibe eventos del calendario, filtramos SOLO clases
       evtSource.addEventListener("eventos", (event) => {
         try {
           const data = JSON.parse(event.data);
-          // Separar clases y actividades
-          userData.clases = data.eventos.filter((e) => e.tipo === "Clase");
-          userData.actividades = data.eventos.filter(
-            (e) => e.tipo === "Actividad"
-          );
+          // Filtramos solo las CLASES para no mezclar con las tareas del calendario
+          const nuevasClases = data.eventos.filter((e) => e.tipo === "Clase");
+          userData.clases = nuevasClases;
         } catch (err) {
-          console.warn("Error al separar eventos:", err);
+          console.warn("Error al procesar eventos/clases:", err);
         }
       });
 
@@ -284,6 +300,7 @@ export function initLogin() {
           loaderOverlay.style.display = "none";
           evtSource.close();
           updateLoginLinks();
+          
           // Enviar el usuario y sus cursos al backend
           if (userData.nombreEstudiante) {
             try {
@@ -303,8 +320,7 @@ export function initLogin() {
               });
 
               const savedUser = await response.json();
-              console.log("aksdmaksdmkasd")
-              console.log(savedUser);
+              // console.log(savedUser);
               localStorage.setItem("userId", savedUser.id);
 
               if (!response.ok) {
@@ -358,6 +374,8 @@ export function initLogin() {
   loginForm.dataset.listenerAdded = "true";
 }
 
+// La función showWelcome se mantiene igual, ya que userData.actividades y userData.clases
+// siguen existiendo en el objeto final, solo que ahora vienen de fuentes más precisas.
 export function showWelcome(userData) {
   try {
     const data = typeof userData === "string" ? JSON.parse(userData) : userData;
@@ -369,6 +387,10 @@ export function showWelcome(userData) {
     const nombre = data.nombreEstudiante || "Estudiante";
     const hoy = new Date().toISOString().split("T")[0];
     const clasesHoy = data.clases?.filter((e) => e.fecha === hoy) || [];
+    
+    // Filtramos actividades que no estén "Entregadas".
+    // Nota: El nuevo scraper devuelve estados como "Por entregar" o "Programada", 
+    // así que la lógica !== "Entregada" funciona correctamente.
     const actividadesPend =
       data.actividades?.filter((e) => e.estado !== "Entregada") || [];
 

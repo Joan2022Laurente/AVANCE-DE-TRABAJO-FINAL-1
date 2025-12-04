@@ -18,12 +18,32 @@ export async function loadNavbarAndHeader() {
 
     // Inicializaciones que dependen del DOM ya insertado
     const collapseBtn = document.getElementById("collapseBtn");
+    // ✅ NUEVO: Referencia al icono dentro del botón
+    const collapseIcon = document.getElementById("collapseIcon"); 
     const sidebar = document.getElementById("sidebar");
     const main = document.querySelector("main");
+
     if (collapseBtn) {
       collapseBtn.addEventListener("click", () => {
         sidebar.classList.toggle("collapsed");
         main.classList.toggle("collapsed");
+
+        // ✅ LÓGICA DE ICONO Y LIMPIEZA VISUAL
+        if (collapseIcon) {
+            if (sidebar.classList.contains("collapsed")) {
+                // Cambiar flecha a "derecha"
+                collapseIcon.classList.replace("bi-arrow-bar-left", "bi-arrow-bar-right");
+                
+                // Opcional pero recomendado: Cerrar cualquier dropdown abierto para que no flote
+                document.querySelectorAll('.collapse.show').forEach(el => {
+                    el.classList.remove('show');
+                    // Si usas bootstrap JS puro, podrías necesitar: new bootstrap.Collapse(el).hide();
+                });
+            } else {
+                // Cambiar flecha a "izquierda"
+                collapseIcon.classList.replace("bi-arrow-bar-right", "bi-arrow-bar-left");
+            }
+        }
       });
     }
 
@@ -101,18 +121,26 @@ function renderHeaderUserInfo() {
     const userContainer = document.querySelector("#header .user-container");
     if (userContainer) {
       const userInfoDiv = document.createElement("div");
-      userInfoDiv.className = "me-2 text-end d-none d-sm-block";
+      userInfoDiv.className =
+        "d-flex align-items-center gap-2 me-2 text-end d-none d-sm-flex";
+
       userInfoDiv.innerHTML = `
-        <div class="fw-bold">${nombre}</div>
-        <small class="text-muted">${rol}</small>
-              <img
-        src="assets/user.svg"
-        alt="Avatar"
-        class="rounded-circle"
-        width="40"
-        height="40"
-      />
-      `;
+    <!-- Columna izquierda: nombre + rol -->
+    <div class="text-end">
+      <div class="fw-bold">${nombre}</div>
+      <small class="text-muted">${rol}</small>
+    </div>
+
+    <!-- Columna derecha: avatar -->
+    <img
+      src="assets/user.svg"
+      alt="Avatar"
+      class="rounded-circle"
+      width="40"
+      height="40"
+    />
+  `;
+
       userContainer.prepend(userInfoDiv);
     }
   } catch (error) {

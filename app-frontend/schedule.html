@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Horario - PlanUp</title>
+    <title>Horario - UTP+Schedule</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -20,14 +20,83 @@
     <main>
       <div id="header"></div>
       <div class="main-container p-4">
-        <!-- Header Section -->
+        <!-- Header Section with AI Integration -->
         <div class="header-section">
-          <h1>Mi Horario</h1>
-          <div class="week-info">
-            <h3 id="cycleInfo"></h3>
-            <p id="weekInfo"></p>
+          <div class="header-content">
+            <div>
+              <h1>Mi Horario</h1>
+              <div class="week-info">
+                <h3 id="cycleInfo"></h3>
+                <p id="weekInfo"></p>
+              </div>
+            </div>
+            <button id="ai-assist-trigger" class="ai-assist-btn">
+              <i class="bi bi-stars"></i>
+              <span>Asistente</span>
+            </button>
           </div>
         </div>
+
+        <!-- AI Assistant Panel (Hidden by default) -->
+        <div id="ai-panel" class="ai-panel">
+          <div class="ai-panel-header">
+            <div class="ai-avatar">
+              <i class="bi bi-robot"></i>
+            </div>
+            <div class="ai-title">
+              <h4>Asistente Inteligente</h4>
+              <p class="ai-status">
+                <span class="status-dot"></span>
+                Listo para ayudarte
+              </p>
+            </div>
+            <button id="ai-close" class="ai-close-btn">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="ai-quick-actions">
+            <button class="quick-action-card" data-action="next-class">
+              <i class="bi bi-clock-history"></i>
+              <span>¿Cuál es mi próxima clase?</span>
+            </button>
+            <button class="quick-action-card" data-action="pending-tasks">
+              <i class="bi bi-list-check"></i>
+              <span>Tareas pendientes</span>
+            </button>
+            <button class="quick-action-card" data-action="today-schedule">
+              <i class="bi bi-calendar-day"></i>
+              <span>Horario de hoy</span>
+            </button>
+            <button class="quick-action-card" data-action="week-summary">
+              <i class="bi bi-bar-chart"></i>
+              <span>Resumen de la semana</span>
+            </button>
+          </div>
+
+          <!-- AI Response Area -->
+          <div id="ai-response-area" class="ai-response-area">
+            <div class="ai-welcome">
+              <i class="bi bi-lightbulb"></i>
+              <p>Selecciona una acción rápida o escribe tu pregunta</p>
+            </div>
+          </div>
+
+          <!-- Custom Input -->
+          <div class="ai-input-container">
+            <input
+              type="text"
+              id="ai-custom-input"
+              placeholder="Escribe tu pregunta..."
+              class="ai-input"
+            />
+            <button id="ai-send-custom" class="ai-send-btn">
+              <i class="bi bi-arrow-right-circle-fill"></i>
+            </button>
+          </div>
+        </div>
+
         <!-- Navigation Tabs -->
         <ul class="nav nav-tabs" id="scheduleTabs" role="tablist">
           <li class="nav-item" role="presentation">
@@ -55,6 +124,7 @@
             </button>
           </li>
         </ul>
+
         <!-- Tab Content -->
         <div class="tab-content" id="scheduleTabContent">
           <!-- Schedule Tab -->
@@ -86,6 +156,7 @@
               <!-- Generated dynamically -->
             </div>
           </div>
+
           <!-- Activities Tab -->
           <div class="tab-pane fade" id="activities" role="tabpanel">
             <div class="activities-section">
@@ -112,146 +183,18 @@
             </div>
           </div>
         </div>
-        <a href="add-course.html" class="add-course-btn">
-          <i class="bi bi-plus-lg me-2"></i>
-          Agregar curso
-        </a>
+
+
       </div>
     </main>
 
-    <!-- Modal para agregar nota -->
-    <div class="modal fade" id="addNoteModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Agregar Nota</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form id="noteForm">
-              <input type="hidden" id="noteCourseName" />
-              <div class="mb-3">
-                <label for="noteContent" class="form-label"
-                  >Contenido de la nota</label
-                >
-                <textarea
-                  class="form-control"
-                  id="noteContent"
-                  rows="3"
-                ></textarea>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Cerrar
-            </button>
-            <button type="button" class="btn btn-primary" id="saveNote">
-              Guardar
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- Modal para agregar recurso -->
-    <div
-      class="modal fade"
-      id="addResourceModal"
-      tabindex="-1"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Agregar Recurso</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form id="resourceForm">
-              <input type="hidden" id="resourceCourseName" />
-              <div class="mb-3">
-                <label for="resourceName" class="form-label"
-                  >Nombre del recurso</label
-                >
-                <input type="text" class="form-control" id="resourceName" />
-              </div>
-              <div class="mb-3">
-                <label for="resourceLink" class="form-label"
-                  >Enlace del recurso</label
-                >
-                <input type="url" class="form-control" id="resourceLink" />
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Cerrar
-            </button>
-            <button type="button" class="btn btn-primary" id="saveResource">
-              Guardar
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <div id="ai-widget-container">
-      <button id="ai-toggle-btn" class="ai-float-btn">
-        <i class="bi bi-stars"></i>
-      </button>
 
-      <div id="ai-chat-window" class="ai-chat-window d-none">
-        <div class="ai-header">
-          <div class="d-flex align-items-center">
-            <i class="bi bi-robot me-2"></i>
-            <span>Asistente PlanUp</span>
-          </div>
-          <button id="ai-close-btn" class="btn-close-white">
-            <i class="bi bi-x-lg"></i>
-          </button>
-        </div>
-
-        <div id="ai-messages" class="ai-messages">
-          <div class="ai-message bot-message">
-            Hola, soy tu asistente académico. Tengo acceso a tu horario y
-            tareas. ¿En qué puedo ayudarte hoy?
-          </div>
-        </div>
-
-        <div class="ai-input-area">
-          <input
-            type="text"
-            id="ai-input"
-            placeholder="Escribe tu pregunta..."
-            autocomplete="off"
-          />
-          <button id="ai-send-btn"><i class="bi bi-send-fill"></i></button>
-        </div>
-      </div>
-    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="./scripts/schedule.js"></script>
     <script type="module" src="./scripts/main.js"></script>
     <script type="module" src="./scripts/ai/ai-assintant.js"></script>
   </body>
-</html>
+</html>g
