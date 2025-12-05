@@ -386,7 +386,7 @@
   background: var(--color-bg-tertiary);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 20px;
-  overflow: hidden;
+  overflow: visible;  /* ✅ CAMBIADO */
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
@@ -395,17 +395,7 @@
   animation: fadeInUp 0.5s ease backwards;
 }
 
-.task-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--color-primary), transparent);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
+
 
 .task-card:hover::before {
   opacity: 1;

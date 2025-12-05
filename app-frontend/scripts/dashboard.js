@@ -1,195 +1,299 @@
-// Función para parsear los datos del estudiante
+/* =========================================================
+   LOGICA DEL DASHBOARD - PlanUp
+   Integración completa (Desarrolladores 1, 2, 3 y 4)
+========================================================= */
+
+// ---------------------------------------------------------
+// UTILIDADES
+// ---------------------------------------------------------
+
+// Función para obtener datos del estudiante desde LocalStorage
 function getStudentData() {
+  const userId = localStorage.getItem("userId");
   const rawData = localStorage.getItem("userData");
-  if (!rawData) return null;
+
+  if (!rawData) {
+    console.warn("No se encontraron datos en localStorage (userData).");
+    return null;
+  }
 
   try {
-    return JSON.parse(rawData); // ✅ Solo un parseo
+    const data = JSON.parse(rawData);
+    console.log(`Cargando dashboard para usuario ID: ${userId || 'Desconocido'}`);
+    return data;
   } catch (error) {
     console.error("Error al parsear userData:", error);
     return null;
   }
 }
 
-
-
-
-// Función para actualizar el encabezado con el nombre del estudiante
-function updateHeader(studentName) {
+// Actualizar Encabezado (Nombre del estudiante)
+function updateHeader(nombre) {
+  // Buscamos el contenedor por clase, no por ID
   const welcomeBadge = document.querySelector(".welcome-badge");
+  
   if (welcomeBadge) {
+    // Mantenemos el ícono y actualizamos el texto
     welcomeBadge.innerHTML = `
       <i class="bi bi-person-check-fill me-2"></i>
-      ¡Hola, ${studentName}!
+      ¡Hola, ${nombre}! <span class="badge bg-primary ms-2">Estudiante</span>
     `;
   }
 }
 
-// Función para actualizar la tarjeta de horario semanal
+// ---------------------------------------------------------
+// DESARROLLADOR 1 - Card "Horario Semanal"
+// ---------------------------------------------------------
 function updateScheduleCard(studentData) {
-  const scheduleCard = document.querySelector(".card-schedule");
-  if (!scheduleCard) return;
+  const card = document.querySelector(".card-schedule");
+  if (!card) return;
 
-  const classesThisWeek = studentData.clases.length;
-  const courseText = classesThisWeek > 0
-    ? `${classesThisWeek} clase(s) esta semana`
-    : "No tienes clases registradas esta semana";
+  const cardText = card.querySelector(".card-text");
+  const courses = studentData.cursos || [];
 
-  scheduleCard.querySelector(".card-text").textContent = courseText;
-
-  // Actualizar botones de acción
-  const addCourseBtn = scheduleCard.querySelector(".btn-outline-modern");
-  const viewScheduleBtn = scheduleCard.querySelector(".btn-link-modern");
-
-  if (addCourseBtn) {
-    addCourseBtn.innerHTML = `
-      <i class="bi bi-calendar-plus me-1"></i> Ver Horario
-    `;
-    addCourseBtn.href = "horario.html";
-  }
-
-  if (viewScheduleBtn) {
-    viewScheduleBtn.textContent = "Ver detalles ";
-    viewScheduleBtn.innerHTML += '<i class="bi bi-arrow-right ms-1"></i>';
+  // Tarea 3 & 4: Validar cursos y mostrar mensaje
+  if (courses.length === 0) {
+    cardText.textContent = "No tienes cursos registrados aún";
+  } else {
+    cardText.textContent = `Tienes ${courses.length} cursos inscritos actualmente`;
   }
 }
 
-// Función para actualizar la tarjeta de tareas pendientes
+// ---------------------------------------------------------
+// DESARROLLADOR 2 - Card "Tareas Pendientes"
+// ---------------------------------------------------------
 function updateTasksCard(studentData) {
-  const tasksCard = document.querySelector(".card-tasks");
-  if (!tasksCard) return;
+  const card = document.querySelector(".card-tasks");
+  if (!card) return;
 
-  const pendingActivities = studentData.actividades.filter(
-    actividad => !actividad.estado || actividad.estado !== "Entregada"
-  );
+  const cardText = card.querySelector(".card-text");
+  const progressBar = card.querySelector(".progress-bar");
+  const progressText = card.querySelector(".progress-text");
 
-  const pendingCount = pendingActivities.length;
-  const progressPercentage = studentData.actividades.length > 0
-    ? Math.round(((studentData.actividades.length - pendingCount) / studentData.actividades.length) * 100)
-    : 0;
+  const tasks = studentData.actividades || [];
+  const totalTasks = tasks.length;
 
-  tasksCard.querySelector(".card-text").textContent =
-    pendingCount > 0
-      ? `${pendingCount} tarea(s) pendiente(s)`
-      : "No tienes tareas pendientes";
+  // Filtramos las tareas completadas (Estado: "Entregada")
+  const completedTasks = tasks.filter(t => t.estado === "Entregada").length;
+  const pendingTasks = totalTasks - completedTasks;
 
-  // Actualizar barra de progreso
-  const progressBar = tasksCard.querySelector(".progress-bar");
-  const progressText = tasksCard.querySelector(".progress-text");
-
-  if (progressBar) {
-    progressBar.style.width = `${progressPercentage}%`;
-    progressBar.setAttribute("aria-valuenow", progressPercentage);
+  // Calculamos el porcentaje
+  let percent = 0;
+  if (totalTasks > 0) {
+    percent = Math.round((completedTasks / totalTasks) * 100);
   }
 
+  // Actualizar texto principal
+  if (totalTasks === 0) {
+    cardText.textContent = "No tienes tareas registradas";
+  } else if (pendingTasks === 0) {
+    cardText.textContent = "¡Todo al día! No tienes pendientes";
+  } else {
+    cardText.textContent = `Tienes ${pendingTasks} tarea(s) pendiente(s)`;
+  }
+
+  // Actualizar barra de progreso y etiqueta
+  if (progressBar) {
+    progressBar.style.width = `${percent}%`;
+    progressBar.setAttribute("aria-valuenow", percent);
+  }
+  
   if (progressText) {
-    progressText.textContent = `${progressPercentage}% completado`;
+    progressText.textContent = `${percent}% completado`;
   }
 }
 
-// Función para actualizar la sección de actividad reciente
-function updateActivitySection(studentData) {
-  const activityList = document.querySelector(".activity-list");
-  if (!activityList) return;
+// ---------------------------------------------------------
+// DESARROLLADOR 3 - Card "Recursos"
+// Lógica para procesar la respuesta de la API
+// ---------------------------------------------------------
+function updateResourcesCard(resources) {
+  const card = document.querySelector(".card-resources");
+  if (!card) return;
 
-  activityList.innerHTML = ""; // Limpiar contenido previo
+  const cardText = card.querySelector(".card-text");
+  
+  // Seleccionamos los contadores por su clase. 
+  // Asumimos el orden del HTML: [0] = Docs, [1] = Enlaces
+  const statNumbers = card.querySelectorAll(".stat-number");
+  const docsSpan = statNumbers[0];
+  const linksSpan = statNumbers[1];
 
-  // Agregar actividades recientes (máximo 5)
-  const recentActivities = studentData.actividades
-    .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
-    .slice(0, 5);
+  const safeResources = resources || [];
+  
+  let docsCount = 0;
+  let linksCount = 0;
 
-  if (recentActivities.length === 0) {
-    activityList.innerHTML = `
-      <div class="text-center py-4 text-muted">
-        <i class="bi bi-calendar-x fs-3 d-block mb-2"></i>
-        No hay actividades recientes
-      </div>
-    `;
+  // Iteramos sobre el JSON que recibimos de la API
+  safeResources.forEach(res => {
+    // Convertimos a minúsculas para evitar errores (Link vs link)
+    const categoria = res.categoria ? res.categoria.toLowerCase() : "";
+    
+    // Si la categoría es 'link' o 'enlace', lo contamos como enlace
+    // Cualquier otra cosa (pdf, doc, archivo) es un documento
+    if (categoria === 'link' || categoria === 'enlace') {
+      linksCount++;
+    } else {
+      docsCount++;
+    }
+  });
+
+  // Actualizar UI
+  if (docsCount === 0 && linksCount === 0) {
+    if (cardText) cardText.textContent = "No tienes recursos guardados";
+    if (docsSpan) docsSpan.textContent = "0";
+    if (linksSpan) linksSpan.textContent = "0";
+  } else {
+    if (cardText) cardText.textContent = "Materiales disponibles";
+    if (docsSpan) docsSpan.textContent = docsCount.toString();
+    if (linksSpan) linksSpan.textContent = linksCount.toString();
+  }
+}
+
+// FUNCIÓN FETCH PARA DESARROLLADOR 3
+// Obtiene los datos reales de la API
+async function fetchResourcesAndRender() {
+  const userId = localStorage.getItem("userId");
+  
+  // Si no hay userId, no podemos consultar la API
+  if (!userId) {
+    console.error("No se encontró userId para buscar recursos.");
     return;
   }
 
-  recentActivities.forEach(activity => {
-    const activityItem = document.createElement("div");
-    activityItem.className = "activity-item";
+  try {
+    const url = `http://localhost:8081/api/resources/user/${userId}`;
+    console.log(`Consultando recursos en: ${url}`);
+    
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error(`Error HTTP: ${response.status}`);
+    }
 
-    const iconClass = activity.estado === "Entregada"
-      ? "bi-check2-square bg-success"
-      : "bi-exclamation-triangle bg-warning";
+    const resources = await response.json();
+    console.log("Recursos obtenidos:", resources);
+    
+    // Llamamos a la función que actualiza la UI con los datos obtenidos
+    updateResourcesCard(resources);
 
-    activityItem.innerHTML = `
-      <div class="activity-icon ${iconClass.split(" ")[1]}">
-        <i class="${iconClass.split(" ")[0]}"></i>
+  } catch (error) {
+    console.error("Error al obtener recursos:", error);
+    // En caso de error, mostramos 0 en todo para no romper la UI
+    updateResourcesCard([]);
+    
+    // Opcional: Mostrar mensaje de error en la tarjeta
+    const cardText = document.querySelector(".card-resources .card-text");
+    if(cardText) cardText.textContent = "Error de conexión";
+  }
+}
+
+// ---------------------------------------------------------
+// DESARROLLADOR 4 - Card "Progreso General"
+// ---------------------------------------------------------
+function updateProgressCard(studentData) {
+  const card = document.querySelector(".card-progress");
+  if (!card) return;
+
+  const circle = card.querySelector(".chart-circle");
+  const circleText = circle ? circle.querySelector("span") : null;
+  const cardText = card.querySelector(".card-text");
+
+  const tasks = studentData.actividades || [];
+  const total = tasks.length;
+  
+  if (total === 0) {
+    if (circleText) circleText.textContent = "0%";
+    if (cardText) cardText.textContent = "Sin actividad registrada";
+    return;
+  }
+
+  // Calcular porcentaje global
+  const completed = tasks.filter(t => t.estado === "Entregada").length;
+  const percent = Math.round((completed / total) * 100);
+
+  // Actualizar el gráfico circular con gradiente cónico
+  if (circle) {
+    circle.style.background = `conic-gradient(#3b82f6 ${percent}%, rgba(255, 255, 255, 0.1) ${percent}%)`;
+    circle.setAttribute("data-percent", percent);
+  }
+
+  if (circleText) {
+    circleText.textContent = `${percent}%`;
+  }
+  
+  if (cardText) {
+    cardText.textContent = "Rendimiento académico global";
+  }
+}
+
+// ---------------------------------------------------------
+// EXTRA - Sección de Actividad Reciente
+// ---------------------------------------------------------
+function updateActivitySection(studentData) {
+  const list = document.querySelector(".activity-list");
+  if (!list) return;
+
+  list.innerHTML = ""; // Limpiar contenido previo
+
+  const activities = studentData.actividades || [];
+  // Tomamos las primeras 5 actividades
+  const recent = activities.slice(0, 5);
+
+  if (recent.length === 0) {
+    list.innerHTML = `<div class="text-center py-4 text-muted">Sin actividad reciente</div>`;
+    return;
+  }
+
+  recent.forEach(act => {
+    // Configuración visual según estado
+    let iconClass = "bi-exclamation-triangle";
+    let bgClass = "bg-warning"; // Por defecto "Por entregar"
+
+    if (act.estado === "Entregada") {
+      iconClass = "bi-check2-square";
+      bgClass = "bg-success";
+    } else if (act.estado === "Programada") {
+      iconClass = "bi-calendar-event";
+      bgClass = "bg-primary";
+    }
+
+    // Crear elemento HTML
+    const item = document.createElement("div");
+    item.className = "activity-item";
+    item.innerHTML = `
+      <div class="activity-icon ${bgClass}">
+        <i class="bi ${iconClass}"></i>
       </div>
       <div class="activity-content">
-        <div class="activity-title">${activity.nombreActividad}</div>
-        <div class="activity-subtitle">${activity.curso}</div>
-        <div class="activity-time">${new Date(activity.fecha).toLocaleDateString()}</div>
-      </div>
-      <div class="activity-action">
-        <button class="btn btn-sm btn-outline-light">
-          <i class="bi bi-three-dots"></i>
-        </button>
+        <div class="activity-title">${act.nombreActividad}</div>
+        <div class="activity-subtitle text-muted" style="font-size: 0.85rem;">${act.curso}</div>
+        <div class="activity-time">${act.fechaLimite || "Sin fecha límite"}</div>
       </div>
     `;
-
-    activityList.appendChild(activityItem);
+    list.appendChild(item);
   });
 }
 
-// Función para actualizar la sección de consejos
-function updateTipsSection(studentData) {
-  const tipsSection = document.querySelector(".tips-section");
-  if (!tipsSection) return;
-
-  const hasClasses = studentData.clases.length > 0;
-  const hasActivities = studentData.actividades.length > 0;
-
-  const tipCards = tipsSection.querySelectorAll(".tip-card");
-
-  if (tipCards.length >= 3) {
-    // Actualizar tarjeta 1 (cursos)
-    if (hasClasses) {
-      tipCards[0].querySelector(".tip-title").textContent = "Revisa tu horario";
-      tipCards[0].querySelector(".tip-text").textContent =
-        "Tienes clases programadas para esta semana. Asegúrate de asistir.";
-      tipCards[0].querySelector(".tip-icon i").className = "bi bi-calendar-check";
-    }
-
-    // Actualizar tarjeta 2 (tareas)
-    const pendingActivities = studentData.actividades.filter(
-      a => !a.estado || a.estado !== "Entregada"
-    );
-
-    if (pendingActivities.length > 0) {
-      tipCards[1].querySelector(".tip-title").textContent = "Tareas pendientes";
-      tipCards[1].querySelector(".tip-text").textContent =
-        `Tienes ${pendingActivities.length} tarea(s) por completar esta semana.`;
-      tipCards[1].querySelector(".tip-icon i").className = "bi bi-clipboard-check";
-    }
-
-    // Actualizar tarjeta 3 (recursos)
-    tipCards[2].querySelector(".tip-title").textContent = "Organiza tus materiales";
-    tipCards[2].querySelector(".tip-text").textContent =
-      "Guarda apuntes y recursos por curso para encontrarlos fácilmente.";
-  }
-}
-
-// Función principal para inicializar el dashboard
+// ---------------------------------------------------------
+// INICIALIZACIÓN PRINCIPAL
+// ---------------------------------------------------------
 function initDashboard() {
+  // 1. Cargar datos síncronos del LocalStorage (Perfil, Cursos, Tareas)
   const studentData = getStudentData();
-  if (!studentData) {
-    console.error("No se encontraron datos del estudiante.");
-    return;
+
+  if (studentData) {
+    updateHeader(studentData.nombreEstudiante);
+    updateScheduleCard(studentData);
+    updateTasksCard(studentData);
+    updateProgressCard(studentData);
+    updateActivitySection(studentData);
   }
 
-  // Actualizar todas las secciones
-  updateHeader(studentData.nombreEstudiante);
-  updateScheduleCard(studentData);
-  updateTasksCard(studentData);
-  updateActivitySection(studentData);
-  updateTipsSection(studentData);
+  // 2. Cargar datos ASÍNCRONOS de la API (Recursos)
+  // Se ejecuta independientemente para no bloquear el resto
+  fetchResourcesAndRender();
 }
 
-// Inicializar cuando el DOM esté cargado
+// Ejecutar cuando el DOM esté listo
 document.addEventListener("DOMContentLoaded", initDashboard);

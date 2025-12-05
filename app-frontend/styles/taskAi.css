@@ -1,0 +1,505 @@
+/* ============================================
+   🤖 TASK AI CSS - ASISTENTE INTELIGENTE (MINIMALISTA)
+   ============================================ */
+
+/* 🎯 Panel Flotante Principal */
+.ai-assistant-container {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 9999;
+  animation: aiFloatIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+
+}
+
+/* Badge Flotante (Estado Minimizado) */
+.ai-badge-trigger {
+  width: 64px;
+  height: 64px;
+  background: var(--color-primary);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.ai-badge-trigger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.ai-badge-trigger.has-insights {
+  animation: subtlePulse 3s ease-in-out infinite;
+}
+
+.ai-icon {
+  font-size: 1.75rem;
+  color: #fff;
+}
+
+/* Badge de Notificación */
+.ai-notification-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  background: #ef4444;
+  border: 2px solid var(--color-bg-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  color: #fff;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Panel Expandido */
+.ai-panel {
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  width: 420px;
+  max-height: 500px;
+  background: var(--color-bg-secondary);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+.ai-panel.active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+/* Header del Panel */
+.ai-panel-header {
+  padding: 1.5rem;
+  background: var(--color-bg-tertiary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ai-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ai-panel-title i {
+  font-size: 1.5rem;
+  color: var(--color-primary);
+}
+
+.ai-panel-title h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+  font-family: var(--font-mono);
+  letter-spacing: -0.01em;
+}
+
+.ai-panel-close {
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-panel-close:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-text-primary);
+}
+
+/* Contenido del Panel */
+.ai-panel-content {
+  padding: 1.5rem;
+  max-height: 480px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Scrollbar personalizada */
+.ai-panel-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ai-panel-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+}
+
+.ai-panel-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.ai-panel-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Loading State */
+.ai-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  gap: 1rem;
+}
+
+.ai-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.ai-loading-text {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* Insight Card */
+.ai-insight-card {
+  background: var(--color-bg-tertiary);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1.25rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+}
+
+.ai-insight-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.ai-insight-card.warning {
+  border-left: 3px solid #f59e0b;
+}
+
+.ai-insight-card.danger {
+  border-left: 3px solid #ef4444;
+}
+
+.ai-insight-card.success {
+  border-left: 3px solid #22c55e;
+}
+
+.ai-insight-card.info {
+  border-left: 3px solid #06b6d4;
+}
+
+.ai-insight-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.ai-insight-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+  flex-shrink: 0;
+}
+
+.ai-insight-card.warning .ai-insight-icon {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.ai-insight-card.danger .ai-insight-icon {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.ai-insight-card.success .ai-insight-icon {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.ai-insight-card.info .ai-insight-icon {
+  background: rgba(6, 182, 212, 0.15);
+  color: #06b6d4;
+}
+
+.ai-insight-title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+  flex: 1;
+  line-height: 1.4;
+}
+
+.ai-insight-body {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Badge en Tarjetas de Tareas */
+.task-ai-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 32px;
+  height: 32px;
+  background: var(--color-primary);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+}
+
+.task-card:hover .task-ai-badge {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.task-ai-badge:hover {
+  transform: scale(1.1);
+}
+
+.task-ai-badge.warning {
+  background: #f59e0b;
+}
+
+.task-ai-badge.danger {
+  background: #ef4444;
+}
+
+.task-ai-badge.success {
+  background: #22c55e;
+}
+
+.task-ai-badge.info {
+  background: #06b6d4;
+}
+
+/* Tooltip de Badge */
+.task-ai-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  right: 0;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 0.625rem 0.875rem;
+  min-width: 180px;
+  max-width: 260px;
+  color: var(--color-text-primary);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transform: translateY(4px);
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+.task-ai-tooltip::before {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  right: 10px;
+  width: 10px;
+  height: 10px;
+  background: var(--color-bg-secondary);
+  border-right: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  transform: rotate(45deg);
+}
+
+.task-ai-badge:hover .task-ai-tooltip {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+/* Empty State */
+.ai-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.ai-empty-icon {
+  font-size: 3rem;
+  color: var(--color-text-secondary);
+  opacity: 0.3;
+  margin-bottom: 1rem;
+}
+
+.ai-empty-text {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+/* Animaciones */
+@keyframes aiFloatIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes subtlePulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ai-assistant-container {
+    bottom: 1.5rem;
+    right: 1.5rem;
+  }
+  
+  .ai-badge-trigger {
+    width: 56px;
+    height: 56px;
+  }
+  
+  .ai-icon {
+    font-size: 1.5rem;
+  }
+  
+  .ai-panel {
+    width: calc(100vw - 3rem);
+    max-width: 380px;
+    bottom: 72px;
+    right: 0;
+  }
+  
+  .ai-panel-content {
+    max-height: 400px;
+    padding: 1rem;
+  }
+  
+  .ai-insight-card {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .ai-assistant-container {
+    bottom: 1rem;
+    right: 1rem;
+    left: 1rem;
+  }
+  
+  .ai-badge-trigger {
+    width: 52px;
+    height: 52px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+  
+  .ai-panel {
+    width: 100%;
+    max-width: none;
+    right: 0;
+    left: 0;
+    bottom: 68px;
+  }
+}
+
+/* Accesibilidad */
+.ai-badge-trigger:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.ai-panel-close:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}

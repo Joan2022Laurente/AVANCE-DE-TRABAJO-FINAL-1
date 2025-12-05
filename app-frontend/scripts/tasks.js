@@ -1,5 +1,5 @@
 // ==============================
-// 📌 TASKS.JS - VERSIÓN MEJORADA CON UI/UX PREMIUM
+// 📌 TASKS.JS - VERSIÓN CON INTEGRACIÓN IA
 // ==============================
 
 const API_URL = "http://localhost:8081/api/tasks";
@@ -297,6 +297,9 @@ async function loadTasks() {
     setTimeout(() => {
       hideSkeletonLoader();
       renderTasks(tasks);
+      
+      // 🤖 Actualizar análisis de IA
+      refreshAI();
     }, 300);
     
   } catch (error) {
@@ -380,8 +383,7 @@ async function handleAddTask(event) {
     course: { id: selectedCourseId }
   };
   
-const submitBtn = document.querySelector('button[form="add-task-form"][type="submit"]');
-
+  const submitBtn = document.querySelector('button[form="add-task-form"][type="submit"]');
   const originalText = submitBtn.innerHTML;
   submitBtn.disabled = true;
   submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Guardando...';
@@ -453,6 +455,14 @@ function setupSearch() {
 // ---- Volver a cursos ----
 function goBackToCourses() {
   window.location.href = 'courses.html';
+}
+
+// ---- 🤖 Actualizar IA ----
+function refreshAI() {
+  if (window.refreshTaskAI) {
+    console.log('🤖 Actualizando análisis de IA...');
+    window.refreshTaskAI();
+  }
 }
 
 // ---- Inicializar página ----
