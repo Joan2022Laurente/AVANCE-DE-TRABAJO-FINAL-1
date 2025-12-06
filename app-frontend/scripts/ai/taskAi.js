@@ -3,7 +3,7 @@
 // ==============================
 
 const AI_API_URL = "https://backednexamn.onrender.com/generate-text";
-const TASKS_API_URL = "http://localhost:8081/api/tasks";
+const TASKS_API_URL = "https://utpschedulebackendjava.onrender.com/api/tasks";
 
 class TaskAIAssistant {
   constructor() {

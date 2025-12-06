@@ -2,7 +2,7 @@
 // 📌 TASKS.JS - VERSIÓN CON INTEGRACIÓN IA
 // ==============================
 
-const API_URL = "http://localhost:8081/api/tasks";
+const API_URL = "https://utpschedulebackendjava.onrender.com/api/tasks";
 const selectedCourseId = localStorage.getItem("selectedCourseId");
 let allTasks = [];
 let currentFilter = 'all';

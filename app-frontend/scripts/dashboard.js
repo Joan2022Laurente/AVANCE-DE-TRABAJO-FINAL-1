@@ -162,7 +162,7 @@ async function fetchResourcesAndRender() {
   }
 
   try {
-    const url = `http://localhost:8081/api/resources/user/${userId}`;
+    const url = `https://utpschedulebackendjava.onrender.com/api/resources/user/${userId}`;
     console.log(`Consultando recursos en: ${url}`);
     
     const response = await fetch(url);

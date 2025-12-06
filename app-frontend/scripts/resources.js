@@ -224,7 +224,7 @@ async function loadCourseResources(courseId) {
 
   try {
     const response = await fetch(
-      `http://localhost:8081/api/resources/course/${courseId}`
+      `https://utpschedulebackendjava.onrender.com/api/resources/course/${courseId}`
     );
 
     if (!response.ok) throw new Error("Error al obtener recursos del curso");
@@ -298,7 +298,7 @@ async function handleAddResource(event) {
 
   try {
     const response = await fetch(
-      `http://localhost:8081/api/resources/user/${userId}/course/${selectedCourseId}`,
+      `https://utpschedulebackendjava.onrender.com/api/resources/user/${userId}/course/${selectedCourseId}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -344,7 +344,7 @@ async function deleteResource(resourceId) {
 
   try {
     const response = await fetch(
-      `http://localhost:8081/api/resources/${resourceId}`,
+      `https://utpschedulebackendjava.onrender.com/api/resources/${resourceId}`,
       { method: "DELETE" }
     );
 

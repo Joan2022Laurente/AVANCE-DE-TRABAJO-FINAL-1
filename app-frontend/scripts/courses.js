@@ -2,7 +2,7 @@
 // 📚 COURSES.JS - VERSIÓN MEJORADA CON MODAL DE OPCIONES
 // ==============================
 
-const API_URL = "http://localhost:8081/api";
+const API_URL = "https://utpschedulebackendjava.onrender.com/api";
 let currentCourse = null;
 
 // ---- Obtener el código del usuario actual ----
